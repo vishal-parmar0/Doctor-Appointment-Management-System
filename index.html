@@ -816,8 +816,8 @@
                     <li class="nav-item"><a class="nav-link" href="#doctors">Our Doctors</a></li>
                 </ul>
                 <div class="d-flex gap-3">
-                    <a href="#" class="btn btn-outline-primary">Login</a>
-                    <a href="#" class="btn btn-primary">Register</a>
+                    <a href="login.html" class="btn btn-outline-primary">Login</a>
+                    <a href="register.html" class="btn btn-primary">Register</a>
                 </div>
             </div>
         </div>
@@ -879,37 +879,55 @@
                 <div class="col-lg-3">
                     <div class="search-field">
                         <i class="fa-solid fa-stethoscope"></i>
-                        <select class="form-select">
+                        <select class="form-select" id="search-speciality">
                             <option selected>Specialities</option>
-                            <option>Cardiology</option>
-                            <option>Neurology</option>
-                            <option>Pediatrics</option>
+                            <option>Cardiologist</option>
+                            <option>Dermatologist</option>
+                            <option>Neurologist</option>
+                            <option>Pediatrician</option>
+                            <option>Orthopedic Surgeon</option>
+                            <option>Ophthalmologist</option>
+                            <option>Dentist</option>
+                            <option>Psychiatrist</option>
+                            <option>General Physician</option>
+                            <option>Other</option>
                         </select>
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="search-field">
                         <i class="fa-solid fa-user-doctor"></i>
-                        <select class="form-select">
+                        <select class="form-select" id="search-doctor">
                             <option selected>Select a Doctor</option>
-                            <option>Dr. Alexander Smith</option>
-                            <option>Dr. Sarah Connor</option>
+                            <option>Dr. Alexander Smith (Cardiology)</option>
+                            <option>Dr. Sarah Connor (Dermatology)</option>
+                            <option>Dr. James Watson (Neurology)</option>
+                            <option>Dr. Virginia Apgar (Pediatrics)</option>
+                            <option>Dr. Robert Koch (Orthopedics)</option>
+                            <option>Dr. Rosalind Franklin (Eye Care)</option>
+                            <option>Dr. Maria Montessori (General)</option>
                         </select>
                     </div>
                 </div>
                 <div class="col-lg-3">
                     <div class="search-field">
                         <i class="fa-solid fa-location-dot"></i>
-                        <select class="form-select">
+                        <select class="form-select" id="search-location">
                             <option selected>Location</option>
                             <option>Ahmedabad</option>
                             <option>Surat</option>
                             <option>Mumbai</option>
+                            <option>Delhi</option>
+                            <option>Bangalore</option>
+                            <option>Pune</option>
+                            <option>Hyderabad</option>
+                            <option>Chennai</option>
+                            <option>Kolkata</option>
                         </select>
                     </div>
                 </div>
                 <div class="col-lg-3">
-                    <button class="btn btn-primary w-100 h-100">SEARCH</button>
+                    <button class="btn btn-primary w-100 h-100" id="search-btn">SEARCH</button>
                 </div>
             </div>
         </div>
@@ -969,7 +987,7 @@
                         <i class="fa-solid fa-check"></i>
                         <span>24/7 Patient Support</span>
                     </div>
-                    <a href="#" class="btn btn-primary mt-4">Learn More</a>
+                    <a href="#services" class="btn btn-primary mt-4">Learn More</a>
                 </div>
                 <div class="col-lg-6 mt-5 mt-lg-0" data-aos="fade-left">
                     <div class="about-img-container">
@@ -1005,7 +1023,7 @@
                         <li><i class="fa-solid fa-circle-check"></i> Heart Surgery Consultation</li>
                         <li><i class="fa-solid fa-circle-check"></i> Cardiac Rehabilitation</li>
                     </ul>
-                    <a href="#" class="service-link">Learn More <i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="#appointment" class="service-link">Learn More <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
 
                 <!-- Dental -->
@@ -1020,7 +1038,7 @@
                         <li><i class="fa-solid fa-circle-check"></i> Root Canal Treatment</li>
                         <li><i class="fa-solid fa-circle-check"></i> Dental Implants</li>
                     </ul>
-                    <a href="#" class="service-link">Learn More <i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="#appointment" class="service-link">Learn More <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
 
                 <!-- Neurology -->
@@ -1035,7 +1053,7 @@
                         <li><i class="fa-solid fa-circle-check"></i> Epilepsy Treatment</li>
                         <li><i class="fa-solid fa-circle-check"></i> Stroke Management</li>
                     </ul>
-                    <a href="#" class="service-link">Learn More <i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="#appointment" class="service-link">Learn More <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
 
                 <!-- Eye Care -->
@@ -1050,7 +1068,7 @@
                         <li><i class="fa-solid fa-circle-check"></i> Cataract Surgery</li>
                         <li><i class="fa-solid fa-circle-check"></i> Laser Treatment</li>
                     </ul>
-                    <a href="#" class="service-link">Learn More <i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="#appointment" class="service-link">Learn More <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
 
                 <!-- Orthopedics -->
@@ -1065,7 +1083,7 @@
                         <li><i class="fa-solid fa-circle-check"></i> Spine Treatment</li>
                         <li><i class="fa-solid fa-circle-check"></i> Sports Injury Care</li>
                     </ul>
-                    <a href="#" class="service-link">Learn More <i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="#appointment" class="service-link">Learn More <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
 
                 <!-- Pediatrics -->
@@ -1080,7 +1098,7 @@
                         <li><i class="fa-solid fa-circle-check"></i> Growth Monitoring</li>
                         <li><i class="fa-solid fa-circle-check"></i> Child Nutrition</li>
                     </ul>
-                    <a href="#" class="service-link">Learn More <i class="fa-solid fa-arrow-right"></i></a>
+                    <a href="#appointment" class="service-link">Learn More <i class="fa-solid fa-arrow-right"></i></a>
                 </div>
             </div>
 
@@ -1101,7 +1119,7 @@
                     <p class="text-muted mt-2">Meet our certified specialists who are dedicated to your health.</p>
                 </div>
                 <div class="col-lg-4 text-lg-end">
-                    <a href="#" class="btn btn-outline-primary">View All Doctors</a>
+                    <a href="#appointment" class="btn btn-outline-primary">View All Doctors</a>
                 </div>
             </div>
 
@@ -1235,12 +1253,28 @@
                                 <div class="col-md-6">
                                     <div class="form-icon-group">
                                         <i class="fa-solid fa-stethoscope"></i>
-                                        <select class="form-select form-control" required>
+                                        <select class="form-select form-control" required id="appt-speciality"
+                                            onchange="checkOtherAppt(this)">
                                             <option value="">Select Speciality</option>
-                                            <option>Cardiology</option>
-                                            <option>Dermatology</option>
-                                            <option>Neurology</option>
+                                            <option>Cardiologist</option>
+                                            <option>Dermatologist</option>
+                                            <option>Neurologist</option>
+                                            <option>Pediatrician</option>
+                                            <option>Orthopedic Surgeon</option>
+                                            <option>Ophthalmologist</option>
+                                            <option>Dentist</option>
+                                            <option>Psychiatrist</option>
+                                            <option>General Physician</option>
+                                            <option>Other</option>
                                         </select>
+                                    </div>
+                                </div>
+                                <!-- Custom Other Field for Appointment -->
+                                <div class="form-group mb-4" id="appt-other-group" style="display:none;">
+                                    <div class="form-icon-group">
+                                        <i class="fa-solid fa-pen"></i>
+                                        <input type="text" class="form-control" placeholder="Specify specialization"
+                                            id="appt-custom-spec">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -1248,8 +1282,13 @@
                                         <i class="fa-solid fa-user-doctor"></i>
                                         <select class="form-select form-control" required>
                                             <option value="">Select Doctor</option>
-                                            <option>Dr. Alexander Smith</option>
-                                            <option>Dr. Virginia Apgar</option>
+                                            <option>Dr. Alexander Smith (Cardiology)</option>
+                                            <option>Dr. Sarah Connor (Dermatology)</option>
+                                            <option>Dr. James Watson (Neurology)</option>
+                                            <option>Dr. Virginia Apgar (Pediatrics)</option>
+                                            <option>Dr. Robert Koch (Orthopedics)</option>
+                                            <option>Dr. Rosalind Franklin (Eye Care)</option>
+                                            <option>Dr. Maria Montessori (General Physician)</option>
                                         </select>
                                     </div>
                                 </div>
@@ -1469,20 +1508,20 @@
                 <div class="col-lg-3 col-6 mb-5">
                     <h5 class="text-white fw-bold mb-4">Quick Links</h5>
                     <ul class="footer-links">
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Our Services</a></li>
-                        <li><a href="#">Our Doctors</a></li>
-                        <li><a href="#">Blog</a></li>
+                        <li><a href="#hero">Home</a></li>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#services">Our Services</a></li>
+                        <li><a href="#doctors">Our Doctors</a></li>
+                        <li><a href="#appointment">Blog</a></li>
                     </ul>
                 </div>
-                <div class="col-lg-3 col-6 mb-5">
-                    <h5 class="text-white fw-bold mb-4">Useful Links</h5>
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="text-white fw-bold mb-4">Support</h5>
                     <ul class="footer-links">
-                        <li><a href="#">Book Appointment</a></li>
-                        <li><a href="#">Patient Login</a></li>
-                        <li><a href="#">Doctor Login</a></li>
-                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#appointment">Book Appointment</a></li>
+                        <li><a href="login.html">Patient Login</a></li>
+                        <li><a href="login.html">Doctor Login</a></li>
+                        <li><a href="#faq">FAQ</a></li>
                         <li><a href="#">Privacy Policy</a></li>
                     </ul>
                 </div>
@@ -1627,10 +1666,20 @@
             });
         });
 
+        // Simulated login state
+        let isLoggedIn = false;
+
         // Form Validation & Success Flash
         const appointmentForm = document.getElementById('appointment-form');
         appointmentForm.addEventListener('submit', (e) => {
             e.preventDefault();
+
+            if (!isLoggedIn) {
+                alert('Please Login First to Book an Appointment');
+                window.location.href = 'login.html';
+                return;
+            }
+
             const btn = appointmentForm.querySelector('button');
             const originalText = btn.innerText;
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Booking...';
@@ -1671,6 +1720,63 @@
                     tooltip: { enabled: false }
                 }
             }
+        });
+
+        // Search Button Functionality
+        document.getElementById('search-btn').addEventListener('click', () => {
+            const speciality = document.getElementById('search-speciality').value;
+            const doctor = document.getElementById('search-doctor').value;
+            const location = document.getElementById('search-location').value;
+
+            if (speciality === 'Specialities' && doctor === 'Select a Doctor' && location === 'Location') {
+                alert('Please select at least one filter to search.');
+                return;
+            }
+
+            // Simulate search
+            const btn = document.getElementById('search-btn');
+            const originalText = btn.innerText;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+
+                // Scroll to doctors section to show results
+                document.getElementById('doctors').scrollIntoView({ behavior: 'smooth' });
+
+                // Optional: trigger doctor filter if a speciality was chosen
+                if (speciality !== 'Specialities') {
+                    const tag = document.querySelector(`.tag[data-filter="${speciality.toLowerCase()}"]`);
+                    if (tag) tag.click();
+                }
+            }, 800);
+        });
+
+        // Other Speciality Appointment Logic
+        function checkOtherAppt(select) {
+            const otherGroup = document.getElementById('appt-other-group');
+            const customInput = document.getElementById('appt-custom-spec');
+            if (select.value === 'Other') {
+                otherGroup.style.display = 'block';
+                customInput.focus();
+                customInput.required = true;
+            } else {
+                otherGroup.style.display = 'none';
+                customInput.required = false;
+            }
+        }
+
+        // Placeholder Link Feedback
+        document.querySelectorAll('footer a[href="#"], .service-link[href="#"]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                if (link.getAttribute('href') === '#') {
+                    e.preventDefault();
+                    // show a simple toast or alert
+                    alert('This page is coming soon. Stay tuned for updates!');
+                }
+            });
         });
 
     </script>

@@ -550,13 +550,29 @@
                                 <label class="form-label">Specialization</label>
                                 <div class="input-group">
                                     <i class="fa-solid fa-stethoscope field-icon"></i>
-                                    <select name="specialization" class="form-control">
+                                    <select name="specialization" class="form-control" id="reg-specialization"
+                                        onchange="checkOther(this)">
                                         <option value="">Select Specialization</option>
                                         <option>Cardiologist</option>
                                         <option>Dermatologist</option>
                                         <option>Neurologist</option>
+                                        <option>Pediatrician</option>
+                                        <option>Orthopedic Surgeon</option>
+                                        <option>Ophthalmologist (Eye Care)</option>
+                                        <option>Dentist</option>
+                                        <option>Psychiatrist</option>
                                         <option>General Physician</option>
+                                        <option>Other</option>
                                     </select>
+                                </div>
+                            </div>
+                            <!-- Custom Other Field -->
+                            <div class="form-group" id="other-specialization-group" style="display:none;">
+                                <label class="form-label">Specify Your Specialization</label>
+                                <div class="input-group">
+                                    <i class="fa-solid fa-pen field-icon"></i>
+                                    <input type="text" name="custom_specialization" class="form-control"
+                                        placeholder="Enter your specialization" id="custom-specialization">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -614,6 +630,19 @@
                 flash.style.opacity = '0';
                 setTimeout(() => flash.remove(), 300);
             }, 3000);
+        }
+
+        function checkOther(select) {
+            const otherGroup = document.getElementById('other-specialization-group');
+            const customInput = document.getElementById('custom-specialization');
+            if (select.value === 'Other') {
+                otherGroup.style.display = 'block';
+                customInput.focus();
+                customInput.required = true;
+            } else {
+                otherGroup.style.display = 'none';
+                customInput.required = false;
+            }
         }
 
         // Role Switcher

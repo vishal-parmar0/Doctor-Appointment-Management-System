@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - MediBook Doctor Appointment System</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0066FF;
+            --primary-dark: #0052CC;
+            --purple: #7C3AED;
+            --success: #10B981;
+            --error: #EF4444;
+            --warning: #F59E0B;
+            --dark: #1A1A2E;
+            --light-bg: #F8FAFF;
+            --white: #FFFFFF;
+            --shadow: 0 20px 60px rgba(0, 102, 255, 0.15);
+            --radius: 16px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Navbar copy from index */
+        .navbar {
+            background: var(--white);
+            box-shadow: 0 10px 30px rgba(0, 102, 255, 0.05);
+            padding: 15px 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--dark) !important;
+            font-size: 24px;
+        }
+
+        .navbar-brand span {
+            color: var(--primary);
+        }
+
+        /* Split Layout */
+        .main-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-wrapper {
+            display: flex;
+            width: 100%;
+            height: calc(100vh - 80px);
+            overflow: hidden;
+        }
+
+        .left-panel {
+            flex: 1;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--purple) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: var(--white);
+            padding: 60px;
+            text-align: center;
+        }
+
+        .left-panel i.main-icon {
+            font-size: 80px;
+            margin-bottom: 30px;
+            text-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .left-panel h2 {
+            font-weight: 700;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+            margin: 40px 0;
+        }
+
+        .feature-list li {
+            margin-bottom: 15px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .feature-list li i {
+            color: var(--white);
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.2);
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .right-panel {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--light-bg);
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .auth-card {
+            background: var(--white);
+            padding: 50px 40px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 480px;
+        }
+
+        .auth-header h3 {
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .auth-header p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        /* Role Switcher */
+        .role-switcher {
+            display: flex;
+            background: #f0f4ff;
+            padding: 5px;
+            border-radius: 50px;
+            margin-bottom: 30px;
+        }
+
+        .role-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            border-radius: 50px;
+            font-weight: 600;
+            color: #666;
+            transition: var(--transition);
+        }
+
+        .role-btn.active {
+            background: var(--primary);
+            color: var(--white);
+            box-shadow: 0 5px 15px rgba(0, 102, 255, 0.2);
+        }
+
+        /* Form Fields */
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group i.field-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            z-index: 5;
+            transition: var(--transition);
+        }
+
+        .form-control {
+            padding: 12px 15px 12px 45px;
+            border-radius: 12px;
+            border: 1px solid #eee;
+            height: 52px;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(0, 102, 255, 0.1);
+            outline: none;
+        }
+
+        .form-control:focus+i.field-icon {
+            color: var(--primary);
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #999;
+            z-index: 5;
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            margin: 20px 0 30px;
+        }
+
+        .forgot-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Submit Button */
+        .btn-auth {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--purple) 100%);
+            color: var(--white);
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 16px;
+            transition: var(--transition);
+            margin-bottom: 20px;
+        }
+
+        .btn-auth:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 102, 255, 0.3);
+            filter: brightness(1.1);
+        }
+
+        .divider {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
+        }
+
+        .divider::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 45%;
+            height: 1px;
+            background: #eee;
+        }
+
+        .divider::after {
+            content: "";
+            position: absolute;
+            right: 0;
+            top: 50%;
+            width: 45%;
+            height: 1px;
+            background: #eee;
+        }
+
+        .divider span {
+            color: #999;
+            font-size: 14px;
+            background: var(--white);
+            padding: 0 10px;
+        }
+
+        /* Social Login */
+        .btn-social {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 50px;
+            background: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: 600;
+            color: #555;
+            transition: var(--transition);
+        }
+
+        .btn-social:hover {
+            background: #f9f9f9;
+            border-color: #ccc;
+        }
+
+        .bottom-link {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+        }
+
+        .bottom-link a {
+            color: var(--primary);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        /* Flash Messages */
+        #flash-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1100;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .flash-msg {
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.3s ease-out;
+            transition: opacity 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .flash-success {
+            background-color: var(--success);
+        }
+
+        .flash-error {
+            background-color: var(--error);
+        }
+
+        .flash-info {
+            background-color: var(--primary);
+        }
+
+        .flash-warning {
+            background-color: var(--warning);
+        }
+
+        /* Animations */
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0)
+            }
+
+            25% {
+                transform: translateX(-10px)
+            }
+
+            75% {
+                transform: translateX(10px)
+            }
+        }
+
+        .shake {
+            animation: shake 0.3s ease-in-out;
+        }
+
+        /* Loading Spinner */
+        .spinner-border-sm {
+            width: 1rem;
+            height: 1rem;
+            border-width: 0.2em;
+        }
+
+        /* Responsive */
+        @media (max-width: 991px) {
+            .left-panel {
+                display: none;
+            }
+
+            .auth-wrapper {
+                height: auto;
+                padding: 40px 0;
+            }
+
+            body {
+                height: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Flash Container for JS Messages -->
+    <div id="flash-container"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <span><i class="fa-solid fa-square-plus"></i></span> MediBook
+            </a>
+            <div class="ms-auto d-none d-lg-block">
+                <a href="index.html" class="nav-link"><i class="fa-solid fa-house me-1"></i> Back to Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="auth-wrapper">
+            <!-- Left Panel (Gradient) -->
+            <div class="left-panel" data-aos="fade-right">
+                <i class="fa-solid fa-hospital-user main-icon"></i>
+                <h2>MediBook</h2>
+                <p>Your Health, Your Choice</p>
+
+                <ul class="feature-list">
+                    <li><i class="fa-solid fa-check"></i> Book appointments instantly</li>
+                    <li><i class="fa-solid fa-check"></i> Access top specialist doctors</li>
+                    <li><i class="fa-solid fa-check"></i> AI powered health assistant</li>
+                </ul>
+
+                <div class="mt-4">
+                    <p class="opacity-75">Trusted by 1000+ patients across India</p>
+                </div>
+            </div>
+
+            <!-- Right Panel (Form) -->
+            <div class="right-panel">
+                <div class="auth-card" data-aos="fade-left" id="auth-card">
+                    <div class="auth-header text-center">
+                        <h3>Welcome Back! 👋</h3>
+                        <p>Login to your MediBook account</p>
+
+                        <div class="role-switcher">
+                            <button type="button" class="role-btn active"
+                                onclick="switchRole('patient', this)">Patient</button>
+                            <button type="button" class="role-btn" onclick="switchRole('doctor', this)">Doctor</button>
+                        </div>
+                    </div>
+
+                    <form id="login-form" action="/login" method="POST">
+                        <input type="hidden" name="role" id="role-input" value="patient">
+
+                        <!-- Email Field -->
+                        <div class="form-group">
+                            <label class="form-label">Email Address</label>
+                            <div class="input-group">
+                                <i class="fa-solid fa-envelope field-icon"></i>
+                                <input type="email" name="email" class="form-control" placeholder="Enter your email"
+                                    required id="email">
+                            </div>
+                            <small class="text-danger d-none" id="email-error">Please enter a valid email
+                                address</small>
+                        </div>
+
+                        <!-- Password Field -->
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+                            <div class="input-group">
+                                <i class="fa-solid fa-lock field-icon"></i>
+                                <input type="password" name="password" class="form-control"
+                                    placeholder="Enter your password" required id="password">
+                                <i class="fa-solid fa-eye password-toggle"
+                                    onclick="togglePassword('password', this)"></i>
+                            </div>
+                            <small class="text-danger d-none" id="password-error">Password must be at least 6
+                                characters</small>
+                        </div>
+
+                        <!-- Remember / Forgot -->
+                        <div class="remember-forgot">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="remember_me" id="remember">
+                                <label class="form-check-label" for="remember">Remember Me</label>
+                            </div>
+                            <a href="#" class="forgot-link">Forgot Password?</a>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-auth" id="submit-btn text-white">Login to MediBook</button>
+
+                        <div class="divider">
+                            <span>or</span>
+                        </div>
+
+                        <!-- Social Login -->
+                        <button type="button" class="btn-social">
+                            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20"
+                                alt="google">
+                            Continue with Google
+                        </button>
+
+                        <div class="bottom-link">
+                            Don't have an account? <a href="register.html">Create Account</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script>
+        // Initialize AOS
+        AOS.init({ duration: 1000, once: true });
+
+        // Flash Message Helper
+        function showFlash(message, type = 'success') {
+            const container = document.getElementById('flash-container');
+            const flash = document.createElement('div');
+            flash.className = `flash-msg flash-${type}`;
+            const icons = {
+                'success': 'fa-circle-check',
+                'error': 'fa-circle-exclamation',
+                'info': 'fa-circle-info',
+                'warning': 'fa-triangle-exclamation'
+            };
+            flash.innerHTML = `
+                <i class="fa-solid ${icons[type] || 'fa-circle-info'}"></i>
+                <span>${message}</span>
+            `;
+            container.appendChild(flash);
+
+            setTimeout(() => {
+                flash.style.opacity = '0';
+                setTimeout(() => flash.remove(), 300);
+            }, 3000);
+        }
+
+        // Role Switcher
+        function switchRole(role, btn) {
+            document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('role-input').value = role;
+
+            const header = document.querySelector('.auth-header h3');
+            if (role === 'doctor') {
+                header.innerText = 'Welcome Doctor! 🏥';
+                showFlash('Switched to Doctor login panel', 'info');
+            } else {
+                header.innerText = 'Welcome Back! 👋';
+            }
+        }
+
+        // Toggle Password
+        function togglePassword(inputId, icon) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+
+        // Form Validation & Submit
+        const loginForm = document.getElementById('login-form');
+        const authCard = document.getElementById('auth-card');
+
+        loginForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const email = document.getElementById('email');
+            const password = document.getElementById('password');
+            let isValid = true;
+
+            // Reset errors
+            document.getElementById('email-error').classList.add('d-none');
+            document.getElementById('password-error').classList.add('d-none');
+            email.style.borderColor = "#eee";
+            password.style.borderColor = "#eee";
+
+            // Simple Regex for email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email.value)) {
+                document.getElementById('email-error').classList.remove('d-none');
+                email.style.borderColor = "var(--error)";
+                isValid = false;
+            }
+
+            if (password.value.length < 6) {
+                document.getElementById('password-error').classList.remove('d-none');
+                password.style.borderColor = "var(--error)";
+                isValid = false;
+            }
+
+            if (!isValid) {
+                authCard.classList.add('shake');
+                setTimeout(() => authCard.classList.remove('shake'), 400);
+                showFlash('Please fix the errors in the form', 'error');
+                return;
+            }
+
+            // All Valid - Process Submit
+            const btn = loginForm.querySelector('.btn-auth');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Logging in...';
+            btn.disabled = true;
+
+            // Simulate API Call
+            setTimeout(() => {
+                showFlash('Login successful! Redirecting...', 'success');
+                setTimeout(() => {
+                    window.location.href = 'index.html'; // Or dashboard
+                }, 1000);
+            }, 1000);
+        });
+    </script>
+</body>
+
+</html>

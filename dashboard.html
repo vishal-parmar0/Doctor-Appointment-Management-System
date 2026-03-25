@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | LifeTrust</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <style>
+        body {
+            background-color: var(--bg-light);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dash-layout">
+        <!-- Dashboard Top Nav -->
+        <nav class="dash-nav">
+            <div class="d-flex align-items-center">
+                <a class="navbar-brand fw-bold fs-4 me-5" href="index.html" style="color: var(--dash-primary)">
+                    <i class="fa-solid fa-notes-medical"></i> CuraNet
+                </a>
+
+                <div class="dash-pills d-none d-lg-flex">
+                    <a href="#" class="dash-pill active">Dashboard</a>
+                    <a href="#" class="dash-pill">Patients</a>
+                    <a href="#" class="dash-pill">Appointments</a>
+                    <a href="#" class="dash-pill">Prescriptions</a>
+                    <a href="#" class="dash-pill">Medical Records</a>
+                </div>
+            </div>
+
+            <div class="d-flex align-items-center gap-4">
+                <div class="position-relative text-muted" style="cursor: pointer;">
+                    <i class="fa-regular fa-envelope fs-5"></i>
+                </div>
+                <div class="position-relative text-muted" style="cursor: pointer;">
+                    <i class="fa-regular fa-bell fs-5"></i>
+                    <span
+                        class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle"
+                        style="width: 10px; height: 10px;"></span>
+                </div>
+                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=40"
+                    class="rounded-circle" width="40" height="40" alt="Profile">
+            </div>
+        </nav>
+
+        <div class="container-fluid px-0">
+            <div class="row g-4">
+
+                <!-- Main Content Area -->
+                <div class="col-xl-8 col-lg-7">
+
+                    <div class="d-flex justify-content-between align-items-end mb-4">
+                        <div>
+                            <p class="text-muted mb-1">Good morning, Monica!</p>
+                            <h2 class="dash-greeting mb-0">How are you today?</h2>
+                        </div>
+                        <div class="search-widget mt-0"
+                            style="padding: 8px 15px; background: rgba(255,255,255,0.7); box-shadow: none;">
+                            <i class="fa-solid fa-magnifying-glass text-muted"></i>
+                            <input type="text" class="search-input bg-transparent" placeholder="Search..."
+                                style="width: 150px;">
+                            <span class="text-muted small border px-2 rounded">⌘K</span>
+                        </div>
+                    </div>
+
+                    <!-- Medicine Tracker -->
+                    <div class="medicine-tracker mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4 class="fw-bold mb-0">Your daily medicine</h4>
+                            <button class="btn btn-sm btn-outline-primary rounded-pill px-3"
+                                style="color: var(--dash-primary); border-color: var(--dash-primary); background: rgba(129, 107, 251, 0.05);">Add
+                                medicine</button>
+                        </div>
+
+                        <!-- Timeline Header -->
+                        <div class="d-flex justify-content-between text-muted small mb-4 px-2"
+                            style="border-bottom: 1px solid #eee; padding-bottom: 15px;">
+                            <span>Tue 9</span>
+                            <span>Wed 10</span>
+                            <span>Thu 11</span>
+                            <span>Fri 12</span>
+                            <span>Sat 13</span>
+                            <span class="fw-bold text-dark">Sun 14</span>
+                            <span>Mon 15</span>
+                            <span>Tue 16</span>
+                            <span>Wed 17</span>
+                            <span>Thu 18</span>
+                            <span>Fri 19</span>
+                        </div>
+
+                        <!-- Timeline Rows -->
+                        <div class="position-relative">
+                            <!-- Metformin -->
+                            <div class="d-flex align-items-center mb-4 position-relative">
+                                <span class="text-muted small position-absolute start-0" style="top: -20px;">Metformin
+                                    <strong>500mg</strong></span>
+                                <div class="med-bar purple" style="width: 60%; margin-left: 20%;">
+                                    <div class="ms-auto med-icon purple"><i class="fa-solid fa-pills small"></i></div>
+                                </div>
+                            </div>
+
+                            <!-- Lisinopril -->
+                            <div class="d-flex align-items-center mb-4 position-relative">
+                                <span class="text-muted small position-absolute start-0" style="top: -20px;">Lisinopril
+                                    <strong>10mg</strong></span>
+                                <div class="d-flex w-100">
+                                    <div class="med-bar yellow me-1" style="width: 15%; margin-left: 10%;">
+                                        <div class="ms-auto med-icon yellow"><i class="fa-solid fa-capsules small"></i>
+                                        </div>
+                                    </div>
+                                    <div class="med-bar purple" style="width: 15%;">
+                                        <div class="ms-auto med-icon purple"><i class="fa-solid fa-pills small"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Atorvastatin -->
+                            <div class="d-flex align-items-center mb-4 position-relative">
+                                <span class="text-muted small position-absolute start-0"
+                                    style="top: -20px;">Atorvastatin <strong>20mg</strong></span>
+                                <div class="med-bar yellow" style="width: 50%; margin-left: 30%;">
+                                    <div class="ms-auto med-icon yellow"><i class="fa-solid fa-capsules small"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Amoxicillin -->
+                            <div class="d-flex align-items-center mb-4 position-relative">
+                                <span class="text-muted small position-absolute start-0" style="top: -20px;">Amoxicillin
+                                    <strong>500mg</strong></span>
+                                <div class="d-flex w-100">
+                                    <div class="med-bar yellow me-1" style="width: 70%; margin-left: 10%;">
+                                        <div class="ms-auto med-icon yellow"><i class="fa-solid fa-capsules small"></i>
+                                        </div>
+                                    </div>
+                                    <div class="med-bar purple" style="width: 10%;">
+                                        <div class="ms-auto med-icon purple"><i class="fa-solid fa-pills small"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Widgets -->
+                    <div class="row g-4">
+                        <!-- Schedule/Calendar Dummy -->
+                        <div class="col-md-4">
+                            <div class="dash-widget">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="widget-title mb-0">Schedule</h5>
+                                    <i class="fa-solid fa-expand text-muted small"></i>
+                                </div>
+                                <div class="mt-4">
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <small class="text-muted">Dentist</small>
+                                        <div class="d-flex gap-1">
+                                            <div
+                                                style="width: 15px; height: 15px; border-radius: 4px; background: rgba(129, 107, 251, 0.2);">
+                                            </div>
+                                            <div
+                                                style="width: 15px; height: 15px; border-radius: 4px; background: rgba(129, 107, 251, 1);">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <small class="text-muted">Gym</small>
+                                        <div class="d-flex gap-1">
+                                            <div
+                                                style="width: 15px; height: 15px; border-radius: 4px; background: rgba(129, 107, 251, 1);">
+                                            </div>
+                                            <div
+                                                style="width: 15px; height: 15px; border-radius: 4px; background: rgba(129, 107, 251, 0.2);">
+                                            </div>
+                                            <div
+                                                style="width: 15px; height: 15px; border-radius: 4px; background: rgba(129, 107, 251, 1);">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <small class="text-muted">Psychologist</small>
+                                        <div class="d-flex gap-1">
+                                            <div
+                                                style="width: 15px; height: 15px; border-radius: 4px; background: rgba(129, 107, 251, 1);">
+                                            </div>
+                                            <div
+                                                style="width: 15px; height: 15px; border-radius: 4px; background: rgba(129, 107, 251, 0.2);">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between mt-3 text-muted"
+                                        style="font-size: 0.7rem;">
+                                        <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Billing Chart -->
+                        <div class="col-md-4">
+                            <div class="dash-widget text-center position-relative">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h5 class="widget-title mb-0">Billing Status</h5>
+                                    <i class="fa-solid fa-expand text-muted small"></i>
+                                </div>
+                                <div style="height: 180px; position: relative;">
+                                    <canvas id="billingChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Consultations Chart -->
+                        <div class="col-md-4">
+                            <div class="dash-widget">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <h5 class="widget-title mb-0">Consultations</h5>
+                                    <i class="fa-solid fa-expand text-muted small"></i>
+                                </div>
+                                <div style="height: 150px;">
+                                    <canvas id="consultationChart"></canvas>
+                                </div>
+                                <p class="text-muted mb-0 mt-3" style="font-size: 0.7rem;">*Offline visits deliver
+                                    better results.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Side Panel (CureAI) -->
+                <div class="col-xl-4 col-lg-5">
+                    <div class="ai-panel">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div>
+                                <i class="fa-solid fa-bars"></i>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <span>CureAI 1.4</span>
+                                <span class="badge border border-light fw-normal rounded-pill">Beta</span>
+                            </div>
+                            <div>
+                                <i class="fa-solid fa-expand"></i>
+                            </div>
+                        </div>
+
+                        <div class="ai-orb"></div>
+
+                        <div class="text-center mb-4">
+                            <h5 class="fw-normal">How can I assist you today?</h5>
+                        </div>
+
+                        <div class="ai-grid">
+                            <div class="ai-action">
+                                <i class="fa-solid fa-user-doctor"></i>
+                                Specialists
+                            </div>
+                            <div class="ai-action">
+                                <i class="fa-solid fa-file-medical"></i>
+                                Med. History
+                            </div>
+                            <div class="ai-action">
+                                <i class="fa-solid fa-notes-medical"></i>
+                                My EHR
+                            </div>
+                            <div class="ai-action">
+                                <i class="fa-solid fa-file-waveform"></i>
+                                Health report
+                            </div>
+                            <div class="ai-action">
+                                <i class="fa-solid fa-prescription-bottle-medical"></i>
+                                Prescriptions
+                            </div>
+                            <div class="ai-action">
+                                <i class="fa-solid fa-stethoscope"></i>
+                                Consultation
+                            </div>
+                        </div>
+
+                        <div class="ai-input-container">
+                            <i class="fa-solid fa-wand-magic-sparkles me-2" style="font-size: 0.9rem;"></i>
+                            <input type="text" class="ai-input" placeholder="Ask anything...">
+                            <i class="fa-solid fa-paper-plane ms-2 border p-2 rounded-circle"
+                                style="cursor: pointer;"></i>
+                            <i class="fa-solid fa-microphone ms-2" style="cursor: pointer;"></i>
+                        </div>
+                        <p class="text-center mt-3 mb-0" style="font-size: 0.7rem; color: rgba(255,255,255,0.7);">CureAI
+                            can make mistakes. Check important information.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="assets/js/scripts.js"></script>
+</body>
+
+</html>

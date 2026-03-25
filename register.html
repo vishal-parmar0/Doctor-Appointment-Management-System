@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - MediBook Doctor Appointment System</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0066FF;
+            --primary-dark: #0052CC;
+            --purple: #7C3AED;
+            --success: #10B981;
+            --error: #EF4444;
+            --warning: #F59E0B;
+            --dark: #1A1A2E;
+            --light-bg: #F8FAFF;
+            --white: #FFFFFF;
+            --shadow: 0 20px 60px rgba(0, 102, 255, 0.15);
+            --radius: 16px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Navbar copy from index */
+        .navbar {
+            background: var(--white);
+            box-shadow: 0 10px 30px rgba(0, 102, 255, 0.05);
+            padding: 15px 0;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--dark) !important;
+            font-size: 24px;
+        }
+
+        .navbar-brand span {
+            color: var(--primary);
+        }
+
+        /* Split Layout */
+        .main-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-wrapper {
+            display: flex;
+            width: 100%;
+            min-height: calc(100vh - 80px);
+        }
+
+        .left-panel {
+            flex: 1;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--purple) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: var(--white);
+            padding: 60px;
+            text-align: center;
+        }
+
+        .left-panel i.main-icon {
+            font-size: 80px;
+            margin-bottom: 30px;
+        }
+
+        .left-panel h2 {
+            font-weight: 700;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+            margin: 40px 0;
+        }
+
+        .feature-list li {
+            margin-bottom: 15px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .feature-list li i {
+            color: var(--white);
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.2);
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stats-row {
+            display: flex;
+            gap: 30px;
+            margin-top: 40px;
+            font-weight: 600;
+        }
+
+        .stats-row span {
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 15px;
+            border-radius: 10px;
+        }
+
+        .right-panel {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--light-bg);
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .auth-card {
+            background: var(--white);
+            padding: 50px 40px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 550px;
+            margin: 40px 0;
+        }
+
+        .auth-header h3 {
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .auth-header p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        /* Role Switcher */
+        .role-switcher {
+            display: flex;
+            background: #f0f4ff;
+            padding: 5px;
+            border-radius: 50px;
+            margin-bottom: 30px;
+        }
+
+        .role-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            border-radius: 50px;
+            font-weight: 600;
+            color: #666;
+            transition: var(--transition);
+        }
+
+        .role-btn.active {
+            background: var(--primary);
+            color: var(--white);
+            box-shadow: 0 5px 15px rgba(0, 102, 255, 0.2);
+        }
+
+        /* Form Fields */
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group i.field-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            z-index: 5;
+            transition: var(--transition);
+        }
+
+        .form-control {
+            padding: 12px 15px 12px 45px;
+            border-radius: 12px;
+            border: 1px solid #eee;
+            height: 52px;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(0, 102, 255, 0.1);
+            outline: none;
+        }
+
+        /* Validation Indicators */
+        .validation-indicator {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 5;
+            display: none;
+        }
+
+        .validation-indicator.success {
+            color: var(--success);
+            display: block;
+        }
+
+        .validation-indicator.error {
+            color: var(--error);
+            display: block;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #999;
+            z-index: 5;
+        }
+
+        /* Strength Meter */
+        .strength-meter {
+            height: 4px;
+            background-color: #eee;
+            margin: 8px 0;
+            border-radius: 2px;
+            position: relative;
+        }
+
+        .strength-bar {
+            height: 100%;
+            width: 0%;
+            border-radius: 2px;
+            transition: var(--transition);
+        }
+
+        .strength-label {
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        /* Match Indicator */
+        .match-indicator {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            display: none;
+        }
+
+        /* Buttons */
+        .btn-auth {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--purple) 100%);
+            color: var(--white);
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 16px;
+            transition: var(--transition);
+            margin: 20px 0;
+        }
+
+        .btn-auth:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 102, 255, 0.3);
+            filter: brightness(1.1);
+        }
+
+        .bottom-link {
+            text-align: center;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .bottom-link a {
+            color: var(--primary);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        /* Flash Messages */
+        #flash-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1100;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .flash-msg {
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .flash-success {
+            background-color: var(--success);
+        }
+
+        .flash-error {
+            background-color: var(--error);
+        }
+
+        .flash-info {
+            background-color: var(--primary);
+        }
+
+        .flash-warning {
+            background-color: var(--warning);
+        }
+
+        /* Doctor Fields */
+        #doctor-fields {
+            display: none;
+        }
+
+        /* Animations */
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0)
+            }
+
+            25% {
+                transform: translateX(-10px)
+            }
+
+            75% {
+                transform: translateX(10px)
+            }
+        }
+
+        .shake {
+            animation: shake 0.3s ease-in-out;
+        }
+
+        /* Responsive */
+        @media (max-width: 991px) {
+            .left-panel {
+                display: none;
+            }
+
+            .auth-wrapper {
+                height: auto;
+            }
+
+            .auth-card {
+                padding: 30px 20px;
+                margin: 20px 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Flash Container -->
+    <div id="flash-container"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <span><i class="fa-solid fa-square-plus"></i></span> MediBook
+            </a>
+            <div class="ms-auto d-none d-lg-block">
+                <a href="index.html" class="nav-link"><i class="fa-solid fa-house me-1"></i> Back to Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="auth-wrapper">
+            <!-- Left Panel -->
+            <div class="left-panel" data-aos="fade-right">
+                <i class="fa-solid fa-user-plus main-icon"></i>
+                <h2>Join MediBook Today</h2>
+                <p>Your Health, Our Priority</p>
+
+                <ul class="feature-list">
+                    <li><i class="fa-solid fa-check"></i> Free patient registration</li>
+                    <li><i class="fa-solid fa-check"></i> Access 50+ specialist doctors</li>
+                    <li><i class="fa-solid fa-check"></i> Instant appointment booking</li>
+                </ul>
+
+                <div class="stats-row">
+                    <span>500+ Doctors</span>
+                    <span>10K+ Patients</span>
+                    <span>4.8★ Rating</span>
+                </div>
+            </div>
+
+            <!-- Right Panel -->
+            <div class="right-panel">
+                <div class="auth-card" data-aos="fade-left" id="auth-card">
+                    <div class="auth-header text-center">
+                        <h3>Create Your Account 🏥</h3>
+                        <p>Join thousands of patients on MediBook</p>
+
+                        <div class="role-switcher">
+                            <button type="button" class="role-btn active"
+                                onclick="switchRole('patient', this)">Patient</button>
+                            <button type="button" class="role-btn" onclick="switchRole('doctor', this)">Doctor</button>
+                        </div>
+                        <p id="doctor-note" class="small text-muted d-none">Note: Doctor accounts require admin approval
+                        </p>
+                    </div>
+
+                    <form id="register-form" action="/register" method="POST">
+                        <input type="hidden" name="role" id="role-input" value="patient">
+
+                        <!-- Full Name -->
+                        <div class="form-group">
+                            <label class="form-label">Full Name</label>
+                            <div class="input-group">
+                                <i class="fa-solid fa-user field-icon"></i>
+                                <input type="text" name="name" class="form-control" placeholder="Enter your full name"
+                                    required id="name">
+                                <i class="fa-solid fa-circle-check validation-indicator success" id="name-success"></i>
+                            </div>
+                            <small class="text-danger d-none" id="name-error">Name must be at least 3 characters &
+                                letters only</small>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="form-group">
+                            <label class="form-label">Email Address</label>
+                            <div class="input-group">
+                                <i class="fa-solid fa-envelope field-icon"></i>
+                                <input type="email" name="email" class="form-control" placeholder="Enter your email"
+                                    required id="email">
+                                <i class="fa-solid fa-circle-check validation-indicator success" id="email-success"></i>
+                            </div>
+                            <small class="text-danger d-none" id="email-error">Please enter a valid email
+                                address</small>
+                        </div>
+
+                        <!-- Phone Number -->
+                        <div class="form-group">
+                            <label class="form-label">Phone Number</label>
+                            <div class="input-group">
+                                <i class="fa-solid fa-phone field-icon"></i>
+                                <input type="tel" name="phone" class="form-control ps-4" placeholder="10 digit number"
+                                    required id="phone" style="padding-left: 85px !important;">
+                                <div style="position:absolute; left: 40px; top: 14px; font-weight: 600; color: #555;">
+                                    +91</div>
+                                <i class="fa-solid fa-circle-check validation-indicator success" id="phone-success"></i>
+                            </div>
+                            <small class="text-danger d-none" id="phone-error">Please enter valid 10 digit
+                                number</small>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+                            <div class="input-group">
+                                <i class="fa-solid fa-lock field-icon"></i>
+                                <input type="password" name="password" class="form-control"
+                                    placeholder="Create a strong password" required id="password">
+                                <i class="fa-solid fa-eye password-toggle"
+                                    onclick="togglePassword('password', this)"></i>
+                            </div>
+                            <!-- Strength Meter -->
+                            <div class="strength-meter">
+                                <div class="strength-bar" id="strength-bar"></div>
+                            </div>
+                            <div class="strength-label" id="strength-label">Strength: Weak</div>
+                            <small class="text-danger d-none" id="password-error">Minimum 8 characters, 1 uppercase, 1
+                                number, 1 special char</small>
+                        </div>
+
+                        <!-- Confirm Password -->
+                        <div class="form-group">
+                            <label class="form-label">Confirm Password</label>
+                            <div class="input-group">
+                                <i class="fa-solid fa-lock field-icon"></i>
+                                <input type="password" name="confirm_password" class="form-control"
+                                    placeholder="Re-enter password" required id="confirm_password">
+                                <i class="fa-solid fa-eye password-toggle"
+                                    onclick="togglePassword('confirm_password', this)"></i>
+                                <i class="fa-solid fa-circle-check match-indicator text-success" id="match-success"></i>
+                                <i class="fa-solid fa-circle-xmark match-indicator text-danger" id="match-error"></i>
+                            </div>
+                            <small class="text-danger d-none" id="match-msg">Passwords do not match</small>
+                        </div>
+
+                        <!-- Doctor Extra Fields -->
+                        <div id="doctor-fields">
+                            <div class="form-group">
+                                <label class="form-label">Specialization</label>
+                                <div class="input-group">
+                                    <i class="fa-solid fa-stethoscope field-icon"></i>
+                                    <select name="specialization" class="form-control">
+                                        <option value="">Select Specialization</option>
+                                        <option>Cardiologist</option>
+                                        <option>Dermatologist</option>
+                                        <option>Neurologist</option>
+                                        <option>General Physician</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Years of Experience</label>
+                                <div class="input-group">
+                                    <i class="fa-solid fa-briefcase-medical field-icon"></i>
+                                    <input type="number" name="experience" class="form-control"
+                                        placeholder="Experience in years" min="0">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Terms -->
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" type="checkbox" id="terms" required>
+                            <label class="form-check-label small" for="terms">
+                                I agree to the <a href="#" class="text-primary font-weight-bold">Terms of Service</a>
+                                and <a href="#" class="text-primary font-weight-bold">Privacy Policy</a>
+                            </label>
+                        </div>
+
+                        <!-- Submit -->
+                        <button type="submit" class="btn btn-auth">Create My Account</button>
+
+                        <div class="bottom-link">
+                            Already have an account? <a href="login.html">Login Here</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script>
+        AOS.init({ duration: 1000, once: true });
+
+        // Flash Message Helper
+        function showFlash(message, type = 'success') {
+            const container = document.getElementById('flash-container');
+            const flash = document.createElement('div');
+            flash.className = `flash-msg flash-${type}`;
+            const icons = {
+                'success': 'fa-circle-check',
+                'error': 'fa-circle-exclamation',
+                'info': 'fa-circle-info',
+                'warning': 'fa-triangle-exclamation'
+            };
+            flash.innerHTML = `<i class="fa-solid ${icons[type] || 'fa-circle-info'}"></i><span>${message}</span>`;
+            container.appendChild(flash);
+            setTimeout(() => {
+                flash.style.opacity = '0';
+                setTimeout(() => flash.remove(), 300);
+            }, 3000);
+        }
+
+        // Role Switcher
+        function switchRole(role, btn) {
+            document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('role-input').value = role;
+
+            const docFields = document.getElementById('doctor-fields');
+            const docNote = document.getElementById('doctor-note');
+            if (role === 'doctor') {
+                docFields.style.display = 'block';
+                docNote.classList.remove('d-none');
+                showFlash('Dr. registration requires profile verification', 'warning');
+            } else {
+                docFields.style.display = 'none';
+                docNote.classList.add('d-none');
+            }
+        }
+
+        // Toggle Password
+        function togglePassword(inputId, icon) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+
+        // Password Strength Logic
+        const passwordInput = document.getElementById('password');
+        const strengthBar = document.getElementById('strength-bar');
+        const strengthLabel = document.getElementById('strength-label');
+
+        passwordInput.addEventListener('keyup', () => {
+            const val = passwordInput.value;
+            let score = 0;
+            if (val.length >= 8) score++;
+            if (/[A-Z]/.test(val)) score++;
+            if (/[0-9]/.test(val)) score++;
+            if (/[^A-Za-z0-9]/.test(val)) score++;
+
+            const widths = ['25%', '50%', '75%', '100%'];
+            const colors = ['var(--error)', 'var(--warning)', 'var(--primary)', 'var(--success)'];
+            const labels = ['Weak', 'Fair', 'Good', 'Strong'];
+
+            if (val.length === 0) {
+                strengthBar.style.width = '0%';
+                strengthLabel.innerText = 'Strength: Weak';
+                return;
+            }
+
+            strengthBar.style.width = widths[score - 1] || '10%';
+            strengthBar.style.backgroundColor = colors[score - 1] || colors[0];
+            strengthLabel.innerText = 'Strength: ' + (labels[score - 1] || 'Weak');
+            strengthLabel.style.color = colors[score - 1] || colors[0];
+        });
+
+        // Real-time Match Indicator
+        const confirmInput = document.getElementById('confirm_password');
+        const mSuccess = document.getElementById('match-success');
+        const mError = document.getElementById('match-error');
+
+        confirmInput.addEventListener('keyup', () => {
+            if (confirmInput.value.length === 0) {
+                mSuccess.style.display = 'none';
+                mError.style.display = 'none';
+                return;
+            }
+            if (confirmInput.value === passwordInput.value) {
+                mSuccess.style.display = 'block';
+                mError.style.display = 'none';
+                confirmInput.style.borderColor = 'var(--success)';
+            } else {
+                mSuccess.style.display = 'none';
+                mError.style.display = 'block';
+                confirmInput.style.borderColor = 'var(--error)';
+            }
+        });
+
+        // Real-time Field Validation (On Blur)
+        const inputs = ['name', 'email', 'phone'];
+        inputs.forEach(id => {
+            const el = document.getElementById(id);
+            el.addEventListener('blur', () => {
+                validateField(id);
+            });
+        });
+
+        function validateField(id) {
+            const el = document.getElementById(id);
+            const val = el.value;
+            const error = document.getElementById(id + '-error');
+            const success = document.getElementById(id + '-success');
+            let valid = true;
+
+            if (id === 'name') {
+                valid = val.length >= 3 && /^[A-Za-z\s]+$/.test(val);
+            } else if (id === 'email') {
+                valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+            } else if (id === 'phone') {
+                valid = /^\d{10}$/.test(val);
+            }
+
+            if (valid && val.length > 0) {
+                error.classList.add('d-none');
+                success.classList.add('success');
+                el.style.borderColor = 'var(--success)';
+            } else if (val.length > 0) {
+                error.classList.remove('d-none');
+                success.classList.remove('success');
+                el.style.borderColor = 'var(--error)';
+            }
+            return valid;
+        }
+
+        // Form Submit
+        const form = document.getElementById('register-form');
+        const card = document.getElementById('auth-card');
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            let allValid = true;
+
+            inputs.forEach(id => { if (!validateField(id)) allValid = false; });
+
+            if (passwordInput.value.length < 8) {
+                allValid = false;
+                document.getElementById('password-error').classList.remove('d-none');
+            }
+            if (confirmInput.value !== passwordInput.value) {
+                allValid = false;
+                document.getElementById('match-msg').classList.remove('d-none');
+            }
+
+            if (!allValid) {
+                card.classList.add('shake');
+                setTimeout(() => card.classList.remove('shake'), 400);
+                showFlash('Please fix form errors', 'error');
+                return;
+            }
+
+            const btn = form.querySelector('.btn-auth');
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Creating Account...';
+            btn.disabled = true;
+
+            setTimeout(() => {
+                showFlash('Account created! Welcome to MediBook', 'success');
+                setTimeout(() => window.location.href = 'login.html', 1500);
+            }, 1500);
+        });
+    </script>
+</body>
+
+</html>

@@ -175,23 +175,6 @@
             max-width: 500px;
         }
 
-        .play-btn {
-            width: 50px;
-            height: 50px;
-            border: 2px solid var(--primary-blue);
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary-blue);
-            margin-left: 20px;
-            transition: var(--transition);
-        }
-
-        .play-btn:hover {
-            background: var(--primary-blue);
-            color: var(--white);
-        }
 
         .hero-stats {
             margin-top: 50px;
@@ -853,14 +836,13 @@
                         care, anytime you need it.</p>
                     <div class="d-flex align-items-center mb-5">
                         <a href="#appointment" class="btn btn-primary">Book Appointment</a>
-                        <a href="#" class="play-btn"><i class="fa-solid fa-play"></i></a>
                     </div>
                     <div class="hero-stats">
                         <div class="stat-floating-card">
                             <div class="avatar-group">
-                                <img src="https://i.pravatar.cc/150?u=1" alt="doc">
-                                <img src="https://i.pravatar.cc/150?u=2" alt="doc">
-                                <img src="https://i.pravatar.cc/150?u=3" alt="doc">
+                                <img src="assets/images/doctor-1.png" alt="doc">
+                                <img src="assets/images/doctor-2.png" alt="doc">
+                                <img src="assets/images/doctor-3.png" alt="doc">
                             </div>
                             <div>
                                 <h6 class="mb-0 fw-bold">Latest Doctors</h6>
@@ -878,7 +860,7 @@
                 </div>
                 <div class="col-lg-6 mt-5 mt-lg-0" data-aos="fade-left">
                     <div class="hero-image-container">
-                        <img src="https://via.placeholder.com/400x500/0066FF/FFFFFF?text=Doctor+Image" alt="doctor">
+                        <img src="assets/images/hero-doctor.png" alt="doctor">
                         <div class="badge-appointments" data-aos="zoom-in" data-aos-delay="500">
                             <h4 class="mb-0 fw-bold">500+</h4>
                             <small class="text-muted">Appointments Booked</small>
@@ -991,7 +973,7 @@
                 </div>
                 <div class="col-lg-6 mt-5 mt-lg-0" data-aos="fade-left">
                     <div class="about-img-container">
-                        <img src="https://via.placeholder.com/600x450/f0f7ff/0066FF?text=Medical+Team" alt="about">
+                        <img src="assets/images/about-team.png" alt="about">
                         <div class="experience-floating-card">
                             <span class="text-primary fs-3">15+</span>
                             <br>Years Experience
@@ -1137,7 +1119,7 @@
                         <div class="col-md-6 doctor-item" data-category="cardiologist">
                             <div class="doctor-card">
                                 <div class="doctor-img-wrapper">
-                                    <img src="https://i.pravatar.cc/300?u=a" alt="Doc">
+                                    <img src="assets/images/doctor-1.png" alt="Doc">
                                     <div class="appointment-overlay">
                                         <a href="#appointment" class="btn btn-primary">Book An Appointment</a>
                                     </div>
@@ -1155,7 +1137,7 @@
                         <div class="col-md-6 doctor-item" data-category="dermatologist">
                             <div class="doctor-card">
                                 <div class="doctor-img-wrapper">
-                                    <img src="https://i.pravatar.cc/300?u=b" alt="Doc">
+                                    <img src="assets/images/doctor-2.png" alt="Doc">
                                     <div class="appointment-overlay">
                                         <a href="#appointment" class="btn btn-primary">Book An Appointment</a>
                                     </div>
@@ -1173,7 +1155,7 @@
                         <div class="col-md-6 doctor-item" data-category="neurologist">
                             <div class="doctor-card">
                                 <div class="doctor-img-wrapper">
-                                    <img src="https://i.pravatar.cc/300?u=c" alt="Doc">
+                                    <img src="assets/images/doctor-3.png" alt="Doc">
                                     <div class="appointment-overlay">
                                         <a href="#appointment" class="btn btn-primary">Book An Appointment</a>
                                     </div>
@@ -1191,7 +1173,7 @@
                         <div class="col-md-6 doctor-item" data-category="orthopedist">
                             <div class="doctor-card">
                                 <div class="doctor-img-wrapper">
-                                    <img src="https://i.pravatar.cc/300?u=d" alt="Doc">
+                                    <img src="assets/images/doctor-4.png" alt="Doc">
                                     <div class="appointment-overlay">
                                         <a href="#appointment" class="btn btn-primary">Book An Appointment</a>
                                     </div>
@@ -1216,7 +1198,8 @@
                         <p>Awarded to our top rated doctor for consistently achieving exceptional precision in patient
                             care</p>
                         <hr class="my-4">
-                        <img src="https://i.pravatar.cc/100?u=x" class="rounded-circle mb-3" alt="award doc">
+                        <img src="assets/images/doctor-2.png" class="rounded-circle mb-3" alt="award doc"
+                            style="width: 100px; height: 100px; object-fit: cover;">
                         <h5 class="fw-bold">Dr. Victor James</h5>
                         <p class="text-primary mb-2">Orthopedic Surgeon</p>
                         <div class="rating">
@@ -1285,8 +1268,7 @@
                 </div>
                 <div class="col-lg-6 mt-5 mt-lg-0" data-aos="fade-left">
                     <div class="appointment-img-box ms-lg-5">
-                        <img src="https://via.placeholder.com/500x650/f0f7ff/0066FF?text=Doctor+Smiling"
-                            alt="appointment">
+                        <img src="assets/images/doctor-1.png" alt="Doctor Smiling" class="img-fluid">
                         <div class="xp-badge">8 Years of Experience</div>
                         <div class="stat-floating-card mt-4" style="background: var(--light-bg);">
                             <canvas id="satisfactionChart" width="80" height="80"></canvas>
@@ -1316,7 +1298,8 @@
                 <div class="col-lg-4" data-aos="fade-up">
                     <div class="testimonial-card">
                         <div class="client-info">
-                            <img src="https://i.pravatar.cc/100?u=12" alt="p">
+                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=200&h=200"
+                                alt="p">
                             <div>
                                 <h6 class="mb-0 fw-bold">Monica Johnson</h6>
                                 <small class="text-muted">Patient</small>
@@ -1336,7 +1319,8 @@
                 <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
                     <div class="testimonial-card">
                         <div class="client-info">
-                            <img src="https://i.pravatar.cc/100?u=13" alt="p">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200&h=200"
+                                alt="p">
                             <div>
                                 <h6 class="mb-0 fw-bold">Rahul Sharma</h6>
                                 <small class="text-muted">Patient</small>
@@ -1356,7 +1340,8 @@
                 <div class="col-lg-4" data-aos="fade-up" data-aos-delay="400">
                     <div class="testimonial-card">
                         <div class="client-info">
-                            <img src="https://i.pravatar.cc/100?u=14" alt="p">
+                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200&h=200"
+                                alt="p">
                             <div>
                                 <h6 class="mb-0 fw-bold">Priya Patel</h6>
                                 <small class="text-muted">Patient</small>

@@ -1,0 +1,1598 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Dashboard - MediBook</title>
+
+    <!-- Tech Stack (CDNs) -->
+    <!-- Bootstrap 5.3.0 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome 6.4.0 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0066FF;
+            --purple: #7C3AED;
+            --purple-light: #EDE9FE;
+            --teal: #06B6D4;
+            --teal-light: #CFFAFE;
+            --yellow: #F59E0B;
+            --yellow-light: #FEF3C7;
+            --green: #10B981;
+            --red: #EF4444;
+            --bg-page: #F0F2FF;
+            --bg-card: #FFFFFF;
+            --text-dark: #1A1A2E;
+            --text-grey: #6B7280;
+            --shadow-sm: 0 2px 8px rgba(124, 58, 237, 0.08);
+            --shadow-md: 0 4px 24px rgba(124, 58, 237, 0.12);
+            --shadow-lg: 0 8px 40px rgba(124, 58, 237, 0.16);
+            --radius-sm: 10px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* Background Decoration Circles */
+        .bg-decoration {
+            position: fixed;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .bg-top-right {
+            top: -100px;
+            right: -100px;
+            background: rgba(124, 58, 237, 0.08);
+        }
+
+        .bg-bottom-left {
+            bottom: -100px;
+            left: -100px;
+            background: rgba(6, 182, 212, 0.08);
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 70px;
+            background: white;
+            z-index: 9999;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            padding: 0 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-logo {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--purple);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-logo i {
+            font-size: 24px;
+        }
+
+        .nav-tabs-pill {
+            display: flex;
+            background: #F3F4F6;
+            padding: 5px;
+            border-radius: 30px;
+            gap: 5px;
+        }
+
+        .nav-tab {
+            text-decoration: none;
+            color: var(--text-dark);
+            padding: 8px 18px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-tab:hover {
+            color: var(--purple);
+            background: rgba(124, 58, 237, 0.05);
+        }
+
+        .nav-tab.active {
+            background: var(--purple);
+            color: white !important;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .search-container {
+            position: relative;
+            width: 220px;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 8px 40px 8px 15px;
+            border-radius: 20px;
+            background: #F9FAFB;
+            border: 1px solid #E5E7EB;
+            font-size: 13px;
+        }
+
+        .search-container .short-key {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 11px;
+            color: var(--text-grey);
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .nav-btn {
+            color: var(--text-grey);
+            font-size: 18px;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-btn:hover {
+            color: var(--purple);
+        }
+
+        .badge-notify {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--red);
+            color: white;
+            font-size: 10px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse-red 2s infinite;
+        }
+
+        @keyframes pulse-red {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+            }
+
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 6px rgba(239, 68, 68, 0);
+            }
+
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+            }
+        }
+
+        .avatar-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--purple), var(--teal));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(124, 58, 237, 0.2);
+        }
+
+        .profile-dropdown {
+            position: absolute;
+            top: 60px;
+            right: 30px;
+            background: white;
+            width: 180px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            display: none;
+            overflow: hidden;
+            z-index: 10001;
+        }
+
+        .profile-dropdown a {
+            display: block;
+            padding: 12px 15px;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .profile-dropdown a:hover {
+            background: #F9FAFB;
+        }
+
+        .profile-dropdown a.logout {
+            color: var(--red);
+            border-top: 1px solid #eee;
+        }
+
+        /* Dashboard Body */
+        .dashboard-container {
+            margin-top: 70px;
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .left-column {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .greeting-section .subtitle {
+            font-size: 14px;
+            color: var(--text-grey);
+            margin-bottom: 5px;
+        }
+
+        .greeting-section h2 {
+            font-weight: 700;
+            font-size: 32px;
+            margin: 0;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-card .icon-circle {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+
+        .stat-card h3 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            font-size: 13px;
+            color: var(--text-grey);
+            margin: 0;
+        }
+
+        .stat-card .trend {
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .trend.up {
+            color: var(--green);
+        }
+
+        .trend.down {
+            color: var(--red);
+        }
+
+        /* Medicine Card */
+        .medicine-card {
+            background: white;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            padding: 24px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border: none;
+            background: transparent;
+        }
+
+        .card-header h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .btn-add-med {
+            background: white;
+            color: var(--purple);
+            border: 1.5px solid var(--purple);
+            padding: 6px 15px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .btn-add-med:hover {
+            background: var(--purple);
+            color: white;
+        }
+
+        /* Date Scroll */
+        .date-scroll-container {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 10px 0 20px;
+            scrollbar-width: none;
+            /* Firefox */
+        }
+
+        .date-scroll-container::-webkit-scrollbar {
+            display: none;
+            /* Chrome/Safari */
+        }
+
+        .date-pill {
+            min-width: 55px;
+            height: 70px;
+            background: white;
+            border: 1px solid #F3F4F6;
+            border-radius: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .date-pill .day {
+            font-size: 11px;
+            color: var(--text-grey);
+            margin-bottom: 5px;
+        }
+
+        .date-pill .num {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .date-pill:hover {
+            background: var(--purple-light);
+            border-color: var(--purple);
+        }
+
+        .date-pill.active {
+            background: var(--purple);
+            color: white;
+            border-color: var(--purple);
+            box-shadow: 0 5px 15px rgba(124, 58, 237, 0.2);
+        }
+
+        .date-pill.active .day {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Medicine List */
+        .med-list-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #F3F4F6;
+            transition: 0.2s;
+        }
+
+        .med-list-row:hover {
+            background: #F9FAFB;
+        }
+
+        .med-info h5 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .med-info p {
+            font-size: 12px;
+            color: var(--text-grey);
+            margin: 0;
+        }
+
+        .med-badges {
+            display: flex;
+            gap: 8px;
+        }
+
+        .badge-pill {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .bg-purple {
+            background-color: var(--purple);
+        }
+
+        .bg-teal {
+            background-color: var(--teal);
+        }
+
+        .bg-yellow {
+            background-color: var(--yellow);
+        }
+
+        /* Bottom Row Grid */
+        .bottom-row-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .bottom-card {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .bottom-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .bottom-card-header h5 {
+            font-size: 15px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .expand-icon {
+            font-size: 12px;
+            color: var(--text-grey);
+            cursor: pointer;
+        }
+
+        /* Schedule Grid */
+        .schedule-table {
+            display: grid;
+            grid-template-columns: 80px repeat(5, 1fr);
+            gap: 6px;
+            text-align: center;
+        }
+
+        .grid-header {
+            font-size: 11px;
+            color: var(--text-grey);
+            padding-bottom: 5px;
+        }
+
+        .grid-label {
+            text-align: left;
+            font-size: 12px;
+            color: var(--text-grey);
+            display: flex;
+            align-items: center;
+        }
+
+        .grid-cell {
+            width: 100%;
+            height: 30px;
+            border-radius: 8px;
+            background: #F3F4F6;
+        }
+
+        .grid-cell.active-p {
+            background: var(--purple-light);
+            border: 1px solid var(--purple);
+            position: relative;
+        }
+
+        .grid-cell.active-p::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: var(--purple);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .grid-cell.active-t {
+            background: var(--teal-light);
+            position: relative;
+        }
+
+        .grid-cell.active-t::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: var(--teal);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .grid-cell.active-y {
+            background: var(--yellow-light);
+            position: relative;
+        }
+
+        .grid-cell.active-y::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: var(--yellow);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Chart Styling */
+        .chart-container-donut {
+            width: 130px;
+            margin: 0 auto 10px;
+        }
+
+        .chart-legend {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            font-size: 12px;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        .footer-note {
+            font-size: 11px;
+            font-style: italic;
+            color: var(--text-grey);
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        /* Right Column - MediAI Panel */
+        .ai-panel {
+            background: linear-gradient(160deg, #4C1D95 0%, #7C3AED 35%, #0E7490 70%, #06B6D4 100%);
+            border-radius: var(--radius-lg);
+            height: calc(100vh - 110px);
+            position: sticky;
+            top: 90px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 60px rgba(76, 29, 149, 0.5);
+            color: white;
+            z-index: 10;
+        }
+
+        .ai-top-bar {
+            padding: 18px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ai-title {
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .beta-badge {
+            font-size: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 2px 10px;
+            border-radius: 20px;
+        }
+
+        .orb-section {
+            height: 200px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #orbCanvas {
+            filter: drop-shadow(0 0 25px #00E5FF) drop-shadow(0 0 50px #7C3AED);
+            z-index: 2;
+        }
+
+        .pulsing-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .ring-1 {
+            width: 220px;
+            height: 220px;
+            animation: orbPulse 3s infinite 0s;
+        }
+
+        .ring-2 {
+            width: 180px;
+            height: 180px;
+            animation: orbPulse 3s infinite 0.5s;
+        }
+
+        .ring-3 {
+            width: 140px;
+            height: 140px;
+            animation: orbPulse 3s infinite 1s;
+        }
+
+        @keyframes orbPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.4;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 0.1;
+            }
+        }
+
+        .ai-welcome {
+            text-align: center;
+            font-size: 15px;
+            padding: 0 20px 15px;
+            font-weight: 500;
+        }
+
+        /* Quick Actions Grid */
+        .ai-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            padding: 0 16px 15px;
+        }
+
+        .action-btn {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 10px 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.22);
+            transform: translateY(-2px);
+        }
+
+        .action-btn i {
+            font-size: 14px;
+        }
+
+        .action-btn span {
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        /* Chat Area */
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+
+        .chat-bubble {
+            max-width: 85%;
+            padding: 10px 15px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .ai-bubble {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.14);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 18px 18px 18px 4px;
+        }
+
+        .user-bubble {
+            align-self: flex-end;
+            background: white;
+            color: var(--text-dark);
+            border-radius: 18px 18px 4px 18px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Loading Dots */
+        .typing {
+            display: flex;
+            gap: 4px;
+            padding: 5px 0;
+        }
+
+        .dot-pulse {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: white;
+            animation: bounce 1.2s infinite;
+        }
+
+        .dot-pulse:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .dot-pulse:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        /* Chat Input Area */
+        .chat-input-area {
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chat-input-area input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .chat-input-area input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .chat-icon-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+            border: none;
+            color: white;
+        }
+
+        .chat-icon-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .send-btn {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .ai-disclaimer {
+            font-size: 9px;
+            color: rgba(255, 255, 255, 0.4);
+            text-align: center;
+            padding: 8px 10px;
+        }
+
+        /* Upcoming Appointments Floating Section */
+        .upcoming-appointments {
+            margin-bottom: 24px;
+        }
+
+        .appt-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .appt-item {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: 16px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            gap: 12px;
+            transition: var(--transition);
+        }
+
+        .appt-item:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .appt-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            background: var(--purple-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--purple);
+            font-size: 20px;
+        }
+
+        .appt-details h6 {
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .appt-details p {
+            font-size: 11px;
+            color: var(--text-grey);
+            margin-bottom: 8px;
+        }
+
+        .status-badge {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .status-confirmed {
+            background: #DCFCE7;
+            color: #166534;
+        }
+
+        .status-pending {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .dashboard-container {
+                grid-template-columns: 1fr 340px;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .appt-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+
+            .ai-panel {
+                position: static;
+                height: 600px;
+                margin-top: 20px;
+            }
+
+            .bottom-row-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .navbar {
+                padding: 0 15px;
+            }
+
+            .nav-tabs-pill {
+                display: none;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-container {
+                padding: 20px 15px;
+            }
+
+            .search-container {
+                width: 140px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="bg-decoration bg-top-right"></div>
+    <div class="bg-bottom-left bg-decoration"></div>
+
+    <!-- Static Navbar -->
+    <nav class="navbar">
+        <a href="index.html" class="nav-logo">
+            <i class="fa-solid fa-square-plus text-purple"></i> MediBook
+        </a>
+
+        <div class="nav-tabs-pill">
+            <a href="patient-dashboard.html" class="nav-tab active">Dashboard</a>
+            <a href="appointments.html" class="nav-tab">Appointments</a>
+            <a href="prescriptions.html" class="nav-tab">Prescriptions</a>
+            <a href="medical-records.html" class="nav-tab">Medical Records</a>
+            <a href="doctors.html" class="nav-tab">Find Doctors</a>
+        </div>
+
+        <div class="nav-right">
+            <div class="search-container d-none d-md-block">
+                <i class="fa-solid fa-search"
+                    style="position: absolute; left: 12px; top: 12px; font-size: 12px; color: #999;"></i>
+                <input type="text" placeholder="Search...">
+                <span class="short-key">⌘K</span>
+            </div>
+
+            <div class="nav-btn"><i class="fa-solid fa-gear"></i></div>
+            <div class="nav-btn"><i class="fa-solid fa-comment-dots"></i></div>
+            <div class="nav-btn">
+                <i class="fa-solid fa-bell"></i>
+                <span class="badge-notify">3</span>
+            </div>
+
+            <div class="avatar-circle" onclick="toggleDropdown()">MJ</div>
+        </div>
+
+        <!-- Profile Dropdown -->
+        <div class="profile-dropdown" id="profileDropdown">
+            <div class="p-3 border-bottom">
+                <div class="fw-bold" style="font-size: 14px;">Monica Johnson</div>
+                <div class="text-muted" style="font-size: 12px;">monica@example.com</div>
+            </div>
+            <a href="profile.html"><i class="fa-solid fa-user me-2"></i> My Profile</a>
+            <a href="settings.html"><i class="fa-solid fa-cog me-2"></i> Settings</a>
+            <a href="login.html" class="logout"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i> Logout</a>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <!-- Main Content (Left) -->
+        <div class="left-column">
+
+            <div class="greeting-section" data-aos="fade-up">
+                <p class="subtitle">Good morning, Monica!</p>
+                <h2>How are you today?</h2>
+            </div>
+
+            <!-- Stats Row -->
+            <div class="stats-grid" data-aos="fade-up" data-aos-delay="100">
+                <div class="stat-card">
+                    <div class="icon-circle" style="background: var(--purple);"><i
+                            class="fa-solid fa-calendar-check"></i></div>
+                    <h3>12</h3>
+                    <p>Total Appointments</p>
+                    <div class="trend up"><i class="fa-solid fa-arrow-up"></i> All time</div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon-circle" style="background: var(--teal);"><i class="fa-solid fa-clock"></i></div>
+                    <h3>2</h3>
+                    <p>Upcoming</p>
+                    <div class="trend"><i class="fa-solid fa-minus"></i> Next 7 days</div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon-circle" style="background: var(--green);"><i class="fa-solid fa-check-circle"></i>
+                    </div>
+                    <h3>8</h3>
+                    <p>Completed</p>
+                    <div class="trend up"><i class="fa-solid fa-arrow-up"></i> This month</div>
+                </div>
+                <div class="stat-card">
+                    <div class="icon-circle" style="background: var(--red);"><i class="fa-solid fa-times-circle"></i>
+                    </div>
+                    <h3>2</h3>
+                    <p>Cancelled</p>
+                    <div class="trend down"><i class="fa-solid fa-arrow-down"></i> This month</div>
+                </div>
+            </div>
+
+            <!-- Upcoming Appointments -->
+            <div class="upcoming-appointments" data-aos="fade-up" data-aos-delay="150">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold mb-0" style="font-size: 16px;">Upcoming Appointments</h5>
+                    <a href="appointments.html" class="text-primary text-decoration-none small fw-600">View All</a>
+                </div>
+                <div class="appt-list">
+                    <div class="appt-item">
+                        <div class="appt-icon"><i class="fa-solid fa-user-doctor"></i></div>
+                        <div class="appt-details">
+                            <h6>Dr. Alexander Smith</h6>
+                            <p>Cardiologist • Today, 10:00 AM</p>
+                            <span class="status-badge status-confirmed">Confirmed</span>
+                        </div>
+                    </div>
+                    <div class="appt-item">
+                        <div class="appt-icon"><i class="fa-solid fa-user-doctor"></i></div>
+                        <div class="appt-details">
+                            <h6>Dr. Virginia Apgar</h6>
+                            <p>Dermatologist • Tomorrow, 2:00 PM</p>
+                            <span class="status-badge status-confirmed">Confirmed</span>
+                        </div>
+                    </div>
+                    <div class="appt-item">
+                        <div class="appt-icon"><i class="fa-solid fa-user-doctor"></i></div>
+                        <div class="appt-details">
+                            <h6>Dr. William Osler</h6>
+                            <p>Neurologist • 25 Mar, 11:00 AM</p>
+                            <span class="status-badge status-pending">Pending</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Medicine Card -->
+            <div class="medicine-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="card-header">
+                    <h4>Your daily medicine</h4>
+                    <button class="btn-add-med"><i class="fa-solid fa-plus me-1"></i> Add medicine</button>
+                </div>
+
+                <div class="date-scroll-container" id="datePills">
+                    <!-- Javascript generated content -->
+                </div>
+
+                <div class="medicine-list" id="medList">
+                    <!-- Row 1 -->
+                    <div class="med-list-row">
+                        <div class="med-info">
+                            <h5>Metformin 500mg</h5>
+                            <p>Antidiabetic medicine</p>
+                        </div>
+                        <div class="med-badges">
+                            <div class="badge-pill bg-purple"><i class="fa-solid fa-sun"></i> ☀ 1</div>
+                            <div class="badge-pill bg-teal"><i class="fa-solid fa-moon"></i> 🌙 1</div>
+                        </div>
+                    </div>
+                    <!-- Row 2 -->
+                    <div class="med-list-row">
+                        <div class="med-info">
+                            <h5>Lisinopril 10mg</h5>
+                            <p>Blood pressure medication</p>
+                        </div>
+                        <div class="med-badges">
+                            <div class="badge-pill bg-purple"><i class="fa-solid fa-sun"></i> ☀ 1</div>
+                            <div class="badge-pill bg-yellow"><i class="fa-solid fa-cloud-sun"></i> ⛅ 1</div>
+                        </div>
+                    </div>
+                    <!-- Row 3 -->
+                    <div class="med-list-row">
+                        <div class="med-info">
+                            <h5>Atorvastatin 20mg</h5>
+                            <p>Cholesterol management</p>
+                        </div>
+                        <div class="med-badges">
+                            <div class="badge-pill bg-teal"><i class="fa-solid fa-moon"></i> 🌙 1</div>
+                        </div>
+                    </div>
+                    <!-- Row 4 -->
+                    <div class="med-list-row">
+                        <div class="med-info">
+                            <h5>Amoxicillin 500mg</h5>
+                            <p>Antibiotic course</p>
+                        </div>
+                        <div class="med-badges">
+                            <div class="badge-pill bg-purple"><i class="fa-solid fa-sun"></i> ☀ 1</div>
+                            <div class="badge-pill bg-yellow"><i class="fa-solid fa-cloud-sun"></i> ⛅ 1</div>
+                            <div class="badge-pill bg-teal"><i class="fa-solid fa-moon"></i> 🌙 1</div>
+                        </div>
+                    </div>
+                    <!-- Row 5 -->
+                    <div class="med-list-row border-0">
+                        <div class="med-info">
+                            <h5>Omeprazole 20mg</h5>
+                            <p>Stomach care</p>
+                        </div>
+                        <div class="med-badges">
+                            <div class="badge-pill bg-purple"><i class="fa-solid fa-sun"></i> ☀ 1</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Row Cards -->
+            <div class="bottom-row-grid" data-aos="fade-up" data-aos-delay="300">
+                <!-- Schedule Card -->
+                <div class="bottom-card">
+                    <div class="bottom-card-header">
+                        <h5>Schedule</h5>
+                        <i class="fa-solid fa-expand-alt expand-icon"></i>
+                    </div>
+                    <div class="schedule-table">
+                        <div class="grid-header"></div>
+                        <div class="grid-header">Mon</div>
+                        <div class="grid-header">Tue</div>
+                        <div class="grid-header fw-bold text-dark">Wed</div>
+                        <div class="grid-header">Thu</div>
+                        <div class="grid-header">Fri</div>
+
+                        <div class="grid-label">Dentist</div>
+                        <div class="grid-cell active-p"></div>
+                        <div class="grid-cell"></div>
+                        <div class="grid-cell active-p"></div>
+                        <div class="grid-cell"></div>
+                        <div class="grid-cell active-p"></div>
+
+                        <div class="grid-label">Gym</div>
+                        <div class="grid-cell active-t"></div>
+                        <div class="grid-cell active-t"></div>
+                        <div class="grid-cell"></div>
+                        <div class="grid-cell active-t"></div>
+                        <div class="grid-cell active-t"></div>
+
+                        <div class="grid-label">Physiologist</div>
+                        <div class="grid-cell"></div>
+                        <div class="grid-cell"></div>
+                        <div class="grid-cell active-y"></div>
+                        <div class="grid-cell active-y"></div>
+                        <div class="grid-cell"></div>
+                    </div>
+                </div>
+
+                <!-- Billing Status Card -->
+                <div class="bottom-card">
+                    <div class="bottom-card-header">
+                        <h5>Billing Status</h5>
+                        <i class="fa-solid fa-expand-alt expand-icon"></i>
+                    </div>
+                    <div class="chart-container-donut">
+                        <canvas id="billingChart"></canvas>
+                    </div>
+                    <div class="chart-legend">
+                        <span><span class="dot" style="background: var(--yellow);"></span> Pending</span>
+                        <span><span class="dot" style="background: var(--teal);"></span> Paid</span>
+                    </div>
+                </div>
+
+                <!-- Consultation Card -->
+                <div class="bottom-card">
+                    <div class="bottom-card-header">
+                        <h5>Consultations</h5>
+                        <i class="fa-solid fa-expand-alt expand-icon"></i>
+                    </div>
+                    <div style="height: 140px;">
+                        <canvas id="consultChart"></canvas>
+                    </div>
+                    <div class="footer-note">*Offline visits deliver better results.</div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- RIGHT Column - MediAI -->
+        <div class="right-column-container">
+            <div class="ai-panel" data-aos="fade-left">
+                <!-- AI Top -->
+                <div class="ai-top-bar">
+                    <i class="fa-solid fa-bars" style="cursor: pointer;"></i>
+                    <div class="ai-title">MediAI 1.0 <span class="beta-badge">Beta</span></div>
+                    <i class="fa-solid fa-plus" style="cursor: pointer;"></i>
+                </div>
+
+                <!-- Orb Section -->
+                <div class="orb-section">
+                    <div class="pulsing-ring ring-1"></div>
+                    <div class="pulsing-ring ring-2"></div>
+                    <div class="pulsing-ring ring-3"></div>
+                    <canvas id="orbCanvas"></canvas>
+                </div>
+
+                <div class="ai-welcome">How can I assist you today?</div>
+
+                <!-- Action Grid -->
+                <div class="ai-actions-grid">
+                    <div class="action-btn" onclick="quickAction('specialists', 'Show doctor specializations')">
+                        <i class="fa-solid fa-user-md"></i>
+                        <span>Specialists</span>
+                    </div>
+                    <div class="action-btn" onclick="quickAction('med_history', 'Management tips')">
+                        <i class="fa-solid fa-notes-medical"></i>
+                        <span>Med. History</span>
+                    </div>
+                    <div class="action-btn" onclick="quickAction('ehr', 'What is EHR?')">
+                        <i class="fa-solid fa-file-medical-alt"></i>
+                        <span>My EHR</span>
+                    </div>
+                    <div class="action-btn" onclick="quickAction('health_tips', 'Health Tips')">
+                        <i class="fa-solid fa-heartbeat"></i>
+                        <span>Health Tips</span>
+                    </div>
+                    <div class="action-btn" onclick="quickAction('prescriptions', 'Prescriptions info')">
+                        <i class="fa-solid fa-pills"></i>
+                        <span>Prescriptions</span>
+                    </div>
+                    <div class="action-btn" onclick="quickAction('consultation', 'Consultations info')">
+                        <i class="fa-solid fa-stethoscope"></i>
+                        <span>Consultation</span>
+                    </div>
+                </div>
+
+                <!-- Chat Area -->
+                <div class="chat-messages" id="chatMessages">
+                    <div class="chat-bubble ai-bubble">
+                        👋 Hi Monica! I'm MediAI, your personal health assistant. I can help you find the right doctor,
+                        give health tips, and manage your meds. How can I help you today?
+                    </div>
+                </div>
+
+                <!-- Input Area -->
+                <div class="chat-input-area">
+                    <i class="fa-solid fa-paperclip" style="color: rgba(255,255,255,0.5); cursor: pointer;"></i>
+                    <input type="text" id="chatInput" placeholder="Ask MediAI anything..."
+                        onkeypress="handleKeyPress(event)">
+                    <div class="chat-icon-btn"><i class="fa-solid fa-microphone"></i></div>
+                    <button class="chat-icon-btn send-btn" id="sendBtn" onclick="sendMessage()"><i
+                            class="fa-solid fa-paper-plane"></i></button>
+                </div>
+
+                <div class="ai-disclaimer">MediAI can make mistakes. Always consult a real doctor.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        // Initialize AOS
+        AOS.init({ duration: 800, once: true });
+
+        // Profile Dropdown Toggle
+        function toggleDropdown() {
+            const dropdown = document.getElementById('profileDropdown');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function (event) {
+            const avatar = document.querySelector('.avatar-circle');
+            const dropdown = document.getElementById('profileDropdown');
+            if (!avatar.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
+
+        // Generate Date Pills
+        function generateDatePills() {
+            const container = document.getElementById('datePills');
+            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const today = new Date();
+
+            // Generate for 11 days (5 before, today, 5 after)
+            for (let i = -5; i <= 5; i++) {
+                const date = new Date(today);
+                date.setDate(today.getDate() + i);
+
+                const pill = document.createElement('div');
+                pill.className = `date-pill ${i === 0 ? 'active' : ''}`;
+
+                const dayName = days[date.getDay()];
+                const dateNum = date.getDate();
+
+                pill.innerHTML = `
+                    <span class="day">${dayName} ${dateNum}</span>
+                    <span class="num">${dateNum}</span>
+                `;
+
+                pill.onclick = function () {
+                    document.querySelectorAll('.date-pill').forEach(p => p.classList.remove('active'));
+                    pill.classList.add('active');
+                };
+
+                container.appendChild(pill);
+            }
+        }
+        generateDatePills();
+
+        // CHARTS
+        // Billing Doughnut
+        const billingCtx = document.getElementById('billingChart').getContext('2d');
+        new Chart(billingCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Pending', 'Paid'],
+                datasets: [{
+                    data: [3, 9],
+                    backgroundColor: ['#F59E0B', '#06B6D4'],
+                    borderWidth: 0,
+                    hoverOffset: 6
+                }]
+            },
+            options: {
+                cutout: '72%',
+                plugins: { legend: { display: false } },
+                animation: { duration: 1500 }
+            }
+        });
+
+        // Consultation Bar
+        const consultCtx = document.getElementById('consultChart').getContext('2d');
+        new Chart(consultCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Phone', 'Video', 'Offline'],
+                datasets: [{
+                    data: [4, 12, 24],
+                    backgroundColor: ['#F59E0B', '#06B6D4', '#7C3AED'],
+                    borderRadius: 8,
+                    borderSkipped: false,
+                    barThickness: 15
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { display: false },
+                    y: { grid: { display: false }, ticks: { font: { size: 10 } } }
+                },
+                animation: { duration: 1500 }
+            }
+        });
+
+        // THREE.JS ORB ANIMATION
+        const orbCanvas = document.getElementById('orbCanvas');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+        camera.position.z = 2;
+
+        const renderer = new THREE.WebGLRenderer({ canvas: orbCanvas, alpha: true, antialias: true });
+        renderer.setSize(180, 180);
+        renderer.setClearColor(0x000000, 0);
+
+        const geometry = new THREE.SphereGeometry(0.75, 64, 64);
+        const material = new THREE.MeshPhongMaterial({
+            color: 0x00E5FF,
+            emissive: 0x0891B2,
+            specular: 0xffffff,
+            shininess: 120,
+            transparent: true,
+            opacity: 0.85
+        });
+        const sphere = new THREE.Mesh(geometry, material);
+        scene.add(sphere);
+
+        const wireMat = new THREE.MeshBasicMaterial({ color: 0xA78BFA, wireframe: true, transparent: true, opacity: 0.25 });
+        const wire = new THREE.Mesh(geometry, wireMat);
+        wire.scale.set(1.03, 1.03, 1.03);
+        scene.add(wire);
+
+        const partGeo = new THREE.BufferGeometry();
+        const positions = new Float32Array(500 * 3);
+        for (let i = 0; i < 500; i++) {
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.acos(2 * Math.random() - 1);
+            const r = 0.9 + Math.random() * 0.4;
+            positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+            positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+            positions[i * 3 + 2] = r * Math.cos(phi);
+        }
+        partGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const partMat = new THREE.PointsMaterial({ color: 0x00E5FF, size: 0.025, transparent: true, opacity: 0.7 });
+        const particles = new THREE.Points(partGeo, partMat);
+        scene.add(particles);
+
+        scene.add(new THREE.AmbientLight(0x7C3AED, 0.6));
+        const dirLight = new THREE.DirectionalLight(0x00E5FF, 1.2);
+        dirLight.position.set(5, 3, 5);
+        scene.add(dirLight);
+        const ptLight = new THREE.PointLight(0xffffff, 0.8);
+        ptLight.position.set(-3, -3, -3);
+        scene.add(ptLight);
+
+        let t = 0;
+        function animateOrb() {
+            requestAnimationFrame(animateOrb);
+            t += 0.01;
+            sphere.rotation.x += 0.003;
+            sphere.rotation.y += 0.005;
+            wire.rotation.x -= 0.002;
+            wire.rotation.y -= 0.004;
+            sphere.position.y = Math.sin(t) * 0.08;
+            wire.position.y = Math.sin(t) * 0.08;
+            particles.rotation.y += 0.001;
+            particles.rotation.x += 0.0005;
+            sphere.material.opacity = 0.75 + Math.sin(t * 2) * 0.1;
+            renderer.render(scene, camera);
+        }
+        animateOrb();
+
+        // MEDIAI CHAT LOGIC
+        const aiResponses = {
+            'specialists': "🏥 Available specializations at MediBook:\n• Cardiologist - Heart specialist\n• Dermatologist - Skin specialist\n• Neurologist - Brain specialist\n• Orthopedist - Bone specialist\n• Gynecologist - Women's health\n• Pediatrician - Child specialist\nBook any specialist from Find Doctors!",
+            'med_history': "💊 Medicine Management Tips:\n• Always take medicines at same time daily\n• Never skip doses without doctor advice\n• Store medicines in cool dry place\n• Your current medicines: 5 active\n• Next dose: Metformin 500mg (Evening)",
+            'ehr': "📋 Electronic Health Record (EHR):\nYour EHR contains your complete medical history including past appointments, prescriptions, test results and doctor notes. It helps doctors provide better and more informed care for you.",
+            'health_tips': "💚 3 Health Tips for Today:\n1. 💧 Drink 8 glasses of water daily\n2. 🚶 Walk 30 minutes this morning\n3. 😴 Sleep 7-8 hours tonight\nSmall healthy habits make big differences!",
+            'prescriptions': "📝 Reading Your Prescription:\n• Rx = prescription symbol\n• OD = Once daily\n• BD = Twice daily\n• TDS = Three times daily\nAlways follow your doctor's instructions!",
+            'consultation': "🩺 Consultation Types at MediBook:\n📞 Phone - Quick queries, follow-ups\n📹 Video - Visual examination needed\n🏥 In-Person - Physical examination\nBest results come from in-person visits!",
+            default: "I understand your concern. For accurate medical advice, I recommend consulting one of our specialist doctors. Would you like me to help you find the right specialist for your needs? 😊"
+        };
+
+        function addBubble(text, type) {
+            const chatBox = document.getElementById('chatMessages');
+            const bubble = document.createElement('div');
+            bubble.className = `chat-bubble ${type}-bubble`;
+            bubble.innerText = text;
+            chatBox.appendChild(bubble);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function showLoading() {
+            const chatBox = document.getElementById('chatMessages');
+            const loader = document.createElement('div');
+            loader.className = 'chat-bubble ai-bubble typing';
+            loader.id = 'temp-loader';
+            loader.innerHTML = '<div class="dot-pulse"></div><div class="dot-pulse"></div><div class="dot-pulse"></div>';
+            chatBox.appendChild(loader);
+            chatBox.scrollTop = chatBox.scrollHeight;
+            return loader.id;
+        }
+
+        function quickAction(key, displayText) {
+            addBubble(displayText, 'user');
+            const loaderId = showLoading();
+            setTimeout(() => {
+                document.getElementById(loaderId).remove();
+                const response = aiResponses[key] || aiResponses.default;
+                addBubble(response, 'ai');
+            }, 1200);
+        }
+
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') sendMessage();
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const msg = input.value.trim();
+            if (!msg) return;
+
+            addBubble(msg, 'user');
+            input.value = '';
+
+            const loaderId = showLoading();
+
+            setTimeout(() => {
+                document.getElementById(loaderId).remove();
+                addBubble(getSmartResponse(msg), 'ai');
+            }, 1200);
+        }
+
+        function getSmartResponse(msg) {
+            const lower = msg.toLowerCase();
+            if (lower.includes('headache')) return "🧠 For headaches, I recommend consulting a Neurologist. Dr. William Osler is available. Shall I help you book?";
+            if (lower.includes('heart') || lower.includes('chest')) return "❤️ For chest/heart concerns, please see Dr. Alexander Smith (Cardiologist) urgently. Shall I help you book?";
+            if (lower.includes('skin') || lower.includes('rash')) return "🩺 For skin issues, consult Dr. Virginia Apgar (Dermatologist). She's highly rated!";
+            if (lower.includes('medicine')) return "💊 You have 5 active medicines. Metformin 500mg is due this evening. Always take medicines as prescribed!";
+            return aiResponses.default;
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Doctors - Admin Panel</title>
+
+    <!-- Tech Stack -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0066FF;
+            --dark-side: #111827;
+            --success: #10B981;
+            --danger: #EF4444;
+            --grey: #9CA3AF;
+            --radius-md: 12px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #F8FAFF;
+            margin: 0;
+            display: flex;
+        }
+
+        /* Sidebar Sidebar */
+        .admin-sidebar {
+            width: 260px;
+            background: var(--dark-side);
+            height: 100vh;
+            position: fixed;
+            padding: 30px 15px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 15px;
+            margin-bottom: 40px;
+        }
+
+        .nav-link-adm {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            border-radius: 10px;
+            text-decoration: none;
+            color: var(--grey);
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .nav-link-adm.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .admin-main {
+            margin-left: 260px;
+            width: 100%;
+            padding: 35px;
+        }
+
+        /* Patient Table */
+        .table-panel {
+            background: white;
+            border-radius: var(--radius-md);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            margin-top: 20px;
+        }
+
+        .p-table {
+            width: 100%;
+        }
+
+        .p-table th {
+            font-size: 12px;
+            color: var(--grey);
+            font-weight: 600;
+            text-transform: uppercase;
+            padding: 15px;
+            border-bottom: 1px solid #F3F4F6;
+        }
+
+        .p-table td {
+            padding: 15px;
+            vertical-align: middle;
+            border-bottom: 1px solid #F3F4F6;
+            font-size: 14px;
+        }
+
+        .p-img-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .p-img {
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+        }
+
+        .p-name {
+            font-size: 14px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .p-id {
+            font-size: 11px;
+            color: var(--grey);
+        }
+
+        .badge-status {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-active {
+            background: #DCFCE7;
+            color: #166534;
+        }
+
+        .badge-blocked {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .btn-panel-sm {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+
+        .btn-primary-light {
+            background: rgba(0, 102, 255, 0.1);
+            color: var(--primary);
+        }
+
+        .btn-primary-light:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-danger-light {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .btn-danger-light:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        @media (max-width: 992px) {
+            .admin-sidebar {
+                width: 80px;
+            }
+
+            .brand-section h2,
+            .nav-link-adm span {
+                display: none;
+            }
+
+            .admin-main {
+                margin-left: 80px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside class="admin-sidebar">
+        <div class="brand-section">
+            <i class="fa-solid fa-square-plus" style="color: var(--primary); font-size: 24px;"></i>
+            <span>
+                <h2 style="font-size: 18px; margin: 0; font-weight: 700;">MediBook Admin</h2>
+            </span>
+        </div>
+        <nav>
+            <a href="admin-dashboard.html" class="nav-link-adm">
+                <i class="fa-solid fa-gauge"></i> <span>Dashboard</span>
+            </a>
+            <a href="admin-doctors.html" class="nav-link-adm active">
+                <i class="fa-solid fa-user-doctor"></i> <span>Doctor Management</span>
+            </a>
+            <a href="admin-verification.html" class="nav-link-adm">
+                <i class="fa-solid fa-shield-halved"></i> <span>Verification Desk</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="admin-main">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold">Central Doctor Registry</h2>
+            <button class="btn btn-primary rounded-pill px-4" onclick="location.reload()">Sync Data</button>
+        </div>
+
+        <div class="table-panel" data-aos="fade-up">
+            <div class="mb-4 d-flex gap-3">
+                <input type="text" class="form-control" style="border-radius: 12px; max-width: 400px;"
+                    placeholder="Filter by name, ID or specialization...">
+                <select class="form-select" style="border-radius: 12px; width: 150px;">
+                    <option>All Specialities</option>
+                    <option>Cardiology</option>
+                    <option>Dermatology</option>
+                    <option>Neurology</option>
+                </select>
+            </div>
+
+            <div class="table-responsive">
+                <table class="p-table">
+                    <thead>
+                        <tr>
+                            <th>Doctor</th>
+                            <th>Specialization</th>
+                            <th>Total Consults</th>
+                            <th>Platform Earn</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Doc 1 -->
+                        <tr>
+                            <td>
+                                <div class="p-img-box">
+                                    <img src="https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=100"
+                                        class="p-img">
+                                    <div>
+                                        <h6 class="p-name">Dr. Alexander Smith</h6>
+                                        <span class="p-id">#DOC-SM-302</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>Cardiology • MD</td>
+                            <td>1,248 Sessions</td>
+                            <td>₹4.8L</td>
+                            <td><span class="badge-status badge-active">Active</span></td>
+                            <td>
+                                <div class="btn-panel-sm">
+                                    <button class="btn-circle btn-primary-light"><i
+                                            class="fa-solid fa-eye"></i></button>
+                                    <button class="btn-circle btn-danger-light"><i class="fa-solid fa-ban"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- Doc 2 -->
+                        <tr>
+                            <td>
+                                <div class="p-img-box">
+                                    <img src="https://images.unsplash.com/photo-1559839734-2b71f153678e?w=100"
+                                        class="p-img">
+                                    <div>
+                                        <h6 class="p-name">Dr. Virginia Apgar</h6>
+                                        <span class="p-id">#DOC-AP-105</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>Dermatology • FRCP</td>
+                            <td>892 Sessions</td>
+                            <td>₹2.1L</td>
+                            <td><span class="badge-status badge-active">Active</span></td>
+                            <td>
+                                <div class="btn-panel-sm">
+                                    <button class="btn-circle btn-primary-light"><i
+                                            class="fa-solid fa-eye"></i></button>
+                                    <button class="btn-circle btn-danger-light"><i
+                                            class="fa-solid fa-lock"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800 });
+    </script>
+</body>
+
+</html>

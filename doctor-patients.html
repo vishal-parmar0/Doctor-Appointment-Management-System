@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Patients - Doctor Panel</title>
+
+    <!-- Tech Stack -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0066FF;
+            --secondary: #7C3AED;
+            --success: #10B981;
+            --grey: #6B7280;
+            --light-bg: #F8FAFF;
+            --radius-md: 16px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-bg);
+            margin: 0;
+            display: flex;
+        }
+
+        /* Sidebar Sidebar */
+        .sidebar {
+            width: 280px;
+            background: white;
+            height: 100vh;
+            position: fixed;
+            padding: 30px 20px;
+            box-shadow: 2px 0 20px rgba(0, 0, 0, 0.03);
+            z-index: 1000;
+        }
+
+        .sidebar-brand {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 40px;
+        }
+
+        .menu-link {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 20px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--grey);
+            font-weight: 500;
+            transition: 0.2s;
+            margin-bottom: 5px;
+        }
+
+        .menu-link.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 8px 15px rgba(0, 102, 255, 0.2);
+        }
+
+        .content {
+            margin-left: 280px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        /* Patient Table */
+        .patient-table-card {
+            background: white;
+            border-radius: var(--radius-md);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+        }
+
+        .search-patient {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .search-patient input {
+            border: 1px solid #E5E7EB;
+            padding: 10px 15px;
+            border-radius: 10px;
+            flex: 1;
+            outline: none;
+        }
+
+        .p-table {
+            width: 100%;
+        }
+
+        .p-table th {
+            font-size: 12px;
+            color: var(--grey);
+            font-weight: 600;
+            text-transform: uppercase;
+            padding: 15px;
+            border-bottom: 1px solid #F3F4F6;
+        }
+
+        .p-table td {
+            padding: 15px;
+            vertical-align: middle;
+            border-bottom: 1px solid #F3F4F6;
+        }
+
+        .p-img-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .p-img {
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+        }
+
+        .p-name {
+            font-size: 14px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .p-id {
+            font-size: 11px;
+            color: var(--grey);
+        }
+
+        .badge-age {
+            background: #F3F4F6;
+            color: var(--grey);
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .btn-view {
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+            padding: 6px 15px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .btn-view:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 80px;
+                padding: 20px 10px;
+            }
+
+            .sidebar-brand span,
+            .menu-link span {
+                display: none;
+            }
+
+            .content {
+                margin-left: 80px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside class="sidebar">
+        <a href="doctor-dashboard.html" class="sidebar-brand">
+            <i class="fa-solid fa-square-plus"></i> <span>MediBook</span>
+        </a>
+        <nav>
+            <a href="doctor-dashboard.html" class="menu-link">
+                <i class="fa-solid fa-house"></i> <span>Dashboard</span>
+            </a>
+            <a href="doctor-appointments.html" class="menu-link">
+                <i class="fa-solid fa-calendar"></i> <span>Appointments</span>
+            </a>
+            <a href="doctor-patients.html" class="menu-link active">
+                <i class="fa-solid fa-user-group"></i> <span>My Patients</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold">My Patients</h2>
+            <button class="btn btn-primary rounded-pill px-4 fw-bold">Add New Entry</button>
+        </div>
+
+        <div class="patient-table-card" data-aos="fade-up">
+            <div class="search-patient">
+                <input type="text" placeholder="Search by name, ID or disease...">
+                <button class="btn btn-light border rounded-pill px-4">Filter</button>
+            </div>
+
+            <div class="table-responsive">
+                <table class="p-table">
+                    <thead>
+                        <tr>
+                            <th>Patient Name</th>
+                            <th>Age / Gender</th>
+                            <th>Contact</th>
+                            <th>Last Diagnosis</th>
+                            <th>Last Visit</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Patient 1 -->
+                        <tr>
+                            <td>
+                                <div class="p-img-box">
+                                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100"
+                                        class="p-img">
+                                    <div>
+                                        <h6 class="p-name">Monica Johnson</h6>
+                                        <span class="p-id">#MB-202301</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="badge-age">24 / Female</span></td>
+                            <td>+91 98765-XXXXX</td>
+                            <td>Hypertension</td>
+                            <td>Today, 10:00 AM</td>
+                            <td><button class="btn-view" onclick="viewPatient('Monica Johnson')">Patient File</button>
+                            </td>
+                        </tr>
+                        <!-- Patient 2 -->
+                        <tr>
+                            <td>
+                                <div class="p-img-box">
+                                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100"
+                                        class="p-img">
+                                    <div>
+                                        <h6 class="p-name">Sarah Connor</h6>
+                                        <span class="p-id">#MB-202305</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="badge-age">32 / Female</span></td>
+                            <td>+91 98231-XXXXX</td>
+                            <td>Skin Allergy</td>
+                            <td>12 Mar 2026</td>
+                            <td><button class="btn-view">Patient File</button></td>
+                        </tr>
+                        <!-- Patient 3 -->
+                        <tr>
+                            <td>
+                                <div class="p-img-box">
+                                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100"
+                                        class="p-img">
+                                    <div>
+                                        <h6 class="p-name">John Wick</h6>
+                                        <span class="p-id">#MB-202409</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><span class="badge-age">45 / Male</span></td>
+                            <td>+91 97712-XXXXX</td>
+                            <td>Blood Pressure</td>
+                            <td>08 Mar 2026</td>
+                            <td><button class="btn-view">Patient File</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Patient Record Sidebar (Fake sidebar) -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="patientFile"
+        style="width: 450px; border-radius: 20px 0 0 20px;">
+        <div class="offcanvas-body p-4">
+            <h4 class="fw-bold mb-4" id="sidePatientName">Patient Record</h4>
+
+            <div class="mb-4 text-center">
+                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200"
+                    class="rounded-circle mb-3" style="width: 80px; height: 80px;">
+                <p class="text-muted small">Medical History ID: #MB-202301</p>
+            </div>
+
+            <div class="mb-4">
+                <h6>Recent Reports</h6>
+                <div class="p-3 bg-light rounded-3 mb-2 d-flex justify-content-between align-items-center">
+                    <span class="small"><i class="fa-solid fa-file-pdf me-2 text-primary"></i>
+                        Blood_Test_Mar24.pdf</span>
+                    <i class="fa-solid fa-download text-muted small cursor-pointer"></i>
+                </div>
+                <div class="p-3 bg-light rounded-3 mb-2 d-flex justify-content-between align-items-center">
+                    <span class="small"><i class="fa-solid fa-file-pdf me-2 text-primary"></i>
+                        ECG_Scan_Results.pdf</span>
+                    <i class="fa-solid fa-download text-muted small cursor-pointer"></i>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <h6>Past Prescriptions</h6>
+                <div class="p-3 bg-light rounded-3 mb-2">
+                    <p class="mb-1 small fw-bold">Metformin 500mg • 2 Weeks ago</p>
+                    <p class="small text-muted mb-0">Note: Take twice daily after meals.</p>
+                </div>
+            </div>
+
+            <button class="btn btn-primary w-100 py-3 rounded-pill fw-bold"
+                onclick="alert('Proceeding to Consult session...')">Start Consult Session</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800 });
+
+        const patientSidebar = new bootstrap.Offcanvas(document.getElementById('patientFile'));
+
+        function viewPatient(name) {
+            document.getElementById('sidePatientName').innerText = name;
+            patientSidebar.show();
+        }
+    </script>
+</body>
+
+</html>

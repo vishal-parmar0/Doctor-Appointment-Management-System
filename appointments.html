@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Appointments - MediBook</title>
+
+    <!-- Tech Stack -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0066FF;
+            --purple: #7C3AED;
+            --bg-page: #F0F2FF;
+            --radius-md: 16px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-page);
+            color: #1A1A2E;
+            margin: 0;
+        }
+
+        /* Navbar copy */
+        .navbar {
+            background: white;
+            height: 70px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            padding: 0 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .nav-logo {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--purple);
+            text-decoration: none;
+        }
+
+        .nav-tabs-pill {
+            display: flex;
+            background: #F3F4F6;
+            padding: 5px;
+            border-radius: 30px;
+        }
+
+        .nav-tab {
+            text-decoration: none;
+            color: #1A1A2E;
+            padding: 8px 18px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .nav-tab.active {
+            background: var(--purple);
+            color: white;
+        }
+
+        .container-content {
+            margin-top: 100px;
+            padding: 0 30px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Appt Table */
+        .appt-card {
+            background: white;
+            border-radius: var(--radius-md);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .appt-item {
+            display: flex;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #F3F4F6;
+            gap: 20px;
+        }
+
+        .appt-item:last-child {
+            border: none;
+        }
+
+        .date-box {
+            width: 70px;
+            height: 75px;
+            background: #F3F4F6;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .date-box .month {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #6B7280;
+            font-weight: 600;
+        }
+
+        .date-box .day {
+            font-size: 22px;
+        }
+
+        .doc-profile-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+        }
+
+        .doc-img-sm {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            object-fit: cover;
+        }
+
+        .doc-info h6 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .doc-info p {
+            margin: 0;
+            font-size: 12px;
+            color: #6B7280;
+        }
+
+        .appt-status {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 20px;
+            text-transform: uppercase;
+        }
+
+        .status-confirmed {
+            background: #DCFCE7;
+            color: #166534;
+        }
+
+        .status-pending {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .status-completed {
+            background: #E0E7FF;
+            color: #3730A3;
+        }
+
+        .btn-action {
+            border: 1px solid #E5E7EB;
+            background: white;
+            padding: 8px 15px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            transition: 0.2s;
+            color: #6B7280;
+        }
+
+        .btn-action:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Tabs filter */
+        .filter-tabs {
+            display: flex;
+            gap: 30px;
+            border-bottom: 1px solid #E5E7EB;
+            margin-bottom: 30px;
+        }
+
+        .filter-tab {
+            padding-bottom: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #6B7280;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .filter-tab.active {
+            color: var(--primary);
+        }
+
+        .filter-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--primary);
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="nav-logo">MediBook</a>
+        <div class="nav-tabs-pill">
+            <a href="patient-dashboard.html" class="nav-tab">Dashboard</a>
+            <a href="appointments.html" class="nav-tab active">Appointments</a>
+            <a href="doctors.html" class="nav-tab">Find Doctors</a>
+        </div>
+        <div>
+            <div class="avatar-circle"
+                style="width: 40px; height: 40px; border-radius: 50%; background: #7C3AED; color: white; display: flex; align-items: center; justify-content: center; font-weight: 600;">
+                MJ</div>
+        </div>
+    </nav>
+
+    <div class="container-content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold">My Appointments</h2>
+            <button class="btn btn-primary rounded-pill px-4 fw-bold" onclick="window.location.href='doctors.html'">+
+                New Appointment</button>
+        </div>
+
+        <div class="filter-tabs">
+            <div class="filter-tab active">Upcoming</div>
+            <div class="filter-tab">Completed</div>
+            <div class="filter-tab">Cancelled</div>
+        </div>
+
+        <div class="appt-card" data-aos="fade-up">
+            <!-- Appt 1 -->
+            <div class="appt-item">
+                <div class="date-box">
+                    <span class="month">Mar</span>
+                    <span class="day">25</span>
+                </div>
+                <div class="doc-profile-row">
+                    <img src="https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=100" class="doc-img-sm">
+                    <div class="doc-info">
+                        <h6>Dr. Alexander Smith</h6>
+                        <p>Cardiologist • Ahmedabad General</p>
+                        <p class="small text-muted"><i class="fa-solid fa-clock me-1"></i> 10:00 AM - 10:30 AM</p>
+                    </div>
+                </div>
+                <div><span class="appt-status status-confirmed">Confirmed</span></div>
+                <div class="d-flex gap-2">
+                    <button class="btn-action" onclick="alert('Join URL: medibook.video/meet-as-smith')"><i
+                            class="fa-solid fa-video me-2"></i> Join Meet</button>
+                    <button class="btn-action" onclick="alert('Reschedule request sent.')">Reschedule</button>
+                </div>
+            </div>
+
+            <!-- Appt 2 -->
+            <div class="appt-item">
+                <div class="date-box">
+                    <span class="month">Mar</span>
+                    <span class="day">28</span>
+                </div>
+                <div class="doc-profile-row">
+                    <img src="https://images.unsplash.com/photo-1559839734-2b71f153678e?w=100" class="doc-img-sm">
+                    <div class="doc-info">
+                        <h6>Dr. Virginia Apgar</h6>
+                        <p>Dermatologist • SkinCare Clinic</p>
+                        <p class="small text-muted"><i class="fa-solid fa-clock me-1"></i> 02:00 PM - 02:30 PM</p>
+                    </div>
+                </div>
+                <div><span class="appt-status status-pending">Requested</span></div>
+                <div class="d-flex gap-2">
+                    <button class="btn-action" onclick="alert('Cancel request sent.')">Cancel Slot</button>
+                </div>
+            </div>
+        </div>
+
+        <h5 class="fw-bold mb-3">Recently Completed</h5>
+        <div class="appt-card" data-aos="fade-up" data-aos-delay="100">
+            <!-- Appt 3 -->
+            <div class="appt-item">
+                <div class="date-box" style="opacity: 0.6;">
+                    <span class="month">Mar</span>
+                    <span class="day">10</span>
+                </div>
+                <div class="doc-profile-row">
+                    <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=100" class="doc-img-sm"
+                        style="filter: grayscale(1);">
+                    <div class="doc-info">
+                        <h6>Dr. William Osler</h6>
+                        <p>Neurologist • City Brain Center</p>
+                        <p class="small text-muted">Offline Visit • Mumbai</p>
+                    </div>
+                </div>
+                <div><span class="appt-status status-completed">Completed</span></div>
+                <div class="d-flex gap-2">
+                    <button class="btn-action" onclick="window.location.href='prescriptions.html'">View Rx</button>
+                    <button class="btn-action">Rate Doctor</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800 });
+    </script>
+</body>
+
+</html>

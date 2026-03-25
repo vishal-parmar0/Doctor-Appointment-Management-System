@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Doctors - MediBook</title>
+
+    <!-- Tech Stack -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0066FF;
+            --purple: #7C3AED;
+            --bg-page: #F0F2FF;
+            --text-dark: #1A1A2E;
+            --text-grey: #6B7280;
+            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --radius-md: 16px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-dark);
+        }
+
+        /* Navbar copy */
+        .navbar {
+            background: white;
+            height: 70px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            padding: 0 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .nav-logo {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--purple);
+            text-decoration: none;
+        }
+
+        .nav-tabs-pill {
+            display: flex;
+            background: #F3F4F6;
+            padding: 5px;
+            border-radius: 30px;
+        }
+
+        .nav-tab {
+            text-decoration: none;
+            color: var(--text-dark);
+            padding: 8px 18px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .nav-tab.active {
+            background: var(--purple);
+            color: white;
+        }
+
+        .container-content {
+            margin-top: 100px;
+            padding: 0 30px;
+        }
+
+        /* Filter Section */
+        .search-area {
+            background: white;
+            padding: 25px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 30px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .search-area input,
+        .search-area select {
+            border: 1px solid #E5E7EB;
+            padding: 10px 15px;
+            border-radius: 10px;
+            outline: none;
+            flex: 1;
+        }
+
+        /* Doctor Grid */
+        .doctor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .doc-card {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .doc-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .doc-header {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .doc-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 15px;
+            object-fit: cover;
+        }
+
+        .doc-info h5 {
+            margin: 0;
+            font-weight: 700;
+        }
+
+        .doc-info p {
+            margin: 0;
+            color: var(--primary);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .badge-rating {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #FEF3C7;
+            color: #92400E;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .doc-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #F3F4F6;
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+
+        .doc-price {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .btn-book {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .btn-book:hover {
+            background: #0052CC;
+        }
+
+        /* Specialities Tags */
+        .spec-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 30px;
+        }
+
+        .tag-pill {
+            background: white;
+            border: 1px solid #E5E7EB;
+            padding: 8px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        .tag-pill:hover,
+        .tag-pill.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="nav-logo">MediBook</a>
+        <div class="nav-tabs-pill">
+            <a href="patient-dashboard.html" class="nav-tab">Dashboard</a>
+            <a href="appointments.html" class="nav-tab">Appointments</a>
+            <a href="doctors.html" class="nav-tab active">Find Doctors</a>
+        </div>
+        <div>
+            <div class="avatar-circle"
+                style="width: 40px; height: 40px; border-radius: 50%; background: #7C3AED; color: white; display: flex; align-items: center; justify-content: center; font-weight: 600;">
+                MJ</div>
+        </div>
+    </nav>
+
+    <div class="container-content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold">Find a Specialist</h2>
+            <p class="text-muted">65 doctors available nearby</p>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-area" data-aos="fade-up">
+            <i class="fa-solid fa-search text-muted"></i>
+            <input type="text" placeholder="Search doctor by name or institution...">
+            <select>
+                <option>Select Location</option>
+                <option>Ahmedabad</option>
+                <option>Surat</option>
+                <option>Mumbai</option>
+            </select>
+            <button class="btn btn-primary rounded-pill px-4">Search</button>
+        </div>
+
+        <!-- Category Tags -->
+        <div class="spec-tags" data-aos="fade-up" data-aos-delay="100">
+            <div class="tag-pill active">All Categories</div>
+            <div class="tag-pill">Cardiologist</div>
+            <div class="tag-pill">Dermatologist</div>
+            <div class="tag-pill">Neurologist</div>
+            <div class="tag-pill">Pediatrician</div>
+            <div class="tag-pill">Dentist</div>
+            <div class="tag-pill">Psychiatrist</div>
+        </div>
+
+        <!-- Doctor Grid -->
+        <div class="doctor-grid">
+            <!-- Doctor 1 -->
+            <div class="doc-card" data-aos="fade-up" data-aos-delay="150">
+                <div class="badge-rating"><i class="fa-solid fa-star"></i> 4.9 (124)</div>
+                <div class="doc-header">
+                    <img src="https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=150" class="doc-img">
+                    <div class="doc-info">
+                        <h5>Dr. Alexander Smith</h5>
+                        <p>Cardiogist • Apollo Hospitals</p>
+                        <small class="text-muted"><i class="fa-solid fa-location-dot me-1"></i> Ahmedabad</small>
+                    </div>
+                </div>
+                <div class="small mb-3">Exp: 15+ Years • Specializing in adult heart health and surgical procedures.
+                </div>
+                <div class="doc-footer">
+                    <div class="doc-price">₹1,500 <small class="text-muted" style="font-size: 11px;">(Cons. Fee)</small>
+                    </div>
+                    <button class="btn-book" onclick="bookNow('Dr. Alexander Smith')">Book Appointment</button>
+                </div>
+            </div>
+
+            <!-- Doctor 2 -->
+            <div class="doc-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="badge-rating"><i class="fa-solid fa-star"></i> 4.8 (89)</div>
+                <div class="doc-header">
+                    <img src="https://images.unsplash.com/photo-1559839734-2b71f153678e?w=150" class="doc-img">
+                    <div class="doc-info">
+                        <h5>Dr. Virginia Apgar</h5>
+                        <p>Dermatologist • SkinCare Clinic</p>
+                        <small class="text-muted"><i class="fa-solid fa-location-dot me-1"></i> Surat</small>
+                    </div>
+                </div>
+                <div class="small mb-3">Exp: 10+ Years • Expert in clinical dermatology and aesthetic skin treatments.
+                </div>
+                <div class="doc-footer">
+                    <div class="doc-price">₹800 <small class="text-muted" style="font-size: 11px;">(Cons. Fee)</small>
+                    </div>
+                    <button class="btn-book" onclick="bookNow('Dr. Virginia Apgar')">Book Appointment</button>
+                </div>
+            </div>
+
+            <!-- Doctor 3 -->
+            <div class="doc-card" data-aos="fade-up" data-aos-delay="250">
+                <div class="badge-rating"><i class="fa-solid fa-star"></i> 4.7 (215)</div>
+                <div class="doc-header">
+                    <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=150" class="doc-img">
+                    <div class="doc-info">
+                        <h5>Dr. William Osler</h5>
+                        <p>Neurologist • City Brain Center</p>
+                        <small class="text-muted"><i class="fa-solid fa-location-dot me-1"></i> Mumbai</small>
+                    </div>
+                </div>
+                <div class="small mb-3">Exp: 20+ Years • Leading neurologist specializing in stroke recovery.</div>
+                <div class="doc-footer">
+                    <div class="doc-price">₹2,000 <small class="text-muted" style="font-size: 11px;">(Cons. Fee)</small>
+                    </div>
+                    <button class="btn-book" onclick="bookNow('Dr. William Osler')">Book Appointment</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Modal (Functional UI) -->
+    <div class="modal fade" id="bookModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+                <div class="modal-body p-4">
+                    <h4 class="fw-bold mb-4">Book Appointment</h4>
+                    <p class="text-muted" id="modalDocName">Dr. Name</p>
+
+                    <div class="mb-3">
+                        <label class="small fw-bold mb-2">Select Date</label>
+                        <input type="date" class="form-control" id="bookDate">
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="small fw-bold mb-2">Select Time Slot</label>
+                        <div class="d-flex flex-wrap gap-2">
+                            <button class="btn btn-sm btn-outline-primary active">10:00 AM</button>
+                            <button class="btn btn-sm btn-outline-primary">11:30 AM</button>
+                            <button class="btn btn-sm btn-outline-primary">02:00 PM</button>
+                            <button class="btn btn-sm btn-outline-primary">04:30 PM</button>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary w-100 py-3 fw-bold rounded-pill" onclick="confirmBook()">Confirm My
+                        Slot</button>
+                    <button class="btn btn-light w-100 mt-2 py-3 rounded-pill" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800 });
+
+        const bookModal = new bootstrap.Modal(document.getElementById('bookModal'));
+
+        function bookNow(docName) {
+            document.getElementById('modalDocName').innerText = `Doctor: ${docName}`;
+            bookModal.show();
+        }
+
+        function confirmBook() {
+            const date = document.getElementById('bookDate').value;
+            if (!date) { alert("Please select a date!"); return; }
+
+            alert("Success! Your slot has been requested. Dr. Smith will confirm shortly.");
+            bookModal.hide();
+        }
+    </script>
+</body>
+
+</html>

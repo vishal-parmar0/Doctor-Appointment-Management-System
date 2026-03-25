@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Dashboard - MediBook</title>
+
+    <!-- Tech Stack -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0066FF;
+            --secondary: #7C3AED;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --dark: #1A1A2E;
+            --grey: #6B7280;
+            --light-bg: #F8FAFF;
+            --card-bg: #FFFFFF;
+            --radius-md: 16px;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark);
+            margin: 0;
+            display: flex;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background: white;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding: 30px 20px;
+            box-shadow: 2px 0 20px rgba(0, 0, 0, 0.03);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-brand {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 40px;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            flex: 1;
+        }
+
+        .menu-item {
+            margin-bottom: 10px;
+        }
+
+        .menu-link {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 20px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--grey);
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .menu-link i {
+            font-size: 18px;
+            width: 24px;
+        }
+
+        .menu-link:hover,
+        .menu-link.active {
+            background: rgba(0, 102, 255, 0.05);
+            color: var(--primary);
+        }
+
+        .menu-link.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 8px 15px rgba(0, 102, 255, 0.2);
+        }
+
+        .sidebar-footer {
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            width: calc(100% - 280px);
+            padding: 40px;
+            min-height: 100vh;
+        }
+
+        /* Top Header */
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+        }
+
+        .doctor-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .avatar-box {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .profile-info h4 {
+            font-size: 16px;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .profile-info p {
+            font-size: 12px;
+            color: var(--grey);
+            margin: 0;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 24px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .stat-data h3 {
+            font-size: 26px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .stat-data p {
+            font-size: 13px;
+            color: var(--grey);
+            margin: 0;
+        }
+
+        /* Dashboard Layout */
+        .doc-layout {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+        }
+
+        .card-panel {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: 24px;
+            box-shadow: var(--shadow);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .panel-header h5 {
+            font-size: 17px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        /* Appointment Table */
+        .appt-table {
+            width: 100%;
+        }
+
+        .appt-row {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .appt-row:last-child {
+            border: none;
+        }
+
+        .patient-img {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            margin-right: 15px;
+            object-fit: cover;
+        }
+
+        .patient-meta {
+            flex: 1;
+        }
+
+        .patient-meta h6 {
+            font-size: 14px;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .patient-meta p {
+            font-size: 12px;
+            color: var(--grey);
+            margin: 0;
+        }
+
+        .appt-time {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+            width: 100px;
+            text-align: center;
+        }
+
+        .appt-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-action {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+
+        .btn-accept {
+            background: #DCFCE7;
+            color: #166534;
+        }
+
+        .btn-accept:hover {
+            background: #bbf7d0;
+        }
+
+        .btn-cancel {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .btn-cancel:hover {
+            background: #fecaca;
+        }
+
+        /* Chart Styles */
+        .chart-box {
+            height: 280px;
+            width: 100%;
+        }
+
+        /* Profile Completion Card */
+        .completion-card {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            color: white;
+            border-radius: var(--radius-md);
+            padding: 24px;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-circle {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-top-color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .doc-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 80px;
+                padding: 20px 10px;
+            }
+
+            .sidebar-brand span,
+            .menu-link span {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 80px;
+                width: calc(100% - 80px);
+                padding: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <a href="index.html" class="sidebar-brand">
+            <i class="fa-solid fa-square-plus"></i>
+            <span>MediBook</span>
+        </a>
+
+        <ul class="sidebar-menu">
+            <li class="menu-item">
+                <a href="doctor-dashboard.html" class="menu-link active">
+                    <i class="fa-solid fa-house-chimney"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="doctor-appointments.html" class="menu-link">
+                    <i class="fa-solid fa-calendar-check"></i>
+                    <span>Appointments</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="doctor-patients.html" class="menu-link">
+                    <i class="fa-solid fa-user-group"></i>
+                    <span>My Patients</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="#" class="menu-link">
+                    <i class="fa-solid fa-file-medical"></i>
+                    <span>Reports</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="#" class="menu-link">
+                    <i class="fa-solid fa-wallet"></i>
+                    <span>Earnings</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="#" class="menu-link">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>Settings</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <a href="login.html" class="menu-link text-danger">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="header-top" data-aos="fade-down">
+            <div>
+                <h2 class="fw-bold mb-1">Welcome, Dr. Smith!</h2>
+                <p class="text-muted small">Here is what is happening with your practice today.</p>
+            </div>
+
+            <div class="doctor-profile">
+                <div class="nav-btn d-none d-md-flex me-3">
+                    <button class="btn btn-light rounded-pill px-3 py-2 small border">
+                        <i class="fa-solid fa-plus me-2"></i> Add Patient
+                    </button>
+                </div>
+                <div class="avatar-box">AS</div>
+                <div class="profile-info d-none d-lg-block">
+                    <h4>Dr. Alexander Smith</h4>
+                    <p>Cardiologist</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Stats Grid -->
+        <section class="stats-grid" data-aos="fade-up" data-aos-delay="100">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: rgba(0, 102, 255, 0.1); color: var(--primary);">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+                <div class="stat-data">
+                    <h3>1,248</h3>
+                    <p>Total Patients</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: rgba(124, 58, 237, 0.1); color: var(--secondary);">
+                    <i class="fa-solid fa-calendar-day"></i>
+                </div>
+                <div class="stat-data">
+                    <h3>18</h3>
+                    <p>Appointments Today</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">
+                    <i class="fa-solid fa-hand-holding-medical"></i>
+                </div>
+                <div class="stat-data">
+                    <h3>84%</h3>
+                    <p>Recovery Rate</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1); color: var(--warning);">
+                    <i class="fa-solid fa-star"></i>
+                </div>
+                <div class="stat-data">
+                    <h3>4.9</h3>
+                    <p>Patient Rating</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Body Layout -->
+        <div class="doc-layout" data-aos="fade-up" data-aos-delay="200">
+            <!-- Left Side: Appointments & Charts -->
+            <div class="d-flex flex-column gap-4">
+
+                <!-- Today's Appointments -->
+                <div class="card-panel">
+                    <div class="panel-header">
+                        <h5>Today's Appointments</h5>
+                        <a href="#" class="text-primary small text-decoration-none fw-bold">View Schedule</a>
+                    </div>
+
+                    <div class="appt-table">
+                        <!-- Patient 1 -->
+                        <div class="appt-row">
+                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100"
+                                class="patient-img">
+                            <div class="patient-meta">
+                                <h6>Monica Johnson</h6>
+                                <p>Routine Checkup • New Patient</p>
+                            </div>
+                            <div class="appt-time">10:00 AM</div>
+                            <div class="appt-actions">
+                                <button class="btn-action btn-accept"><i class="fa-solid fa-check"></i></button>
+                                <button class="btn-action btn-cancel"><i class="fa-solid fa-xmark"></i></button>
+                            </div>
+                        </div>
+                        <!-- Patient 2 -->
+                        <div class="appt-row">
+                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100"
+                                class="patient-img">
+                            <div class="patient-meta">
+                                <h6>Sarah Connor</h6>
+                                <p>Heart Palpitations • Follow-up</p>
+                            </div>
+                            <div class="appt-time">11:30 AM</div>
+                            <div class="appt-actions">
+                                <button class="btn-action btn-accept"><i class="fa-solid fa-play"></i></button>
+                            </div>
+                        </div>
+                        <!-- Patient 3 -->
+                        <div class="appt-row">
+                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100"
+                                class="patient-img">
+                            <div class="patient-meta">
+                                <h6>John Wick</h6>
+                                <p>Blood Pressure Test • Urgent</p>
+                            </div>
+                            <div class="appt-time">01:45 PM</div>
+                            <div class="appt-actions">
+                                <button class="btn-action btn-accept"><i class="fa-solid fa-check"></i></button>
+                                <button class="btn-action btn-cancel"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Patient Visit Chart -->
+                <div class="card-panel">
+                    <div class="panel-header">
+                        <h5>Patient Growth Analytics</h5>
+                        <select class="form-select form-select-sm" style="width: 120px;">
+                            <option>Monthly</option>
+                            <option>Weekly</option>
+                        </select>
+                    </div>
+                    <div class="chart-box">
+                        <canvas id="growthChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Side: Profile & Logs -->
+            <div class="d-flex flex-column gap-4">
+
+                <!-- Profile Completion -->
+                <div class="completion-card">
+                    <div class="progress-circle">85%</div>
+                    <h5>Complete Your Profile</h5>
+                    <p class="small opacity-75">Your profile is missing verification documents to access premium
+                        features.</p>
+                    <button class="btn btn-light btn-sm rounded-pill px-3 mt-2 fw-bold"
+                        style="color: var(--primary);">Update Now</button>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="card-panel">
+                    <div class="panel-header">
+                        <h5>Recent Activity</h5>
+                    </div>
+                    <ul class="list-unstyled mb-0">
+                        <li class="d-flex gap-3 mb-3 pb-3 border-bottom">
+                            <div class="text-primary"><i class="fa-solid fa-file-medical"></i></div>
+                            <div>
+                                <h6 class="mb-1" style="font-size: 13px;">Prescription Uploaded</h6>
+                                <p class="small text-muted mb-0">Monica Johnson • 2 mins ago</p>
+                            </div>
+                        </li>
+                        <li class="d-flex gap-3 mb-3 pb-3 border-bottom">
+                            <div class="text-success"><i class="fa-solid fa-check-double"></i></div>
+                            <div>
+                                <h6 class="mb-1" style="font-size: 13px;">Appt. Confirmed</h6>
+                                <p class="small text-muted mb-0">Sarah Connor • 1 hour ago</p>
+                            </div>
+                        </li>
+                        <li class="d-flex gap-3">
+                            <div class="text-warning"><i class="fa-solid fa-star"></i></div>
+                            <div>
+                                <h6 class="mb-1" style="font-size: 13px;">New Review Received</h6>
+                                <p class="small text-muted mb-0">5 Stars from John Wick • 3 hours ago</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Next Patient Reminder -->
+                <div class="card-panel bg-light border-0">
+                    <h6 class="text-secondary fw-bold mb-3 small"><i class="fa-solid fa-clock me-2"></i>NEXT PATIENT
+                    </h6>
+                    <div class="d-flex align-items-center">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100"
+                            class="patient-img rounded-circle" style="width: 60px; height: 60px;">
+                        <div class="ms-3">
+                            <h5 class="mb-1">Monica Johnson</h5>
+                            <p class="small text-muted mb-0">Prep for room 302</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        AOS.init({ duration: 800, once: true });
+
+        // Growth Chart
+        const ctx = document.getElementById('growthChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'New Patients',
+                    data: [65, 80, 72, 95, 110, 130],
+                    borderColor: '#0066FF',
+                    backgroundColor: 'rgba(0, 102, 255, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 5,
+                    pointBackgroundColor: '#0066FF'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { display: false } },
+                    y: { border: { dash: [5, 5] }, grid: { color: '#f0f0f0' } }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor Settings - Practice Management</title>
+
+    <!-- Tech Stack -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #0066FF;
+            --grey: #6B7280;
+            --radius-md: 16px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #F8FAFF;
+            margin: 0;
+            display: flex;
+        }
+
+        /* Sidebar Sidebar */
+        .sidebar {
+            width: 280px;
+            background: white;
+            height: 100vh;
+            position: fixed;
+            padding: 30px 20px;
+            box-shadow: 2px 0 20px rgba(0, 0, 0, 0.03);
+            z-index: 1000;
+        }
+
+        .sidebar-brand {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 40px;
+        }
+
+        .menu-link {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 20px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--grey);
+            font-weight: 500;
+            transition: 0.2s;
+            margin-bottom: 5px;
+        }
+
+        .menu-link.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .content {
+            margin-left: 280px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        .settings-card {
+            background: white;
+            border-radius: var(--radius-md);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .form-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--grey);
+            margin-bottom: 8px;
+        }
+
+        .form-control {
+            border-radius: 12px;
+            padding: 12px 15px;
+            border: 1px solid #E5E7EB;
+            font-size: 14px;
+        }
+
+        .setting-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #F3F4F6;
+        }
+
+        .setting-section:last-child {
+            border: none;
+        }
+
+        .form-switch .form-check-input {
+            width: 45px;
+            height: 22px;
+            cursor: pointer;
+        }
+
+        .save-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 35px;
+            border-radius: 50px;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+
+        .save-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 102, 255, 0.2);
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 80px;
+            }
+
+            .sidebar-brand span,
+            .menu-link span {
+                display: none;
+            }
+
+            .content {
+                margin-left: 80px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside class="sidebar">
+        <a href="doctor-dashboard.html" class="sidebar-brand">
+            <i class="fa-solid fa-square-plus"></i> <span style="font-size: 20px;">MediBook</span>
+        </a>
+        <nav>
+            <a href="doctor-dashboard.html" class="menu-link">
+                <i class="fa-solid fa-house"></i> <span>Dashboard</span>
+            </a>
+            <a href="doctor-appointments.html" class="menu-link">
+                <i class="fa-solid fa-calendar"></i> <span>Appointments</span>
+            </a>
+            <a href="doctor-patients.html" class="menu-link">
+                <i class="fa-solid fa-user-group"></i> <span>My Patients</span>
+            </a>
+            <a href="doctor-settings.html" class="menu-link active">
+                <i class="fa-solid fa-gear"></i> <span>Settings</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="content">
+        <h2 class="fw-bold mb-4">Practice Settings</h2>
+
+        <div class="row g-4" data-aos="fade-up">
+            <div class="col-xl-8">
+                <div class="settings-card">
+                    <h5 class="fw-bold mb-4">Clinic Availability</h5>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Consultation Fee (₹)</label>
+                            <input type="number" class="form-control" value="800">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Slot Duration (Mins)</label>
+                            <select class="form-control">
+                                <option>15 mins</option>
+                                <option selected>30 mins</option>
+                                <option>45 mins</option>
+                            </select>
+                        </div>
+                        <div class="col-12 mt-4">
+                            <h6 class="fw-bold mb-3 small text-uppercase">Notification Preferences</h6>
+                            <div class="setting-section">
+                                <div>
+                                    <h6 class="mb-1" style="font-size: 14px;">Appointment Booking Alerts</h6>
+                                    <p class="small text-muted mb-0">Get notified when a patient books a new slot.</p>
+                                </div>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" checked>
+                                </div>
+                            </div>
+                            <div class="setting-section">
+                                <div>
+                                    <h6 class="mb-1" style="font-size: 14px;">Daily Schedule Summary</h6>
+                                    <p class="small text-muted mb-0">Receive a morning email of your day's schedule.</p>
+                                </div>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" checked>
+                                </div>
+                            </div>
+                            <div class="setting-section">
+                                <div>
+                                    <h6 class="mb-1" style="font-size: 14px;">Video Consultation Recording</h6>
+                                    <p class="small text-muted mb-0">Automatically record and upload sessions to EHR.
+                                    </p>
+                                </div>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-5 border-top pt-4 text-end">
+                        <button class="save-btn" onclick="alert('Settings saved successfully!')">Update
+                            Settings</button>
+                    </div>
+                </div>
+
+                <div class="settings-card border-danger">
+                    <h5 class="fw-bold mb-3 text-danger">Vacation Mode</h5>
+                    <p class="text-muted small">Enable this to prevent patients from booking appointments during your
+                        absence.</p>
+                    <div class="d-flex gap-3 align-items-center mt-3">
+                        <input type="date" class="form-control w-auto">
+                        <span>to</span>
+                        <input type="date" class="form-control w-auto">
+                        <button class="btn btn-outline-danger rounded-pill px-4 ms-auto">Enable Mode</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-4">
+                <div class="settings-card text-center">
+                    <div class="p-avatar mx-auto mb-3"
+                        style="width: 100px; height: 100px; background: #F3F4F6; border-radius: 25px; display: flex; align-items: center; justify-content: center; font-size: 32px; color: var(--primary); font-weight: 700; border: 4px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+                        AS</div>
+                    <h6 class="fw-bold mb-1">Dr. Alexander Smith</h6>
+                    <p class="small text-muted mb-3">Cardiology Specialist</p>
+                    <button class="btn btn-sm btn-light border w-100 rounded-pill"><i
+                            class="fa-solid fa-camera me-2"></i>Edit Photo</button>
+                </div>
+
+                <div class="settings-card">
+                    <h6 class="fw-bold mb-3 small">Account Security</h6>
+                    <button class="btn btn-light border w-100 rounded-pill mb-2 text-start small p-3"><i
+                            class="fa-solid fa-key me-3"></i>Change Password</button>
+                    <button class="btn btn-light border w-100 rounded-pill text-start small p-3"><i
+                            class="fa-solid fa-shield-halved me-3"></i>Two-Factor Auth</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800 });
+    </script>
+</body>
+
+</html>

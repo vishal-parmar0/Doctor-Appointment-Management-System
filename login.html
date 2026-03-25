@@ -483,6 +483,7 @@
                             <button type="button" class="role-btn active"
                                 onclick="switchRole('patient', this)">Patient</button>
                             <button type="button" class="role-btn" onclick="switchRole('doctor', this)">Doctor</button>
+                            <button type="button" class="role-btn" onclick="switchRole('admin', this)">Admin</button>
                         </div>
                     </div>
 
@@ -649,11 +650,17 @@
             btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Logging in...';
             btn.disabled = true;
 
-            // Simulate API Call
             setTimeout(() => {
                 showFlash('Login successful! Redirecting...', 'success');
                 setTimeout(() => {
-                    window.location.href = 'index.html'; // Or dashboard
+                    const role = document.getElementById('role-input').value;
+                    if (role === 'doctor') {
+                        window.location.href = 'doctor-dashboard.html';
+                    } else if (role === 'admin') {
+                        window.location.href = 'admin-dashboard.html';
+                    } else {
+                        window.location.href = 'patient-dashboard.html';
+                    }
                 }, 1000);
             }, 1000);
         });

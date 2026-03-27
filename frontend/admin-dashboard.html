@@ -430,7 +430,7 @@
                     <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100" class="rounded-circle"
                         style="width: 40px; height: 40px; border: 2px solid var(--primary);">
                     <div class="d-none d-md-block">
-                        <h6 class="mb-0" style="font-size: 14px;">Master Admin</h6>
+                        <h6 class="mb-0 admin-name-display" style="font-size: 14px;">Master Admin</h6>
                         <p class="small text-muted mb-0">Super Access</p>
                     </div>
                 </div>
@@ -442,16 +442,16 @@
             <div class="stat-card-adm">
                 <div>
                     <h4>Total Doctors</h4>
-                    <h2>156</h2>
+                    <h2 id="stat-total-doctors">0</h2>
                 </div>
                 <div class="stat-icon-adm" style="background: rgba(0, 102, 255, 0.1); color: var(--primary);">
-                    <i class="fa-solid fa-doctor"></i>
+                    <i class="fa-solid fa-user-doctor"></i>
                 </div>
             </div>
             <div class="stat-card-adm">
                 <div>
                     <h4>Active Patients</h4>
-                    <h2>4.2k</h2>
+                    <h2 id="stat-total-patients">0</h2>
                 </div>
                 <div class="stat-icon-adm" style="background: rgba(124, 58, 237, 0.1); color: var(--secondary);">
                     <i class="fa-solid fa-users"></i>
@@ -460,7 +460,7 @@
             <div class="stat-card-adm">
                 <div>
                     <h4>Platform Revenue</h4>
-                    <h2>$128.4k</h2>
+                    <h2 id="stat-platform-revenue">₹0</h2>
                 </div>
                 <div class="stat-icon-adm" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">
                     <i class="fa-solid fa-chart-line"></i>
@@ -469,7 +469,7 @@
             <div class="stat-card-adm">
                 <div>
                     <h4>New Signups </h4>
-                    <h2>+24</h2>
+                    <h2 id="stat-daily-signups">0</h2>
                 </div>
                 <div class="stat-icon-adm" style="background: rgba(245, 158, 11, 0.1); color: var(--warning);">
                     <i class="fa-solid fa-user-plus"></i>
@@ -627,7 +627,43 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
+        // 🛡️ AUTH CHECK
+        const token = localStorage.getItem('token');
+        const userStr = localStorage.getItem('user');
+        const user = userStr ? JSON.parse(userStr) : null;
+
+        if (!token || !user || user.role !== 'admin') {
+            window.location.href = 'login.html';
+        }
+
         AOS.init({ duration: 800, once: true });
+
+        // Update Admin UI
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.admin-name-display').forEach(el => el.innerText = user.full_name);
+            fetchDashboardData();
+        });
+
+        async function fetchDashboardData() {
+            try {
+                const res = await fetch('http://localhost:5000/api/admin/dashboard', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    const stats = {
+                        'stat-total-doctors': data.doctors,
+                        'stat-total-patients': data.patients,
+                        'stat-platform-revenue': '₹' + data.revenue,
+                        'stat-daily-signups': data.signups
+                    };
+                    for (const [id, val] of Object.entries(stats)) {
+                        const el = document.getElementById(id);
+                        if (el) el.innerText = val;
+                    }
+                }
+            } catch (e) { console.error("Admin API Error:", e); }
+        }
 
         // Institutional Traffic Chart
         const trafficCtx = document.getElementById('trafficChart').getContext('2d');

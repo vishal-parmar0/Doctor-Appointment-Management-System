@@ -1060,12 +1060,13 @@
         <!-- Profile Dropdown -->
         <div class="profile-dropdown" id="profileDropdown">
             <div class="p-3 border-bottom">
-                <div class="fw-bold" style="font-size: 14px;">Monica Johnson</div>
-                <div class="text-muted" style="font-size: 12px;">monica@example.com</div>
+                <div class="fw-bold profile-name" style="font-size: 14px;">Patient</div>
+                <div class="text-muted profile-email" style="font-size: 12px;">patient@example.com</div>
             </div>
             <a href="profile.html"><i class="fa-solid fa-user me-2"></i> My Profile</a>
             <a href="settings.html"><i class="fa-solid fa-cog me-2"></i> Settings</a>
-            <a href="login.html" class="logout"><i class="fa-solid fa-arrow-right-from-bracket me-2"></i> Logout</a>
+            <a href="javascript:void(0)" onclick="logout()" class="logout"><i
+                    class="fa-solid fa-arrow-right-from-bracket me-2"></i> Logout</a>
         </div>
     </nav>
 
@@ -1074,7 +1075,7 @@
         <div class="left-column">
 
             <div class="greeting-section" data-aos="fade-up">
-                <p class="subtitle">Good morning, Monica!</p>
+                <p class="subtitle">Good morning, <span class="user-name-display">Patient</span>!</p>
                 <h2>How are you today?</h2>
             </div>
 
@@ -1083,20 +1084,20 @@
                 <div class="stat-card">
                     <div class="icon-circle" style="background: var(--purple);"><i
                             class="fa-solid fa-calendar-check"></i></div>
-                    <h3>12</h3>
+                    <h3 id="stat-total-apps">0</h3>
                     <p>Total Appointments</p>
                     <div class="trend up"><i class="fa-solid fa-arrow-up"></i> All time</div>
                 </div>
                 <div class="stat-card">
                     <div class="icon-circle" style="background: var(--teal);"><i class="fa-solid fa-clock"></i></div>
-                    <h3>2</h3>
+                    <h3 id="stat-upcoming">0</h3>
                     <p>Upcoming</p>
                     <div class="trend"><i class="fa-solid fa-minus"></i> Next 7 days</div>
                 </div>
                 <div class="stat-card">
                     <div class="icon-circle" style="background: var(--green);"><i class="fa-solid fa-check-circle"></i>
                     </div>
-                    <h3>8</h3>
+                    <h3 id="stat-completed">0</h3>
                     <p>Completed</p>
                     <div class="trend up"><i class="fa-solid fa-arrow-up"></i> This month</div>
                 </div>
@@ -1359,8 +1360,56 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
     <script>
+        // 🛡️ AUTH CHECK
+        const token = localStorage.getItem('token');
+        const userStr = localStorage.getItem('user');
+        const user = userStr ? JSON.parse(userStr) : null;
+
+        if (!token || !user || user.role !== 'patient') {
+            window.location.href = 'login.html';
+        }
+
         // Initialize AOS
         AOS.init({ duration: 800, once: true });
+
+        // Update User Profile UI
+        document.addEventListener('DOMContentLoaded', () => {
+            // Bulk update names
+            document.querySelectorAll('.profile-name, .user-name-display').forEach(el => el.innerText = user.full_name);
+            document.querySelectorAll('.profile-email').forEach(el => el.innerText = user.email);
+
+            // Update initials
+            const initials = user.full_name.split(' ').map(n => n[0]).join('').toUpperCase();
+            document.querySelectorAll('.avatar-circle, .user-initials').forEach(el => el.innerText = initials);
+
+            // Fetch real dashboard stats
+            fetchDashboardData();
+        });
+
+        async function fetchDashboardData() {
+            try {
+                const res = await fetch('http://localhost:5000/api/patient/dashboard', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    // Mapping stats to UI elements (ids must exist in HTML)
+                    const totalEl = document.getElementById('stat-total-apps');
+                    const upcomingEl = document.getElementById('stat-upcoming');
+                    const completedEl = document.getElementById('stat-completed');
+
+                    if (totalEl) totalEl.innerText = data.total;
+                    if (upcomingEl) upcomingEl.innerText = data.upcoming;
+                    if (completedEl) completedEl.innerText = data.completed;
+                }
+            } catch (e) { console.error("MediBook API Error:", e); }
+        }
+
+        // Logout
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        }
 
         // Profile Dropdown Toggle
         function toggleDropdown() {

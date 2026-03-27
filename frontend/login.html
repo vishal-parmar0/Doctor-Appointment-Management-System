@@ -644,25 +644,46 @@
                 return;
             }
 
-            // All Valid - Process Submit
-            const btn = loginForm.querySelector('.btn-auth');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Logging in...';
-            btn.disabled = true;
+            // REPLACED: Real Fetch to Backend
+            fetch('http://localhost:5000/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    email: email.value,
+                    password: password.value
+                })
+            })
+                .then(res => res.json().then(data => ({ status: res.status, body: data })))
+                .then(obj => {
+                    if (obj.status === 200) {
+                        showFlash('Login successful! Redirecting...', 'success');
 
-            setTimeout(() => {
-                showFlash('Login successful! Redirecting...', 'success');
-                setTimeout(() => {
-                    const role = document.getElementById('role-input').value;
-                    if (role === 'doctor') {
-                        window.location.href = 'doctor-dashboard.html';
-                    } else if (role === 'admin') {
-                        window.location.href = 'admin-dashboard.html';
+                        // Store Session
+                        localStorage.setItem('token', obj.body.token);
+                        localStorage.setItem('user', JSON.stringify(obj.body.user));
+
+                        setTimeout(() => {
+                            const role = obj.body.user.role;
+                            if (role === 'doctor') {
+                                window.location.href = 'doctor-dashboard.html';
+                            } else if (role === 'admin') {
+                                window.location.href = 'admin-dashboard.html';
+                            } else {
+                                window.location.href = 'patient-dashboard.html';
+                            }
+                        }, 800);
                     } else {
-                        window.location.href = 'patient-dashboard.html';
+                        btn.innerHTML = originalText;
+                        btn.disabled = false;
+                        showFlash(obj.body.error || 'Server Error', 'error');
                     }
-                }, 1000);
-            }, 1000);
+                })
+                .catch(err => {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    showFlash('Connection to server failed. Please ensure the backend is running.', 'error');
+                    console.error('Login Error:', err);
+                });
         });
     </script>
 </body>

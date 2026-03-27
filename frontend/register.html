@@ -789,13 +789,48 @@
             }
 
             const btn = form.querySelector('.btn-auth');
+            const originalText = btn.innerHTML;
             btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Creating Account...';
             btn.disabled = true;
 
-            setTimeout(() => {
-                showFlash('Account created! Welcome to MediBook', 'success');
-                setTimeout(() => window.location.href = 'login.html', 1500);
-            }, 1500);
+            // Collect Data
+            const formData = {
+                email: document.getElementById('email').value,
+                password: passwordInput.value,
+                full_name: document.getElementById('name').value,
+                role: document.getElementById('role-input').value,
+                phone: document.getElementById('phone').value
+            };
+
+            // Add Doctor specific data
+            if (document.getElementById('role-input').value === 'doctor') {
+                const spec = document.getElementById('reg-specialization').value;
+                formData.specialization = (spec === 'Other') ? document.getElementById('custom-specialization').value : spec;
+                formData.experience_years = document.getElementsByName('experience')[0].value || 0;
+            }
+
+            fetch('http://localhost:5000/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            })
+                .then(res => res.json().then(data => ({ status: res.status, body: data })))
+                .then(obj => {
+                    if (obj.status === 201) {
+                        showFlash('Account created! Please log in.', 'success');
+                        setTimeout(() => window.location.href = 'login.html', 1500);
+                    } else {
+                        btn.innerHTML = originalText;
+                        btn.disabled = false;
+                        showFlash(obj.body.error || 'Registration failed', 'error');
+                    }
+                })
+                .catch(err => {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                    showFlash('Server connection failed', 'error');
+                    console.error('Register Error:', err);
+                });
         });
     </script>
 </body>

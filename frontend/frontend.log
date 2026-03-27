@@ -1,0 +1,9 @@
+nohup: ignoring input
+127.0.0.1 - - [25/Mar/2026 19:28:32] "GET /index.html HTTP/1.1" 304 -
+127.0.0.1 - - [25/Mar/2026 19:28:32] "GET /assets/images/doctor-1.png HTTP/1.1" 304 -
+127.0.0.1 - - [25/Mar/2026 19:28:32] "GET /assets/images/doctor-2.png HTTP/1.1" 304 -
+127.0.0.1 - - [25/Mar/2026 19:28:32] "GET /assets/images/hero-doctor.png HTTP/1.1" 304 -
+127.0.0.1 - - [25/Mar/2026 19:28:32] "GET /assets/images/doctor-3.png HTTP/1.1" 304 -
+127.0.0.1 - - [25/Mar/2026 19:28:32] "GET /assets/images/about-team.png HTTP/1.1" 304 -
+127.0.0.1 - - [25/Mar/2026 19:28:32] "GET /assets/images/doctor-4.png HTTP/1.1" 304 -
+127.0.0.1 - - [25/Mar/2026 19:28:38] "GET /register.html HTTP/1.1" 304 -

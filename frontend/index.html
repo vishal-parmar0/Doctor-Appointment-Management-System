@@ -1562,6 +1562,48 @@
             once: true
         });
 
+        // 🌐 PUBLIC DATA FETCH
+        async function fetchPublicData() {
+            try {
+                // Fetch Featured Doctors
+                const resDocs = await fetch('http://localhost:5000/api/public/featured-doctors');
+                const docs = await resDocs.json();
+                if (resDocs.ok) {
+                    const grid = document.querySelector('#specialists .row');
+                    if (docs.length > 0 && grid) {
+                        grid.innerHTML = ''; // Clear hardcoded
+                        docs.forEach(doc => {
+                            grid.innerHTML += `
+                                <div class="col-lg-3 col-md-6 mb-4" data-aos="fade-up">
+                                    <div class="doctor-card">
+                                        <div class="doctor-img">
+                                            <img src="https://images.unsplash.com/photo-1559839734-2b71f1536780?w=400"
+                                                alt="Doctor">
+                                            <div class="specialization-tag">${doc.specialization}</div>
+                                        </div>
+                                        <div class="doctor-info">
+                                            <h5>Dr. ${doc.full_name}</h5>
+                                            <p class="text-muted"><i class="fa-solid fa-location-dot me-2"></i>${doc.city}</p>
+                                            <div class="doctor-rating">
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star"></i>
+                                                <i class="fa-solid fa-star-half-stroke"></i>
+                                                <span>(4.9)</span>
+                                            </div>
+                                            <a href="login.html" class="btn btn-outline-primary w-100 mt-3 rounded-pill">Book Now</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                    }
+                }
+            } catch (e) { console.warn("Landing API offline, showing static content."); }
+        }
+        fetchPublicData();
+
         // Navbar Scroll Effect
         window.addEventListener('scroll', function () {
             const navbar = document.querySelector('.navbar');

@@ -432,7 +432,7 @@
         <!-- Header -->
         <header class="header-top" data-aos="fade-down">
             <div>
-                <h2 class="fw-bold mb-1">Welcome, Dr. Smith!</h2>
+                <h2 class="fw-bold mb-1">Welcome, <span class="doctor-name-display">Doctor</span>!</h2>
                 <p class="text-muted small">Here is what is happening with your practice today.</p>
             </div>
 
@@ -442,10 +442,10 @@
                         <i class="fa-solid fa-plus me-2"></i> Add Patient
                     </button>
                 </div>
-                <div class="avatar-box">AS</div>
+                <div class="avatar-box avatar-initials">DS</div>
                 <div class="profile-info d-none d-lg-block">
-                    <h4>Dr. Alexander Smith</h4>
-                    <p>Cardiologist</p>
+                    <h4 class="doctor-name-display">Dr. Alexander Smith</h4>
+                    <p>Consultant</p>
                 </div>
             </div>
         </header>
@@ -457,7 +457,7 @@
                     <i class="fa-solid fa-users"></i>
                 </div>
                 <div class="stat-data">
-                    <h3>1,248</h3>
+                    <h3 id="stat-total-patients">0</h3>
                     <p>Total Patients</p>
                 </div>
             </div>
@@ -466,7 +466,7 @@
                     <i class="fa-solid fa-calendar-day"></i>
                 </div>
                 <div class="stat-data">
-                    <h3>18</h3>
+                    <h3 id="stat-today-sessions">0</h3>
                     <p>Appointments Today</p>
                 </div>
             </div>
@@ -475,8 +475,8 @@
                     <i class="fa-solid fa-hand-holding-medical"></i>
                 </div>
                 <div class="stat-data">
-                    <h3>84%</h3>
-                    <p>Recovery Rate</p>
+                    <h3 id="stat-total-sessions">0</h3>
+                    <p>Total Consultations</p>
                 </div>
             </div>
             <div class="stat-card">
@@ -484,7 +484,7 @@
                     <i class="fa-solid fa-star"></i>
                 </div>
                 <div class="stat-data">
-                    <h3>4.9</h3>
+                    <h3 id="stat-doc-rating">0</h3>
                     <p>Patient Rating</p>
                 </div>
             </div>
@@ -630,7 +630,45 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
+        // 🛡️ AUTH CHECK
+        const token = localStorage.getItem('token');
+        const userStr = localStorage.getItem('user');
+        const user = userStr ? JSON.parse(userStr) : null;
+
+        if (!token || !user || user.role !== 'doctor') {
+            window.location.href = 'login.html';
+        }
+
         AOS.init({ duration: 800, once: true });
+
+        // Update Doctor UI
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.doctor-name-display').forEach(el => el.innerText = 'Dr. ' + user.full_name);
+            const initials = user.full_name.split(' ').map(n => n[0]).join('').toUpperCase();
+            document.querySelectorAll('.avatar-initials').forEach(el => el.innerText = initials);
+            fetchDashboardData();
+        });
+
+        async function fetchDashboardData() {
+            try {
+                const res = await fetch('http://localhost:5000/api/doctor/dashboard', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    const stats = {
+                        'stat-total-patients': data.patients,
+                        'stat-today-sessions': data.today,
+                        'stat-total-sessions': data.total,
+                        'stat-doc-rating': data.rating
+                    };
+                    for (const [id, val] of Object.entries(stats)) {
+                        const el = document.getElementById(id);
+                        if (el) el.innerText = val;
+                    }
+                }
+            } catch (e) { console.error("Doctor API Error:", e); }
+        }
 
         // Growth Chart
         const ctx = document.getElementById('growthChart').getContext('2d');

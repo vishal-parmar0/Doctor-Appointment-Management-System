@@ -325,7 +325,92 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
+        // 🛡️ AUTH CHECK
+        const token = localStorage.getItem('token');
+        const userStr = localStorage.getItem('user');
+        const user = userStr ? JSON.parse(userStr) : null;
+
+        if (!token || !user || user.role !== 'patient') {
+            window.location.href = 'login.html';
+        }
+
         AOS.init({ duration: 800 });
+
+        // Update Nav initials
+        const initials = user.full_name.split(' ').map(n => n[0]).join('').toUpperCase();
+        document.querySelector('.avatar-circle').innerText = initials;
+
+        async function fetchAppointments() {
+            try {
+                const res = await fetch('http://localhost:5000/api/patient/appointments/patient', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    const upcomingContainer = document.querySelector('.appt-card:nth-of-type(1)');
+                    const completedContainer = document.querySelector('.appt-card:nth-of-type(2)');
+
+                    upcomingContainer.innerHTML = '';
+                    completedContainer.innerHTML = '';
+
+                    if (data.length === 0) {
+                        upcomingContainer.innerHTML = '<div class="p-4 text-center text-muted">No appointments found.</div>';
+                        return;
+                    }
+
+                    data.forEach(ap => {
+                        const dateObj = new Date(ap.date);
+                        const month = dateObj.toLocaleString('default', { month: 'short' });
+                        const day = dateObj.getDate();
+                        const statusClass = `status-${ap.status.toLowerCase()}`;
+
+                        const html = `
+                            <div class="appt-item">
+                                <div class="date-box">
+                                    <span class="month">${month}</span>
+                                    <span class="day">${day}</span>
+                                </div>
+                                <div class="doc-profile-row">
+                                    <img src="https://images.unsplash.com/photo-1559839734-2b71f153678e?w=100" class="doc-img-sm">
+                                    <div class="doc-info">
+                                        <h6>Dr. ${ap.doctor_name}</h6>
+                                        <p>${ap.type} Consultation</p>
+                                        <p class="small text-muted"><i class="fa-solid fa-clock me-1"></i> ${ap.time}</p>
+                                    </div>
+                                </div>
+                                <div><span class="appt-status ${statusClass}">${ap.status}</span></div>
+                                <div class="d-flex gap-2">
+                                    ${ap.status === 'confirmed' ? `<button class="btn-action" onclick="alert('Proceeding to Video Call...')"><i class="fa-solid fa-video me-2"></i> Join</button>` : ''}
+                                    ${ap.status === 'pending' || ap.status === 'confirmed' ? `<button class="btn-action" onclick="cancelAppt(${ap.id})">Cancel</button>` : ''}
+                                    ${ap.status === 'completed' ? `<button class="btn-action" onclick="window.location.href='prescriptions.html'">View Rx</button>` : ''}
+                                </div>
+                            </div>
+                        `;
+
+                        if (ap.status === 'completed') {
+                            completedContainer.innerHTML += html;
+                        } else {
+                            upcomingContainer.innerHTML += html;
+                        }
+                    });
+                }
+            } catch (e) { console.error("MediBook API Error:", e); }
+        }
+        fetchAppointments();
+
+        async function cancelAppt(id) {
+            if (!confirm("Are you sure you want to cancel this appointment?")) return;
+            try {
+                const res = await fetch(`http://localhost:5000/api/patient/appointments/cancel/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    alert("Appointment cancelled.");
+                    fetchAppointments();
+                }
+            } catch (e) { alert("Server error."); }
+        }
     </script>
 </body>
 

@@ -291,11 +291,16 @@
         /* Match Indicator */
         .match-indicator {
             position: absolute;
-            right: 15px;
+            right: 45px;
             top: 50%;
             transform: translateY(-50%);
             font-size: 14px;
             display: none;
+        }
+
+        /* Specific fix for validation icons in password fields to not overlap eye icon */
+        .form-group .input-group .validation-indicator.success {
+            right: 45px;
         }
 
         /* Buttons */
@@ -476,7 +481,7 @@
                                 <i class="fa-solid fa-user field-icon"></i>
                                 <input type="text" name="name" class="form-control" placeholder="Enter your full name"
                                     required id="name">
-                                <i class="fa-solid fa-circle-check validation-indicator success" id="name-success"></i>
+                                <i class="fa-solid fa-circle-check validation-indicator" id="name-success"></i>
                             </div>
                             <small class="text-danger d-none" id="name-error">Name must be at least 3 characters &
                                 letters only</small>
@@ -489,25 +494,53 @@
                                 <i class="fa-solid fa-envelope field-icon"></i>
                                 <input type="email" name="email" class="form-control" placeholder="Enter your email"
                                     required id="email">
-                                <i class="fa-solid fa-circle-check validation-indicator success" id="email-success"></i>
+                                <i class="fa-solid fa-circle-check validation-indicator" id="email-success"></i>
                             </div>
                             <small class="text-danger d-none" id="email-error">Please enter a valid email
                                 address</small>
                         </div>
 
                         <!-- Phone Number -->
-                        <div class="form-group">
-                            <label class="form-label">Phone Number</label>
-                            <div class="input-group">
-                                <i class="fa-solid fa-phone field-icon"></i>
-                                <input type="tel" name="phone" class="form-control ps-4" placeholder="10 digit number"
-                                    required id="phone" style="padding-left: 85px !important;">
-                                <div style="position:absolute; left: 40px; top: 14px; font-weight: 600; color: #555;">
-                                    +91</div>
-                                <i class="fa-solid fa-circle-check validation-indicator success" id="phone-success"></i>
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label class="form-label">Phone Number</label>
+                                <div class="input-group">
+                                    <i class="fa-solid fa-phone field-icon"></i>
+                                    <input type="tel" name="phone" class="form-control" placeholder="10 digits" required
+                                        id="phone">
+                                    <i class="fa-solid fa-circle-check validation-indicator" id="phone-success"></i>
+                                </div>
+                                <small class="text-danger d-none" id="phone-error">Please enter valid 10 digit
+                                    number</small>
                             </div>
-                            <small class="text-danger d-none" id="phone-error">Please enter valid 10 digit
-                                number</small>
+                            <div class="col-md-6 form-group">
+                                <label class="form-label">Date of Birth</label>
+                                <div class="input-group">
+                                    <i class="fa-solid fa-calendar field-icon"></i>
+                                    <input type="date" name="dob" class="form-control" required id="dob">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Gender and Address -->
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label class="form-label">Gender</label>
+                                <select name="gender" class="form-control" id="gender" required>
+                                    <option value="">Select</option>
+                                    <option>Male</option>
+                                    <option>Female</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label class="form-label">Address</label>
+                                <div class="input-group">
+                                    <i class="fa-solid fa-location-dot field-icon"></i>
+                                    <input type="text" name="address" class="form-control" placeholder="City"
+                                        id="address">
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Password -->
@@ -751,13 +784,18 @@
             }
 
             if (valid && val.length > 0) {
-                error.classList.add('d-none');
-                success.classList.add('success');
+                if (error) error.classList.add('d-none');
+                if (success) success.classList.add('success');
                 el.style.borderColor = 'var(--success)';
             } else if (val.length > 0) {
-                error.classList.remove('d-none');
-                success.classList.remove('success');
+                if (error) error.classList.remove('d-none');
+                if (success) success.classList.remove('success');
                 el.style.borderColor = 'var(--error)';
+            } else {
+                // If field is empty, clear both indicators and border
+                if (error) error.classList.add('d-none');
+                if (success) success.classList.remove('success');
+                el.style.borderColor = '#eee';
             }
             return valid;
         }
@@ -799,15 +837,15 @@
                 password: passwordInput.value,
                 full_name: document.getElementById('name').value,
                 role: document.getElementById('role-input').value,
-                phone: document.getElementById('phone').value
+                phone: document.getElementById('phone').value,
+                dob: document.getElementById('dob').value,
+                gender: document.getElementById('gender').value,
+                address: document.getElementById('address').value,
+                specialization: document.getElementById('reg-specialization').value === 'Other' ?
+                    document.getElementById('custom-specialization').value :
+                    document.getElementById('reg-specialization').value,
+                experience: document.querySelector('input[name="experience"]').value
             };
-
-            // Add Doctor specific data
-            if (document.getElementById('role-input').value === 'doctor') {
-                const spec = document.getElementById('reg-specialization').value;
-                formData.specialization = (spec === 'Other') ? document.getElementById('custom-specialization').value : spec;
-                formData.experience_years = document.getElementsByName('experience')[0].value || 0;
-            }
 
             fetch('http://localhost:5000/api/auth/register', {
                 method: 'POST',

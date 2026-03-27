@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Prescriptions - MediBook</title>
+    <title>Medical Records - MediBook</title>
 
     <!-- Tech Stack -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -171,85 +171,52 @@
         .container-content {
             margin-top: 100px;
             padding: 0 30px;
-            max-width: 1000px;
-            margin-left: auto;
-            margin-right: auto;
         }
 
-        /* Prescription List */
-        .rx-card {
+        .record-card {
             background: white;
             border-radius: var(--radius-md);
+            padding: 20px;
+            margin-bottom: 15px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            padding: 25px;
-            margin-bottom: 20px;
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 20px;
-            transition: 0.3s;
+            transition: 0.2s;
+            border-left: 5px solid var(--primary);
         }
 
-        .rx-card:hover {
-            transform: translateX(10px);
-            border-left: 4px solid var(--primary);
+        .record-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
         }
 
-        .rx-icon {
-            width: 60px;
-            height: 60px;
+        .record-icon {
+            width: 50px;
+            height: 50px;
             background: rgba(0, 102, 255, 0.1);
             color: var(--primary);
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
+            font-size: 20px;
+            margin-right: 20px;
         }
 
-        .rx-details {
-            flex: 1;
-        }
-
-        .rx-details h6 {
-            margin: 0 0 5px;
-            font-weight: 700;
-        }
-
-        .rx-details p {
-            margin: 0;
-            font-size: 12px;
-            color: #6B7280;
-        }
-
-        .btn-rx-download {
-            border: none;
+        .btn-view {
             background: #F3F4F6;
-            color: #1A1A2E;
-            padding: 10px 20px;
+            color: var(--text-dark);
+            border: none;
+            padding: 8px 20px;
             border-radius: 10px;
             font-size: 13px;
             font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: 0.2s;
         }
 
-        .btn-rx-download:hover {
+        .btn-view:hover {
             background: var(--primary);
             color: white;
-        }
-
-        .rx-badge {
-            font-size: 10px;
-            font-weight: 700;
-            background: #DCFCE7;
-            color: #166534;
-            padding: 4px 10px;
-            border-radius: 20px;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-            display: inline-block;
         }
     </style>
 </head>
@@ -264,8 +231,8 @@
         <div class="nav-tabs-pill">
             <a href="patient-dashboard.html" class="nav-tab">Dashboard</a>
             <a href="appointments.html" class="nav-tab">Appointments</a>
-            <a href="prescriptions.html" class="nav-tab active">Prescriptions</a>
-            <a href="medical-records.html" class="nav-tab">Medical Records</a>
+            <a href="prescriptions.html" class="nav-tab">Prescriptions</a>
+            <a href="medical-records.html" class="nav-tab active">Medical Records</a>
             <a href="doctors.html" class="nav-tab">Find Doctors</a>
         </div>
 
@@ -273,44 +240,16 @@
     </nav>
 
     <div class="container-content">
-        <h2 class="fw-bold mb-4">Past Prescriptions</h2>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold">Medical Records</h2>
+            <button class="btn btn-primary rounded-pill"><i class="fa-solid fa-upload me-2"></i> Upload Record</button>
+        </div>
 
-        <div data-aos="fade-up">
-            <!-- Rx 1 -->
-            <div class="rx-card">
-                <div class="rx-icon"><i class="fa-solid fa-file-prescription"></i></div>
-                <div class="rx-details">
-                    <span class="rx-badge">Active Treatment</span>
-                    <h6>Hypertension Management Plan</h6>
-                    <p>By Dr. Alexander Smith • Mar 10, 2026</p>
-                    <p class="small text-muted mt-1">Metformin, Lisinopril, Atenolol</p>
-                </div>
-                <button class="btn-rx-download" onclick="alert('Downloading Rx_MB_SMITH_MAR10.pdf...')"><i
-                        class="fa-solid fa-download"></i> Download Rx</button>
-            </div>
-
-            <!-- Rx 2 -->
-            <div class="rx-card">
-                <div class="rx-icon"><i class="fa-solid fa-file-prescription"></i></div>
-                <div class="rx-details">
-                    <span class="rx-badge" style="background: #F3F4F6; color: #6B7280;">Completed</span>
-                    <h6>Migraine Consultation RX</h6>
-                    <p>By Dr. William Osler • Feb 15, 2026</p>
-                    <p class="small text-muted mt-1">Sumatriptan 50mg (SOS)</p>
-                </div>
-                <button class="btn-rx-download"><i class="fa-solid fa-download"></i> Download Rx</button>
-            </div>
-
-            <!-- Rx 3 -->
-            <div class="rx-card">
-                <div class="rx-icon"><i class="fa-solid fa-file-prescription"></i></div>
-                <div class="rx-details">
-                    <span class="rx-badge" style="background: #F3F4F6; color: #6B7280;">Completed</span>
-                    <h6>Annual Wellness Report</h6>
-                    <p>By Dr. Virginia Apgar • Jan 02, 2026</p>
-                    <p class="small text-muted mt-1">Multivitamins, Zinc Supplements</p>
-                </div>
-                <button class="btn-rx-download"><i class="fa-solid fa-download"></i> Download Rx</button>
+        <div id="recordsList">
+            <!-- Dynamic Records -->
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary"></div>
+                <p class="mt-2 text-muted">Loading your medical history...</p>
             </div>
         </div>
     </div>
@@ -329,87 +268,84 @@
             window.location.href = 'login.html';
         }
 
-        AOS.init({ duration: 800 });
 
 
-
-
-
-        function downloadPDF(title, doctor, date, medicines) {
-            const content = `
-                MEDIBOOK - OFFICIAL PRESCRIPTION
-                -------------------------------
-                Title: ${title}
-                Doctor: ${doctor}
-                Date: ${date}
-                
-                Medicines Included:
-                ${medicines}
-                
-                Advice:
-                Please take the medicines as prescribed. Drink plenty of water.
-                -------------------------------
-                This is a computer generated prescription.
-            `;
-            const blob = new Blob([content], { type: 'text/plain' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `Prescription_${date.replace(/ /g, '_')}.txt`;
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(a);
-        }
-
-        async function fetchPrescriptions() {
-            try {
-                const res = await fetch('http://localhost:5000/api/patient/prescriptions/patient', {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                const data = await res.json();
-                if (res.ok) {
-                    const grid = document.querySelector('.container-content > div');
-                    grid.innerHTML = '';
-                    if (data.length === 0) {
-                        grid.innerHTML = '<div class="alert alert-info">No prescriptions found yet.</div>';
-                        return;
-                    }
-                    data.forEach(p => {
-                        grid.innerHTML += `
-                            <div class="rx-card" data-aos="fade-up">
-                                <div class="rx-icon"><i class="fa-solid fa-file-prescription"></i></div>
-                                <div class="rx-details">
-                                    <span class="rx-badge">Electronic Prescription</span>
-                                    <h6>${p.medicines}</h6>
-                                    <p>By Dr. ${p.doctor_name} • ${p.date}</p>
-                                    <p class="small text-muted mt-1">${p.advice || 'No specific advice provided.'}</p>
-                                </div>
-                                <button class="btn-rx-download" onclick="downloadPDF('${p.medicines}', '${p.doctor_name}', '${p.date}', '${p.medicines}')"><i
-                                        class="fa-solid fa-download"></i> Download Rx</button>
-                            </div>
-                        `;
-                    });
-                }
-            } catch (e) {
-                console.error("Prescription Error:", e);
-            }
-        }
-        fetchPrescriptions();
 
 
 
         // Search Filter
         document.getElementById('globalSearch').addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
-            document.querySelectorAll('.rx-card').forEach(card => {
+            document.querySelectorAll('.record-card').forEach(card => {
                 const text = card.innerText.toLowerCase();
                 card.style.display = text.includes(term) ? 'flex' : 'none';
             });
         });
 
+        async function fetchRecords() {
+            try {
+                // Fetch Appointments (Completed) and Prescriptions to show as records
+                const [appRes, preRes] = await Promise.all([
+                    fetch('http://localhost:5000/api/patient/appointments/patient', { headers: { 'Authorization': `Bearer ${token}` } }),
+                    fetch('http://localhost:5000/api/patient/prescriptions/patient', { headers: { 'Authorization': `Bearer ${token}` } })
+                ]);
+
+                if (!appRes.ok || !preRes.ok) {
+                    throw new Error("Failed to fetch records from server");
+                }
+
+                const apps = await appRes.json();
+                const prescriptions = await preRes.json();
+
+                const list = document.getElementById('recordsList');
+                list.innerHTML = '';
+
+                // Combine into "Records"
+                if (apps.length === 0 && prescriptions.length === 0) {
+                    list.innerHTML = `<div class="alert alert-info">No medical records found. Record history is generated after completed consultations.</div>`;
+                    return;
+                }
+
+                // Show Prescriptions first
+                prescriptions.forEach(p => {
+                    list.innerHTML += `
+                        <div class="record-card" data-aos="fade-up">
+                            <div class="d-flex align-items-center">
+                                <div class="record-icon"><i class="fa-solid fa-file-prescription"></i></div>
+                                <div>
+                                    <h6 class="fw-bold mb-1">Prescription - ${p.doctor_name}</h6>
+                                    <p class="text-muted small mb-0">Date: ${p.date} • Issued by specialist</p>
+                                </div>
+                            </div>
+                            <button class="btn-view" onclick="window.location.href='prescriptions.html'">View Details</button>
+                        </div>
+                    `;
+                });
+
+                // Show Completed Appointments
+                apps.filter(a => a.status === 'completed').forEach(a => {
+                    list.innerHTML += `
+                        <div class="record-card" data-aos="fade-up" style="border-left-color: var(--purple);">
+                            <div class="d-flex align-items-center">
+                                <div class="record-icon" style="background: rgba(124, 58, 237, 0.1); color: var(--purple);"><i class="fa-solid fa-notes-medical"></i></div>
+                                <div>
+                                    <h6 class="fw-bold mb-1">Consultation Summary - Dr. ${a.doctor_name}</h6>
+                                    <p class="text-muted small mb-0">Visit Date: ${a.date} • ${a.type}</p>
+                                </div>
+                            </div>
+                            <button class="btn-view" onclick="window.location.href='appointments.html'">View Visit</button>
+                        </div>
+                    `;
+                });
+
+            } catch (e) {
+                document.getElementById('recordsList').innerHTML = `<div class="alert alert-danger">Error loading records. Please check your connection.</div>`;
+            }
+        }
 
 
+        AOS.init();
+        fetchRecords();
     </script>
 </body>
 

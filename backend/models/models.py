@@ -18,6 +18,9 @@ class User(db.Model):
     password_hash = db.Column(db.String(255), nullable=False)
     role = db.Column(db.Enum('patient', 'doctor', 'admin'), default='patient')
     phone = db.Column(db.String(15), nullable=True)
+    dob = db.Column(db.String(20), nullable=True)
+    gender = db.Column(db.String(10), nullable=True)
+    address = db.Column(db.String(255), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     # Helper function to hash password
@@ -86,3 +89,31 @@ class Prescription(db.Model):
     medicines = db.Column(db.Text, nullable=False)
     advice = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+# -----------------
+# 6. Notification Model
+# -----------------
+class Notification(db.Model):
+    __tablename__ = 'notifications'
+    id = db.Column(db.Integer, primary_key=True)
+    patient_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    title = db.Column(db.String(100), nullable=False)
+    message = db.Column(db.Text, nullable=False)
+    type = db.Column(db.Enum('appointment_confirmed', 'appointment_cancelled', 'prescription_uploaded', 'medicine_reminder', 'doctor_message'), default='doctor_message')
+    is_read = db.Column(db.Boolean, default=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+# -----------------
+# 7. Message Model
+# -----------------
+class Message(db.Model):
+    __tablename__ = 'messages'
+    id = db.Column(db.Integer, primary_key=True)
+    sender_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    receiver_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'), nullable=False)
+    message = db.Column(db.Text, nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    is_read = db.Column(db.Boolean, default=False)
+
+    sender = db.relationship('User', foreign_keys=[sender_id], backref='sent_messages')
+    receiver = db.relationship('User', foreign_keys=[receiver_id], backref='received_messages')

@@ -30,7 +30,10 @@ def register():
             email=email,
             password_hash=User.hash_password(password),
             role=role,
-            phone=phone
+            phone=phone,
+            dob=data.get('dob'),
+            gender=data.get('gender'),
+            address=data.get('address')
         )
         db.session.add(new_user)
         db.session.flush() # ID required for next steps
@@ -77,8 +80,41 @@ def login():
             "user": {
                 "id": user.id,
                 "full_name": user.full_name,
-                "role": user.role
+                "email": user.email,
+                "role": user.role,
+                "phone": user.phone,
+                "dob": user.dob,
+                "gender": user.gender,
+                "address": user.address
             }
         }), 200
 
     return jsonify({"error": "Invalid email or matching password"}), 401
+@auth_bp.route('/change-password', methods=['POST'])
+@jwt_required()
+def change_password():
+    """Endpoint for logged-in users to change their password"""
+    current_user_identity = get_jwt_identity()
+    data = request.get_json()
+
+    old_password = data.get('old_password')
+    new_password = data.get('new_password')
+
+    if not old_password or not new_password:
+        return jsonify({"error": "Both old and new password are required"}), 400
+
+    user = User.query.get(current_user_identity['id'])
+    
+    if not user:
+        return jsonify({"error": "User not found"}), 404
+
+    if not user.check_password(old_password):
+        return jsonify({"error": "Incorrect old password"}), 401
+
+    try:
+        user.password_hash = User.hash_password(new_password)
+        db.session.commit()
+        return jsonify({"message": "Password updated successfully!"}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": str(e)}), 500

@@ -50,6 +50,9 @@
             font-weight: 700;
             color: var(--purple);
             text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .nav-tabs-pill {
@@ -57,6 +60,7 @@
             background: #F3F4F6;
             padding: 5px;
             border-radius: 30px;
+            gap: 5px;
         }
 
         .nav-tab {
@@ -66,11 +70,104 @@
             border-radius: 25px;
             font-size: 14px;
             font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav-tab:hover {
+            color: var(--purple);
+            background: rgba(124, 58, 237, 0.05);
         }
 
         .nav-tab.active {
             background: var(--purple);
+            color: white !important;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .search-container {
+            position: relative;
+            width: 220px;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 8px 15px 8px 40px;
+            border-radius: 20px;
+            background: #F9FAFB;
+            border: 1px solid #E5E7EB;
+            font-size: 13px;
+        }
+
+        .search-container .short-key {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 11px;
+            color: #6B7280;
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .nav-btn {
+            color: #6B7280;
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .nav-btn:hover {
+            color: var(--purple);
+        }
+
+        .badge-notify {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #EF4444;
             color: white;
+            font-size: 10px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .avatar-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--purple), #06B6D4);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(124, 58, 237, 0.2);
+        }
+
+        .profile-dropdown {
+            position: absolute;
+            top: 80px;
+            right: 30px;
+            background: white;
+            width: 220px;
+            border-radius: 12px;
+            box-shadow: 0 8px 40px rgba(124, 58, 237, 0.16);
+            display: none;
+            overflow: hidden;
+            z-index: 10001;
         }
 
         .container-content {
@@ -216,17 +313,19 @@
 <body>
 
     <nav class="navbar">
-        <a href="index.html" class="nav-logo">MediBook</a>
+        <a href="index.html" class="nav-logo">
+            <i class="fa-solid fa-square-plus" style="color: #7C3AED;"></i> MediBook
+        </a>
+
         <div class="nav-tabs-pill">
             <a href="patient-dashboard.html" class="nav-tab">Dashboard</a>
             <a href="appointments.html" class="nav-tab">Appointments</a>
+            <a href="prescriptions.html" class="nav-tab">Prescriptions</a>
+            <a href="medical-records.html" class="nav-tab">Medical Records</a>
             <a href="doctors.html" class="nav-tab active">Find Doctors</a>
         </div>
-        <div>
-            <div class="avatar-circle"
-                style="width: 40px; height: 40px; border-radius: 50%; background: #7C3AED; color: white; display: flex; align-items: center; justify-content: center; font-weight: 600;">
-                MJ</div>
-        </div>
+
+        <div id="shared-navbar-right"></div>
     </nav>
 
     <div class="container-content">
@@ -238,25 +337,39 @@
         <!-- Search Bar -->
         <div class="search-area" data-aos="fade-up">
             <i class="fa-solid fa-search text-muted"></i>
-            <input type="text" placeholder="Search doctor by name or institution...">
-            <select>
-                <option>Select Location</option>
-                <option>Ahmedabad</option>
-                <option>Surat</option>
-                <option>Mumbai</option>
-            </select>
-            <button class="btn btn-primary rounded-pill px-4">Search</button>
+            <input type="text" id="searchInput" placeholder="Search doctor by name or Specialization...">
+            <div id="locationWrapper"
+                style="flex: 0.6; position: relative; border: 1px solid #E5E7EB; border-radius: 10px; background: #fff; padding-right: 10px;">
+                <select id="locationSelect" class="form-select border-0"
+                    style="width: 100%; height: 100%; outline: none; background: transparent; cursor: pointer; font-size: 14px; padding: 10px 15px;"
+                    onchange="handleLocationChange(this.value)">
+                    <option value="all">Search the location</option>
+                    <option value="Ahmedabad">Ahmedabad</option>
+                    <option value="Surat">Surat</option>
+                    <option value="Mumbai">Mumbai</option>
+                    <option value="Delhi">Delhi</option>
+                    <option value="Bangalore">Bangalore</option>
+                    <option value="other">Other (Type manually)...</option>
+                </select>
+                <input type="text" id="locationInput" placeholder="Type location here..."
+                    style="display: none; width: 100%; height: 100%; border: none; outline: none; font-size: 14px; padding: 10px 15px;"
+                    onblur="validateLocation()">
+                <div id="locationStatus"
+                    style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 10px; pointer-events: none;">
+                </div>
+            </div>
+            <button class="btn btn-primary rounded-pill px-4" onclick="applyFilters()">Search</button>
         </div>
 
         <!-- Category Tags -->
-        <div class="spec-tags" data-aos="fade-up" data-aos-delay="100">
-            <div class="tag-pill active">All Categories</div>
-            <div class="tag-pill">Cardiologist</div>
-            <div class="tag-pill">Dermatologist</div>
-            <div class="tag-pill">Neurologist</div>
-            <div class="tag-pill">Pediatrician</div>
-            <div class="tag-pill">Dentist</div>
-            <div class="tag-pill">Psychiatrist</div>
+        <div class="spec-tags" id="categoryTags" data-aos="fade-up" data-aos-delay="100">
+            <div class="tag-pill active" onclick="filterByCategory('All Categories', this)">All Categories</div>
+            <div class="tag-pill" onclick="filterByCategory('Cardiologist', this)">Cardiologist</div>
+            <div class="tag-pill" onclick="filterByCategory('Dermatologist', this)">Dermatologist</div>
+            <div class="tag-pill" onclick="filterByCategory('Neurologist', this)">Neurologist</div>
+            <div class="tag-pill" onclick="filterByCategory('Pediatrician', this)">Pediatrician</div>
+            <div class="tag-pill" onclick="filterByCategory('Dentist', this)">Dentist</div>
+            <div class="tag-pill" onclick="filterByCategory('Psychiatrist', this)">Psychiatrist</div>
         </div>
 
         <!-- Doctor Grid -->
@@ -356,6 +469,7 @@
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="shared_navbar.js"></script>
     <script>
         // 🛡️ AUTH CHECK
         const token = localStorage.getItem('token');
@@ -366,14 +480,17 @@
             window.location.href = 'login.html';
         }
 
+
+
         AOS.init({ duration: 800 });
 
         const bookModal = new bootstrap.Modal(document.getElementById('bookModal'));
         let selectedDocId = null;
 
-        // Update Nav initials
-        const initials = user.full_name.split(' ').map(n => n[0]).join('').toUpperCase();
-        document.querySelector('.avatar-circle').innerText = initials;
+
+
+        let allDocs = [];
+        let activeCategory = 'All Categories';
 
         async function fetchDoctors() {
             try {
@@ -382,34 +499,153 @@
                 });
                 const data = await res.json();
                 if (res.ok) {
-                    const grid = document.querySelector('.doctor-grid');
-                    grid.innerHTML = ''; // Clear hardcoded
-                    document.querySelector('.container-content p.text-muted').innerText = `${data.length} doctors available nearby`;
+                    allDocs = data;
 
-                    data.forEach(doc => {
-                        grid.innerHTML += `
-                            <div class="doc-card" data-aos="fade-up">
-                                <div class="badge-rating"><i class="fa-solid fa-star"></i> 4.9 (Live)</div>
-                                <div class="doc-header">
-                                    <img src="https://images.unsplash.com/photo-1559839734-2b71f153678e?w=150" class="doc-img">
-                                    <div class="doc-info">
-                                        <h5>Dr. ${doc.full_name}</h5>
-                                        <p>${doc.specialization}</p>
-                                        <small class="text-muted"><i class="fa-solid fa-location-dot me-1"></i> ${doc.city}</small>
-                                    </div>
-                                </div>
-                                <div class="small mb-3">Exp: ${doc.experience_years}+ Years • Highly recommended for your care.</div>
-                                <div class="doc-footer">
-                                    <div class="doc-price">₹${doc.consultation_fee} <small class="text-muted" style="font-size: 11px;">(Cons. Fee)</small>
-                                    </div>
-                                    <button class="btn-book" onclick="bookNow(${doc.id}, '${doc.full_name}')">Book Appointment</button>
-                                </div>
-                            </div>
-                        `;
-                    });
+                    // Check for URL parameters
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const q = urlParams.get('search');
+                    if (q) {
+                        document.getElementById('searchInput').value = q;
+                        document.getElementById('globalSearch').value = q;
+                    }
+
+                    applyFilters();
                 }
-            } catch (e) { console.error("MediBook Search Error:", e); }
+            } catch (e) {
+                console.error("MediBook Search Error:", e);
+                document.querySelector('.doctor-grid').innerHTML = '<div class="alert alert-danger w-100">Unable to load doctors. Please ensure the backend is running.</div>';
+            }
         }
+
+        function renderDoctors(docs) {
+            const grid = document.querySelector('.doctor-grid');
+            grid.innerHTML = '';
+            document.querySelector('.container-content p.text-muted').innerText = `${docs.length} doctors found`;
+
+            if (docs.length === 0) {
+                const isRealLocation = document.getElementById('locationStatus').getAttribute('data-real') !== 'false';
+                grid.innerHTML = `
+                    <div class="text-center w-100 py-5" data-aos="fade-up">
+                        <i class="fa-solid ${isRealLocation ? 'fa-user-doctor-slash' : 'fa-location-dot'} text-muted mb-3" style="font-size: 60px;"></i>
+                        <h4 class="fw-bold">${isRealLocation ? 'No Doctors Found' : 'Invalid Location'}</h4>
+                        <p class="text-muted">${isRealLocation ? 'No specialists match your search criteria in this real location.' : 'This location does not seem to exist on the global map.'}</p>
+                        <button class="btn btn-primary rounded-pill mt-2" onclick="resetFilters()">Clear Filters</button>
+                    </div>
+                `;
+                return;
+            }
+
+            docs.forEach(doc => {
+                grid.innerHTML += `
+                    <div class="doc-card" data-aos="fade-up">
+                        <div class="badge-rating"><i class="fa-solid fa-star"></i> 4.9 (Live)</div>
+                        <div class="doc-header">
+                            <img src="https://images.unsplash.com/photo-1559839734-2b71f153678e?w=150" class="doc-img">
+                            <div class="doc-info">
+                                <h5>Dr. ${doc.full_name}</h5>
+                                <p>${doc.specialization}</p>
+                                <small class="text-muted"><i class="fa-solid fa-location-dot me-1"></i> ${doc.city}</small>
+                            </div>
+                        </div>
+                        <div class="small mb-3">Exp: ${doc.experience_years}+ Years • Highly recommended for your care.</div>
+                        <div class="doc-footer">
+                            <div class="doc-price">₹${doc.consultation_fee} <small class="text-muted" style="font-size: 11px;">(Cons. Fee)</small>
+                            </div>
+                            <button class="btn-book" onclick="bookNow(${doc.id}, '${doc.full_name}')">Book Appointment</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        window.filterByCategory = function (category, el) {
+            document.querySelectorAll('.tag-pill').forEach(tag => tag.classList.remove('active'));
+            el.classList.add('active');
+            activeCategory = category;
+            applyFilters();
+        }
+
+        window.applyFilters = function () {
+            const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+            const locationSelect = document.getElementById('locationSelect');
+            const locationInput = document.getElementById('locationInput');
+
+            let locationQuery = "";
+            if (locationSelect.style.display !== 'none') {
+                locationQuery = locationSelect.value === 'all' ? '' : locationSelect.value.toLowerCase();
+            } else {
+                locationQuery = locationInput.value.toLowerCase();
+            }
+
+            const filtered = allDocs.filter(doc => {
+                const matchesSearch = doc.full_name.toLowerCase().includes(searchQuery) ||
+                    doc.specialization.toLowerCase().includes(searchQuery);
+                const matchesCategory = activeCategory === 'All Categories' || doc.specialization === activeCategory;
+                const matchesLocation = locationQuery === '' || doc.city.toLowerCase().includes(locationQuery);
+
+                return matchesSearch && matchesCategory && matchesLocation;
+            });
+
+            renderDoctors(filtered);
+        }
+
+        window.resetFilters = function () {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('locationInput').value = '';
+            document.getElementById('locationSelect').value = 'all';
+            document.getElementById('locationSelect').style.display = 'block';
+            document.getElementById('locationInput').style.display = 'none';
+            document.getElementById('locationStatus').innerHTML = '';
+            document.getElementById('locationStatus').setAttribute('data-real', 'true');
+            document.querySelectorAll('.tag-pill').forEach(tag => {
+                if (tag.innerText === 'All Categories') tag.click();
+            });
+            renderDoctors(allDocs);
+        }
+
+        window.handleLocationChange = function (val) {
+            if (val === 'other') {
+                document.getElementById('locationSelect').style.display = 'none';
+                document.getElementById('locationInput').style.display = 'block';
+                document.getElementById('locationInput').focus();
+            } else {
+                applyFilters();
+            }
+        }
+
+        window.validateLocation = async function () {
+            const val = document.getElementById('locationInput').value.trim();
+            const status = document.getElementById('locationStatus');
+            if (val.length < 3) {
+                status.innerHTML = '';
+                status.setAttribute('data-real', 'true');
+                return;
+            }
+
+            status.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin text-muted"></i>';
+            try {
+                // Using OpenStreetMap Nominatim Free API
+                const res = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(val)}&format=json&limit=1`, {
+                    headers: { 'User-Agent': 'MediBookApp/1.0' }
+                });
+                const data = await res.json();
+
+                if (data && data.length > 0) {
+                    status.innerHTML = '<i class="fa-solid fa-circle-check text-success" title="Verified Location"></i>';
+                    status.setAttribute('data-real', 'true');
+                } else {
+                    status.innerHTML = '<i class="fa-solid fa-circle-xmark text-danger" title="Location Not Found"></i>';
+                    status.setAttribute('data-real', 'false');
+                }
+                applyFilters();
+            } catch (e) {
+                status.innerHTML = ''; // Silently fail if API is blocked or offline
+            }
+        }
+        // Real-time filtering
+        document.getElementById('searchInput').addEventListener('input', applyFilters);
+        document.getElementById('locationInput').addEventListener('input', applyFilters);
+
         fetchDoctors();
 
         window.bookNow = function (docId, docName) {
@@ -447,6 +683,23 @@
                 }
             } catch (e) { alert("Server connection failed."); }
         }
+        // Live Search for main search bar
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            document.getElementById('globalSearch').value = term;
+            window.applyFilters();
+        });
+
+        // Global Search listener (sync back to main)
+        document.getElementById('globalSearch').addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            document.getElementById('searchInput').value = term;
+            window.applyFilters();
+        });
+
+
+
+
     </script>
 </body>
 

@@ -48,6 +48,9 @@
             font-weight: 700;
             color: var(--purple);
             text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .nav-tabs-pill {
@@ -55,6 +58,7 @@
             background: #F3F4F6;
             padding: 5px;
             border-radius: 30px;
+            gap: 5px;
         }
 
         .nav-tab {
@@ -64,11 +68,104 @@
             border-radius: 25px;
             font-size: 14px;
             font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav-tab:hover {
+            color: var(--purple);
+            background: rgba(124, 58, 237, 0.05);
         }
 
         .nav-tab.active {
             background: var(--purple);
+            color: white !important;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .search-container {
+            position: relative;
+            width: 220px;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 8px 15px 8px 40px;
+            border-radius: 20px;
+            background: #F9FAFB;
+            border: 1px solid #E5E7EB;
+            font-size: 13px;
+        }
+
+        .search-container .short-key {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 11px;
+            color: #6B7280;
+            background: #eee;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .nav-btn {
+            color: #6B7280;
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .nav-btn:hover {
+            color: var(--purple);
+        }
+
+        .badge-notify {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #EF4444;
             color: white;
+            font-size: 10px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .avatar-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--purple), #06B6D4);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(124, 58, 237, 0.2);
+        }
+
+        .profile-dropdown {
+            position: absolute;
+            top: 80px;
+            right: 30px;
+            background: white;
+            width: 220px;
+            border-radius: 12px;
+            box-shadow: 0 8px 40px rgba(124, 58, 237, 0.16);
+            display: none;
+            overflow: hidden;
+            z-index: 10001;
         }
 
         .container-content {
@@ -146,23 +243,74 @@
             transform: translateY(-3px);
             box-shadow: 0 10px 20px rgba(0, 102, 255, 0.2);
         }
+
+        /* Password Field Enhancements */
+        .password-field-group {
+            position: relative;
+        }
+
+        .password-field-group .form-control {
+            padding-right: 45px !important;
+        }
+
+        /* For the confirm field which has TWO icons/indicators */
+        #confirmNewPassword {
+            padding-right: 65px !important;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #9CA3AF;
+            transition: 0.2s;
+            z-index: 10;
+        }
+
+        .password-toggle:hover {
+            color: var(--primary);
+        }
+
+        .match-indicator {
+            position: absolute;
+            right: 42px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            display: none;
+            z-index: 10;
+        }
+
+        .match-indicator.success {
+            color: #10B981;
+            display: block;
+        }
+
+        .match-indicator.error {
+            color: #EF4444;
+            display: block;
+        }
     </style>
 </head>
 
 <body>
 
     <nav class="navbar">
-        <a href="index.html" class="nav-logo">MediBook</a>
+        <a href="index.html" class="nav-logo">
+            <i class="fa-solid fa-square-plus" style="color: var(--purple);"></i> MediBook
+        </a>
+
         <div class="nav-tabs-pill">
             <a href="patient-dashboard.html" class="nav-tab">Dashboard</a>
             <a href="appointments.html" class="nav-tab">Appointments</a>
+            <a href="prescriptions.html" class="nav-tab">Prescriptions</a>
+            <a href="medical-records.html" class="nav-tab">Medical Records</a>
             <a href="doctors.html" class="nav-tab">Find Doctors</a>
         </div>
-        <div>
-            <div class="avatar-circle"
-                style="width: 40px; height: 40px; border-radius: 50%; background: #7C3AED; color: white; display: flex; align-items: center; justify-content: center; font-weight: 600;">
-                MJ</div>
-        </div>
+
+        <div id="shared-navbar-right"></div>
     </nav>
 
     <div class="container-content">
@@ -170,39 +318,40 @@
 
         <div class="profile-card" data-aos="fade-up">
             <div class="profile-header">
-                <div class="p-avatar-lg">MJ</div>
+                <div class="p-avatar-lg" id="profileAvatar">MJ</div>
                 <div>
-                    <h4 class="fw-bold mb-1">Monica Johnson</h4>
-                    <p class="text-muted mb-2">monica.j@email.com • Patient ID: #MB-P302</p>
-                    <button class="btn btn-sm btn-outline-primary rounded-pill px-3">Change Avatar</button>
+                    <h4 class="fw-bold mb-1" id="profileFullName">Monica Johnson</h4>
+                    <p class="text-muted mb-2"><span id="profileEmail">monica.j@email.com</span> • Patient ID: #MB-P302
+                    </p>
+                    <button class="btn btn-sm btn-outline-primary rounded-pill px-3"
+                        onclick="document.getElementById('avatarUpload').click()">Change Avatar</button>
+                    <input type="file" id="avatarUpload" style="display: none;" accept="image/*"
+                        onchange="previewAvatar(this)">
                 </div>
             </div>
 
-            <form onsubmit="event.preventDefault(); alert('Profile updated successfully!');">
+            <form id="profileGeneralForm">
                 <div class="row g-4">
-                    <div class="col-md-6">
-                        <label class="form-label">First Name</label>
-                        <input type="text" class="form-control" value="Monica">
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Last Name</label>
-                        <input type="text" class="form-control" value="Johnson">
+                    <div class="col-md-12">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="inputName" placeholder="Enter full name">
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Email Address</label>
-                        <input type="email" class="form-control" value="monica.j@email.com">
+                        <input type="email" class="form-control" id="inputEmail" readonly>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Phone Number</label>
-                        <input type="text" class="form-control" value="+91 98765-43210">
+                        <input type="text" class="form-control" id="inputPhone" placeholder="Enter phone number">
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Date of Birth</label>
-                        <input type="date" class="form-control" value="2000-01-04">
+                        <input type="date" class="form-control" id="inputDOB">
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Gender</label>
-                        <select class="form-control">
+                        <select class="form-control" id="inputGender">
+                            <option value="">Select Gender</option>
                             <option>Female</option>
                             <option>Male</option>
                             <option>Other</option>
@@ -210,8 +359,8 @@
                     </div>
                     <div class="col-12">
                         <label class="form-label">Home Address</label>
-                        <textarea class="form-control"
-                            rows="3">123 Health Street, Satellite, Ahmedabad, Gujarat, India</textarea>
+                        <textarea class="form-control" id="inputAddress" rows="3"
+                            placeholder="Enter your full home address"></textarea>
                     </div>
                 </div>
 
@@ -221,15 +370,223 @@
                     </p>
                 </div>
             </form>
+            <div class="profile-card" data-aos="fade-up" data-aos-delay="100">
+                <h5 class="fw-bold mb-4"><i class="fa-solid fa-shield-halved me-2 text-primary"></i> Login & Security
+                </h5>
+                <form id="passwordForm" onsubmit="handlePasswordChange(event)">
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <label class="form-label">Old Password</label>
+                            <div class="password-field-group">
+                                <input type="password" class="form-control" id="oldPassword"
+                                    placeholder="Current password" required>
+                                <i class="fa-solid fa-eye-slash password-toggle"
+                                    onclick="togglePassVisibility('oldPassword', this)"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">New Password</label>
+                            <div class="password-field-group">
+                                <input type="password" class="form-control" id="newPassword" placeholder="New password"
+                                    required oninput="checkPassMatch()">
+                                <i class="fa-solid fa-eye-slash password-toggle"
+                                    onclick="togglePassVisibility('newPassword', this)"></i>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Confirm New Password</label>
+                            <div class="password-field-group">
+                                <input type="password" class="form-control" id="confirmNewPassword"
+                                    placeholder="Confirm password" required oninput="checkPassMatch()">
+                                <span class="match-indicator" id="matchStatus"></span>
+                                <i class="fa-solid fa-eye-slash password-toggle"
+                                    onclick="togglePassVisibility('confirmNewPassword', this)"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-end mt-4">
+                        <button type="submit" id="changePassBtn"
+                            class="btn btn-primary rounded-pill px-4 py-2 fw-bold">Update Password</button>
+                    </div>
+                </form>
+            </div>
         </div>
-    </div>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        AOS.init({ duration: 800 });
-    </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+        <script src="shared_navbar.js"></script>
+        <script>
+            // 🛡️ AUTH CHECK
+            const token = localStorage.getItem('token');
+            const userStr = localStorage.getItem('user');
+            const user = userStr ? JSON.parse(userStr) : null;
+
+            if (!token || !user || user.role !== 'patient') {
+                window.location.href = 'login.html';
+            }
+
+            AOS.init({ duration: 800 });
+
+            // Update UI
+            document.addEventListener('DOMContentLoaded', () => {
+                if (!user) return;
+
+                const initials = user.full_name ? user.full_name.split(' ').map(n => n[0]).join('').toUpperCase() : '??';
+
+                // Initial UI Sync
+                syncAvatar(initials, user.avatar_url);
+
+                const profileFullName = document.getElementById('profileFullName');
+                const profileEmail = document.getElementById('profileEmail');
+                if (profileFullName) profileFullName.innerText = user.full_name || 'User';
+                if (profileEmail) profileEmail.innerText = user.email || 'Email not available';
+
+                document.getElementById('inputName').value = user.full_name || '';
+                document.getElementById('inputEmail').value = user.email || 'N/A';
+                document.getElementById('inputPhone').value = user.phone || '';
+                document.getElementById('inputDOB').value = user.dob || '';
+                document.getElementById('inputGender').value = user.gender || '';
+                document.getElementById('inputAddress').value = user.address || '';
+
+                // Force email to be read-only and look the part
+                const emailInp = document.getElementById('inputEmail');
+                emailInp.readOnly = true;
+                emailInp.style.backgroundColor = '#f3f4f6';
+                emailInp.style.cursor = 'not-allowed';
+            });
+
+
+
+
+            // Search Filter (Redirect to doctors on profile page)
+            document.getElementById('globalSearch').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const term = e.target.value.trim();
+                    if (term) window.location.href = `doctors.html?search=${encodeURIComponent(term)}`;
+                }
+            });
+
+            function syncAvatar(initials, url) {
+                const profileAvatar = document.getElementById('profileAvatar');
+                if (url) {
+                    profileAvatar.innerHTML = `<img src="${url}" style="width:100%;height:100%;object-fit:cover;border-radius:25px;">`;
+                } else {
+                    profileAvatar.innerText = initials;
+                }
+            }
+
+            window.previewAvatar = function (input) {
+                if (input.files && input.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const url = e.target.result;
+                        user.avatar_url = url;
+                        localStorage.setItem('user', JSON.stringify(user));
+                        const initials = user.full_name.split(' ').map(n => n[0]).join('').toUpperCase();
+                        syncAvatar(initials, url);
+                        if (typeof initNavbarLogic === 'function') initNavbarLogic();
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            window.togglePassVisibility = function (id, icon) {
+                const input = document.getElementById(id);
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                } else {
+                    input.type = 'password';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                }
+            };
+
+            window.checkPassMatch = function () {
+                const newPass = document.getElementById('newPassword').value;
+                const confirmPass = document.getElementById('confirmNewPassword').value;
+                const indicator = document.getElementById('matchStatus');
+
+                if (confirmPass === '') {
+                    indicator.style.display = 'none';
+                    return;
+                }
+
+                indicator.style.display = 'block';
+                if (newPass === confirmPass) {
+                    indicator.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+                    indicator.className = 'match-indicator success';
+                } else {
+                    indicator.innerHTML = '<i class="fa-solid fa-circle-xmark"></i>';
+                    indicator.className = 'match-indicator error';
+                }
+            };
+
+            document.getElementById('profileGeneralForm').onsubmit = function (e) {
+                e.preventDefault();
+                user.full_name = document.getElementById('inputName').value;
+                user.phone = document.getElementById('inputPhone').value;
+                user.dob = document.getElementById('inputDOB').value;
+                user.gender = document.getElementById('inputGender').value;
+                user.address = document.getElementById('inputAddress').value;
+
+                localStorage.setItem('user', JSON.stringify(user));
+                alert('Profile updated successfully!');
+                location.reload();
+            };
+
+            window.handlePasswordChange = async function (e) {
+                e.preventDefault();
+                const oldPass = document.getElementById('oldPassword').value;
+                const newPass = document.getElementById('newPassword').value;
+                const confirmPass = document.getElementById('confirmNewPassword').value;
+                const btn = document.getElementById('changePassBtn');
+
+                if (newPass !== confirmPass) {
+                    alert('New passwords do not match');
+                    return;
+                }
+
+                if (newPass.length < 8) {
+                    alert('New password must be at least 8 characters');
+                    return;
+                }
+
+                btn.disabled = true;
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Updating...';
+
+                try {
+                    const res = await fetch('http://localhost:5000/api/auth/change-password', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({
+                            old_password: oldPass,
+                            new_password: newPass
+                        })
+                    });
+
+                    const data = await res.json();
+                    if (res.ok) {
+                        alert('Password updated successfully!');
+                        document.getElementById('passwordForm').reset();
+                        document.getElementById('matchStatus').style.display = 'none';
+                    } else {
+                        alert(data.error || 'Failed to update password');
+                    }
+                } catch (err) {
+                    alert('Server error. Please try again later.');
+                } finally {
+                    btn.disabled = false;
+                    btn.innerHTML = originalText;
+                }
+            }
+        </script>
+
 </body>
 
 </html>

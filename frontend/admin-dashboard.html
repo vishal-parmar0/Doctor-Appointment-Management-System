@@ -408,7 +408,7 @@
         </ul>
 
         <div style="margin-top: auto; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
-            <a href="login.html" class="nav-link-adm text-danger">
+            <a href="admin/index.html" class="nav-link-adm text-danger">
                 <i class="fa-solid fa-right-from-bracket"></i>
                 <span>Global Logout</span>
             </a>
@@ -633,7 +633,7 @@
         const user = userStr ? JSON.parse(userStr) : null;
 
         if (!token || !user || user.role !== 'admin') {
-            window.location.href = 'login.html';
+            window.location.href = 'admin/index.html';
         }
 
         AOS.init({ duration: 800, once: true });
@@ -707,6 +707,7 @@
             }
         });
     </script>
+    <script src="shared_navbar.js"></script>
 </body>
 
 </html>

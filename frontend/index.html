@@ -809,13 +809,13 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mx-auto">
+                <ul class="navbar-nav mx-auto" id="navPills">
                     <li class="nav-item"><a class="nav-link active" href="#hero">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="#about">About Us</a></li>
                     <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
                     <li class="nav-item"><a class="nav-link" href="#doctors">Our Doctors</a></li>
                 </ul>
-                <div class="d-flex gap-3">
+                <div class="d-flex gap-3" id="navAuth">
                     <a href="login.html" class="btn btn-outline-primary">Login</a>
                     <a href="register.html" class="btn btn-primary">Register</a>
                 </div>
@@ -1820,6 +1820,35 @@
                 }
             });
         });
+
+        // Standardize Navbar For Logged In Users
+        function updateIndexNav() {
+            const userStr = localStorage.getItem('user');
+            const user = userStr ? JSON.parse(userStr) : null;
+            if (user && user.role === 'patient') {
+                const navPills = document.getElementById('navPills');
+                const navAuth = document.getElementById('navAuth');
+
+                navPills.innerHTML = `
+                    <li class="nav-item"><a class="nav-link" href="patient-dashboard.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="appointments.html">Appointments</a></li>
+                    <li class="nav-item"><a class="nav-link" href="doctors.html">Find Doctors</a></li>
+                `;
+                navAuth.innerHTML = `
+                    <div class="d-flex align-items-center gap-3">
+                        <span class="fw-bold small d-none d-md-block">Hi, ${user.full_name.split(' ')[0]}</span>
+                        <a href="#" onclick="logout()" class="btn btn-outline-danger btn-sm rounded-pill px-3">Logout</a>
+                        <a href="profile.html" class="btn btn-primary btn-sm rounded-pill px-3">My Profile</a>
+                    </div>
+                `;
+            }
+        }
+        updateIndexNav();
+
+        function logout() {
+            localStorage.clear();
+            window.location.reload();
+        }
 
     </script>
 </body>

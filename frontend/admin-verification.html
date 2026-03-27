@@ -201,7 +201,7 @@
             </span>
         </div>
         <nav>
-            <a href="admin-dashboard.html" class="nav-link-adm">
+            <a href="admin/index.html" class="nav-link-adm">
                 <i class="fa-solid fa-gauge"></i> <span>Dashboard</span>
             </a>
             <a href="admin-verification.html" class="nav-link-adm active">
@@ -300,7 +300,7 @@
         const user = userStr ? JSON.parse(userStr) : null;
 
         if (!token || !user || user.role !== 'admin') {
-            window.location.href = 'login.html';
+            window.location.href = 'admin/index.html';
         }
 
         AOS.init({ duration: 800 });
@@ -365,6 +365,7 @@
             } catch (e) { alert("Server connection failed."); }
         }
     </script>
+    <script src="shared_navbar.js"></script>
 </body>
 
 </html>

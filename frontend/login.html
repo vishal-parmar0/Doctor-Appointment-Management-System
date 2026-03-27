@@ -483,7 +483,6 @@
                             <button type="button" class="role-btn active"
                                 onclick="switchRole('patient', this)">Patient</button>
                             <button type="button" class="role-btn" onclick="switchRole('doctor', this)">Doctor</button>
-                            <button type="button" class="role-btn" onclick="switchRole('admin', this)">Admin</button>
                         </div>
                     </div>
 
@@ -644,6 +643,12 @@
                 return;
             }
 
+            // Show loading state
+            const btn = document.querySelector('.btn-auth');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin me-2"></i> Signing in...';
+            btn.disabled = true;
+
             // REPLACED: Real Fetch to Backend
             fetch('http://localhost:5000/api/auth/login', {
                 method: 'POST',
@@ -667,7 +672,7 @@
                             if (role === 'doctor') {
                                 window.location.href = 'doctor-dashboard.html';
                             } else if (role === 'admin') {
-                                window.location.href = 'admin-dashboard.html';
+                                window.location.href = 'admin/index.html';
                             } else {
                                 window.location.href = 'patient-dashboard.html';
                             }

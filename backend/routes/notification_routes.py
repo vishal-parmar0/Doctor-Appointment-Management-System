@@ -44,3 +44,12 @@ def mark_as_read(id):
     notification.is_read = True
     db.session.commit()
     return jsonify({"message": "Notification marked as read"}), 200
+
+@notification_bp.route('/read-all', methods=['PUT'])
+@jwt_required()
+def mark_all_as_read():
+    """Mark all notifications for the current user as read"""
+    current_user = get_jwt_identity()
+    db.session.query(Notification).filter_by(patient_id=current_user['id'], is_read=False).update({"is_read": True})
+    db.session.commit()
+    return jsonify({"message": "All notifications marked as read"}), 200

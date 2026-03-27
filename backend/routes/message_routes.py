@@ -20,6 +20,7 @@ def get_conversations():
         other_id = m.receiver_id if m.sender_id == user_id else m.sender_id
         if other_id not in conversations:
             other_user = User.query.get(other_id)
+            if not other_user: continue
             unread_count = Message.query.filter_by(sender_id=other_id, receiver_id=user_id, is_read=False).count()
             conversations[other_id] = {
                 "other_id": other_id,
@@ -95,3 +96,12 @@ def mark_read(id):
     msg.is_read = True
     db.session.commit()
     return jsonify({"message": "Message marked as read"}), 200
+
+@message_bp.route('/read-all', methods=['PUT'])
+@jwt_required()
+def mark_all_read():
+    """Mark all messages for the current user (receiver) as read"""
+    current_user = get_jwt_identity()
+    db.session.query(Message).filter_by(receiver_id=current_user['id'], is_read=False).update({"is_read": True})
+    db.session.commit()
+    return jsonify({"message": "All messages marked as read"}), 200

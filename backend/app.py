@@ -13,6 +13,7 @@ from routes.admin_routes import admin_bp
 from routes.landing_routes import landing_bp
 from routes.notification_routes import notification_bp
 from routes.message_routes import message_bp
+from routes.ai_routes import ai_bp
 
 def create_app():
     """Application Factory for MediBook Backend"""
@@ -33,6 +34,7 @@ def create_app():
     app.register_blueprint(landing_bp, url_prefix='/api/public')
     app.register_blueprint(notification_bp, url_prefix='/api/notifications')
     app.register_blueprint(message_bp, url_prefix='/api/messages')
+    app.register_blueprint(ai_bp)
 
     # Global Error Handlers (404, 500)
     @app.errorhandler(404)

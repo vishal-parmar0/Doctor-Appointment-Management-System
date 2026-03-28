@@ -664,8 +664,8 @@
                         showFlash('Login successful! Redirecting...', 'success');
 
                         // Store Session
-                        localStorage.setItem('token', obj.body.token);
-                        localStorage.setItem('user', JSON.stringify(obj.body.user));
+                        sessionStorage.setItem('token', obj.body.token);
+                        sessionStorage.setItem('user', JSON.stringify(obj.body.user));
 
                         setTimeout(() => {
                             const role = obj.body.user.role;

@@ -136,9 +136,15 @@
 
         /* Hero Section */
         #hero {
-            background: linear-gradient(135deg, #f0f7ff 0%, #ffffff 100%);
+            background: #ffffff;
             padding-top: 150px;
             position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content-wrapper {
+            position: relative;
+            z-index: 2;
         }
 
         .hero-tag {
@@ -825,7 +831,7 @@
 
     <!-- Hero Section -->
     <section id="hero">
-        <div class="container">
+        <div class="container hero-content-wrapper">
             <div class="row align-items-center">
                 <div class="col-lg-6" data-aos="fade-right">
                     <div class="hero-tag">
@@ -1823,7 +1829,7 @@
 
         // Standardize Navbar For Logged In Users
         function updateIndexNav() {
-            const userStr = localStorage.getItem('user');
+            const userStr = sessionStorage.getItem('user');
             const user = userStr ? JSON.parse(userStr) : null;
             if (user && user.role === 'patient') {
                 const navPills = document.getElementById('navPills');
@@ -1846,7 +1852,7 @@
         updateIndexNav();
 
         function logout() {
-            localStorage.clear();
+            sessionStorage.clear();
             window.location.reload();
         }
 

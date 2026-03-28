@@ -350,73 +350,16 @@
             <div class="filter-tab">Cancelled</div>
         </div>
 
-        <div class="appt-card" data-aos="fade-up">
-            <!-- Appt 1 -->
-            <div class="appt-item">
-                <div class="date-box">
-                    <span class="month">Mar</span>
-                    <span class="day">25</span>
-                </div>
-                <div class="doc-profile-row">
-                    <img src="https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=100" class="doc-img-sm">
-                    <div class="doc-info">
-                        <h6>Dr. Alexander Smith</h6>
-                        <p>Cardiologist • Ahmedabad General</p>
-                        <p class="small text-muted"><i class="fa-solid fa-clock me-1"></i> 10:00 AM - 10:30 AM</p>
-                    </div>
-                </div>
-                <div><span class="appt-status status-confirmed">Confirmed</span></div>
-                <div class="d-flex gap-2">
-                    <button class="btn-action" onclick="alert('Join URL: medibook.video/meet-as-smith')"><i
-                            class="fa-solid fa-video me-2"></i> Join Meet</button>
-                    <button class="btn-action" onclick="alert('Reschedule request sent.')">Reschedule</button>
-                </div>
-            </div>
-
-            <!-- Appt 2 -->
-            <div class="appt-item">
-                <div class="date-box">
-                    <span class="month">Mar</span>
-                    <span class="day">28</span>
-                </div>
-                <div class="doc-profile-row">
-                    <img src="https://images.unsplash.com/photo-1559839734-2b71f153678e?w=100" class="doc-img-sm">
-                    <div class="doc-info">
-                        <h6>Dr. Virginia Apgar</h6>
-                        <p>Dermatologist • SkinCare Clinic</p>
-                        <p class="small text-muted"><i class="fa-solid fa-clock me-1"></i> 02:00 PM - 02:30 PM</p>
-                    </div>
-                </div>
-                <div><span class="appt-status status-pending">Requested</span></div>
-                <div class="d-flex gap-2">
-                    <button class="btn-action" onclick="alert('Cancel request sent.')">Cancel Slot</button>
-                </div>
+        <div class="appt-card" data-aos="fade-up" id="appointmentsContainer">
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary"></div>
+                <p class="mt-2 text-muted">Retrieving your appointments...</p>
             </div>
         </div>
 
-        <h5 class="fw-bold mb-3">Recently Completed</h5>
-        <div class="appt-card" data-aos="fade-up" data-aos-delay="100">
-            <!-- Appt 3 -->
-            <div class="appt-item">
-                <div class="date-box" style="opacity: 0.6;">
-                    <span class="month">Mar</span>
-                    <span class="day">10</span>
-                </div>
-                <div class="doc-profile-row">
-                    <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=100" class="doc-img-sm"
-                        style="filter: grayscale(1);">
-                    <div class="doc-info">
-                        <h6>Dr. William Osler</h6>
-                        <p>Neurologist • City Brain Center</p>
-                        <p class="small text-muted">Offline Visit • Mumbai</p>
-                    </div>
-                </div>
-                <div><span class="appt-status status-completed">Completed</span></div>
-                <div class="d-flex gap-2">
-                    <button class="btn-action" onclick="window.location.href='prescriptions.html'">View Rx</button>
-                    <button class="btn-action">Rate Doctor</button>
-                </div>
-            </div>
+        <h5 class="fw-bold mb-3 d-none" id="completedHeader">Recently Completed</h5>
+        <div class="appt-card d-none" data-aos="fade-up" data-aos-delay="100" id="completedContainer">
+            <!-- Completed Appts -->
         </div>
     </div>
 
@@ -426,8 +369,8 @@
     <script src="shared_navbar.js"></script>
     <script>
         // 🛡️ AUTH CHECK
-        const token = localStorage.getItem('token');
-        const userStr = localStorage.getItem('user');
+        const token = sessionStorage.getItem('token');
+        const userStr = sessionStorage.getItem('user');
         const user = userStr ? JSON.parse(userStr) : null;
 
         if (!token || !user || user.role !== 'patient') {
@@ -452,52 +395,74 @@
         }
 
         function renderAppointments(filter) {
-            const container = document.querySelector('.appt-card');
+            const container = document.getElementById('appointmentsContainer');
+            const completedHeader = document.getElementById('completedHeader');
+            const completedContainer = document.getElementById('completedContainer');
+
+            // Default visibility
+            completedHeader.classList.add('d-none');
+            completedContainer.classList.add('d-none');
             container.innerHTML = '';
+            completedContainer.innerHTML = '';
 
             let filtered = [];
-            if (filter === 'upcoming') {
-                filtered = allAppointments.filter(ap => ap.status === 'pending' || ap.status === 'confirmed');
-            } else if (filter === 'completed') {
-                filtered = allAppointments.filter(ap => ap.status === 'completed');
-            } else if (filter === 'cancelled') {
-                filtered = allAppointments.filter(ap => ap.status === 'cancelled');
+            let currentFilter = filter.toLowerCase();
+
+            if (currentFilter === 'upcoming') {
+                filtered = allAppointments.filter(ap => ap.status.toLowerCase() === 'pending' || ap.status.toLowerCase() === 'confirmed');
+
+                // Show up to 2 completed ones in the sub-section
+                const completed = allAppointments.filter(ap => ap.status.toLowerCase() === 'completed').slice(0, 2);
+                if (completed.length > 0) {
+                    completedHeader.classList.remove('d-none');
+                    completedContainer.classList.remove('d-none');
+                    completed.forEach(ap => completedContainer.innerHTML += createApptItemHTML(ap));
+                }
+            } else {
+                filtered = allAppointments.filter(ap => ap.status.toLowerCase() === currentFilter);
             }
 
             if (filtered.length === 0) {
-                container.innerHTML = `<div class="p-5 text-center text-muted">No ${filter} appointments found.</div>`;
+                container.innerHTML = `<div class="p-5 text-center text-muted"> <i class="fa-solid fa-calendar-xmark mb-3 d-block opacity-20" style="font-size: 40px;"></i> No ${filter} appointments found.</div>`;
                 return;
             }
 
             filtered.forEach(ap => {
-                const dateObj = new Date(ap.date);
-                const month = dateObj.toLocaleString('default', { month: 'short' });
-                const day = dateObj.getDate();
-                const statusClass = `status-${ap.status.toLowerCase()}`;
+                container.innerHTML += createApptItemHTML(ap);
+            });
+        }
 
-                container.innerHTML += `
-                    <div class="appt-item" data-aos="fade-up">
-                        <div class="date-box">
-                            <span class="month">${month}</span>
-                            <span class="day">${day}</span>
+        function createApptItemHTML(ap) {
+            const dateObj = new Date(ap.appointment_date || ap.date);
+            const month = dateObj.toLocaleString('default', { month: 'short' });
+            const day = dateObj.getDate();
+            const statusClass = `status-${ap.status.toLowerCase()}`;
+            const isPast = ap.status.toLowerCase() === 'completed' || ap.status.toLowerCase() === 'cancelled';
+
+            return `
+                <div class="appt-item" data-aos="fade-up" style="${isPast ? 'opacity: 0.8;' : ''}">
+                    <div class="date-box" style="${isPast ? 'background: #f8fafc; color: #94a3b8;' : ''}">
+                        <span class="month">${month}</span>
+                        <span class="day">${day}</span>
+                    </div>
+                    <div class="doc-profile-row">
+                        <div class="avatar-circle-sm" style="width:50px; height:50px; background:${isPast ? '#f8fafc' : '#f1f5f9'}; border-radius:12px; display:flex; align-items:center; justify-content:center; color:#64748b; font-weight:bold; font-size: 18px;">
+                            ${(ap.doctor_name || 'D')[0]}
                         </div>
-                        <div class="doc-profile-row">
-                            <img src="https://images.unsplash.com/photo-1559839734-2b71f153678e?w=100" class="doc-img-sm">
-                            <div class="doc-info">
-                                <h6>Dr. ${ap.doctor_name}</h6>
-                                <p>${ap.type} Consultation</p>
-                                <p class="small text-muted"><i class="fa-solid fa-clock me-1"></i> ${ap.time}</p>
-                            </div>
-                        </div>
-                        <div><span class="appt-status ${statusClass}">${ap.status}</span></div>
-                        <div class="d-flex gap-2">
-                            ${ap.status === 'confirmed' ? `<button class="btn-action" onclick="alert('Proceeding to Video Call...')"><i class="fa-solid fa-video me-2"></i> Join</button>` : ''}
-                            ${ap.status === 'pending' || ap.status === 'confirmed' ? `<button class="btn-action" onclick="cancelAppt(${ap.id})">Cancel</button>` : ''}
-                            ${ap.status === 'completed' ? `<button class="btn-action" onclick="window.location.href='prescriptions.html'">View Rx</button>` : ''}
+                        <div class="doc-info">
+                            <h6 class="${isPast ? 'text-muted' : ''}">Dr. ${ap.doctor_name}</h6>
+                            <p>${ap.consultation_type || 'General'} Consultation</p>
+                            <p class="small text-muted"><i class="fa-solid fa-clock me-1"></i> ${ap.appointment_time || '10:00 AM'}</p>
                         </div>
                     </div>
-                `;
-            });
+                    <div><span class="appt-status ${statusClass}">${ap.status}</span></div>
+                    <div class="d-flex gap-2">
+                        ${ap.status.toLowerCase() === 'confirmed' ? `<button class="btn-action" onclick="alert('Proceeding to Video Call...')"><i class="fa-solid fa-video me-2"></i> Join</button>` : ''}
+                        ${(ap.status.toLowerCase() === 'pending' || ap.status.toLowerCase() === 'confirmed') ? `<button class="btn-action" onclick="cancelAppt(${ap.id})">Cancel</button>` : ''}
+                        ${ap.status.toLowerCase() === 'completed' ? `<button class="btn-action" onclick="window.location.href='prescriptions.html'">View Rx</button>` : ''}
+                    </div>
+                </div>
+            `;
         }
 
         // Add Tab Click Handlers

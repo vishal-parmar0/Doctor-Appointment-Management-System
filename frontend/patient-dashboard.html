@@ -685,6 +685,14 @@
             z-index: 2;
         }
 
+        #meshGlobeCanvas {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            filter: drop-shadow(0 0 15px rgba(124, 58, 237, 0.3));
+        }
+
         .pulsing-ring {
             position: absolute;
             border-radius: 50%;
@@ -965,27 +973,345 @@
             color: #92400E;
         }
 
-        /* Responsive */
-        @media (max-width: 1200px) {
-            .dashboard-container {
-                grid-template-columns: 1fr 340px;
-            }
-
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .appt-list {
-                grid-template-columns: 1fr;
-            }
+        /* MediAI Agent Container */
+        .ai-agent-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 380px;
+            height: 600px;
+            background: linear-gradient(135deg, #6366F1 0%, #A855F7 100%);
+            border-radius: var(--radius-lg);
+            box-shadow: 0 20px 50px rgba(99, 102, 241, 0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 10000;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        @media (max-width: 992px) {
+        .ai-header {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .ai-header h4 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ai-header .status-pill {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* 3D Orb Visual System */
+        .ai-visual-stage {
+            height: 220px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+        }
+
+        /* The Animated Mesh/Grid Background */
+        .ai-mesh-grid {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+            transform: perspective(500px) rotateX(60deg);
+            top: -50%;
+            animation: mesh-flow 10s linear infinite;
+        }
+
+        @keyframes mesh-flow {
+            0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
+            100% { transform: perspective(500px) rotateX(60deg) translateY(30px); }
+        }
+
+        /* The Main Glowing Orb */
+        .ai-orb-core {
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle at 30% 30%, #fff 0%, #A855F7 30%, #6366F1 70%);
+            border-radius: 50%;
+            position: relative;
+            z-index: 2;
+            box-shadow:
+                0 0 40px rgba(255, 255, 255, 0.5),
+                0 0 80px rgba(168, 85, 247, 0.4),
+                inset 0 0 20px rgba(0, 0, 0, 0.2);
+            animation: orb-float 4s ease-in-out infinite, orb-glow 3s linear infinite alternate;
+        }
+
+        /* Spinning Globe Overlay (Orbital Ring) */
+        .ai-globe-layer {
+            position: absolute;
+            width: 160px;
+            height: 160px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            z-index: 1;
+            animation: orb-spin 12s linear infinite;
+        }
+
+        .ai-globe-layer::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: 50%;
+            width: 10px;
+            height: 10px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 15px #fff;
+        }
+
+        .ai-globe-layer-alt {
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            border: 1px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            z-index: 1;
+            animation: orb-spin-reverse 15s linear infinite;
+        }
+
+        @keyframes orb-float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-15px) scale(1.02); }
+        }
+
+        @keyframes orb-glow {
+            from { box-shadow: 0 0 40px rgba(255, 255, 255, 0.5), 0 0 80px rgba(168, 85, 247, 0.4); }
+            to { box-shadow: 0 0 60px rgba(255, 255, 255, 0.7), 0 0 120px rgba(168, 85, 247, 0.6); }
+        }
+
+        @keyframes orb-spin {
+            from { transform: rotate(0deg) rotateX(70deg); }
+            to { transform: rotate(360deg) rotateX(70deg); }
+        }
+
+        @keyframes orb-spin-reverse {
+            from { transform: rotate(360deg) rotateY(70deg); }
+            to { transform: rotate(0deg) rotateY(70deg); }
+        }
+
+        /* Pulse Waves from the AI */
+        .ai-pulse-wave {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            animation: ai-pulse 2s infinite;
+            z-index: 1;
+        }
+
+        @keyframes ai-pulse {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(2.2); opacity: 0; }
+        }
+
+        /* Quick Action Grid */
+        .chat-quick-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            padding: 15px 20px;
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .quick-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 10px 5px;
+            color: white;
+            font-size: 11px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .quick-btn i { font-size: 14px; color: rgba(255,255,255,0.9); }
+        .quick-btn:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
+
+        /* Chat History Area */
+        .ai-chat-history {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            scrollbar-width: none;
+        }
+
+        .ai-chat-history::-webkit-scrollbar { display: none; }
+
+        .chat-bubble {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 13.5px;
+            line-height: 1.5;
+            position: relative;
+        }
+
+        .user-bubble {
+            align-self: flex-end;
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--text-dark);
+            border-bottom-right-radius: 4px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .ai-bubble {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border-bottom-left-radius: 4px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 5px;
+            padding: 10px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            width: fit-content;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+            animation: dot-jump 1.4s infinite ease-in-out;
+        }
+
+        .dot:nth-child(2) { animation-delay: 0.2s; }
+        .dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes dot-jump {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        /* Input Area */
+        .ai-input-wrapper {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .ai-input-container {
+            flex: 1;
+            position: relative;
+        }
+
+        .ai-input-container input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 25px;
+            padding: 10px 45px 10px 20px;
+            color: white;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .ai-input-container input::placeholder { color: rgba(255, 255, 255, 0.7); }
+
+        .btn-attachment {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-attachment:hover { color: white; }
+
+        .btn-send-ai {
+            width: 42px;
+            height: 42px;
+            background: white;
+            color: #6366F1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.3s;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-send-ai:hover { transform: rotate(15deg) scale(1.1); box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3); }
+
+        .btn-voice {
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+
+        .voice-active { color: var(--red); animation: voice-pulse 1s infinite alternate; }
+
+        @keyframes voice-pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.2); }
+        }
+
+        .emergency-card {
+            background: #EF4444;
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            animation: slide-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes slide-in { from { transform: translateY(20px); opacity: 0; } }
+
+        @media (max-width: 1100px) {
             .dashboard-container {
                 grid-template-columns: 1fr;
             }
 
-            .ai-panel {
+            .ai-agent-container {
                 position: static;
                 height: 600px;
                 margin-top: 20px;
@@ -993,28 +1319,6 @@
 
             .bottom-row-grid {
                 grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .navbar {
-                padding: 0 15px;
-            }
-
-            .nav-tabs-pill {
-                display: none;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .dashboard-container {
-                padding: 20px 15px;
-            }
-
-            .search-container {
-                width: 140px;
             }
         }
     </style>
@@ -1052,7 +1356,7 @@
             </div>
 
             <!-- Stats Row -->
-            <div class="stats-grid" data-aos="fade-up" data-aos-delay="100">
+            <div class="stats-grid" id="statsGrid" data-aos="fade-up" data-aos-delay="100">
                 <div class="stat-card">
                     <div class="icon-circle" style="background: var(--purple);"><i
                             class="fa-solid fa-calendar-check"></i></div>
@@ -1083,41 +1387,18 @@
             </div>
 
             <!-- Upcoming Appointments -->
-            <div class="upcoming-appointments" data-aos="fade-up" data-aos-delay="150">
+            <div class="upcoming-appointments" data-aos="fade-up" data-aos-delay="150" id="upcomingSection">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <h5 class="fw-bold mb-0" style="font-size: 16px;">Upcoming Appointments</h5>
                     <a href="appointments.html" class="text-primary text-decoration-none small fw-600">View All</a>
                 </div>
-                <div class="appt-list">
-                    <div class="appt-item">
-                        <div class="appt-icon"><i class="fa-solid fa-user-doctor"></i></div>
-                        <div class="appt-details">
-                            <h6>Dr. Alexander Smith</h6>
-                            <p>Cardiologist • Today, 10:00 AM</p>
-                            <span class="status-badge status-confirmed">Confirmed</span>
-                        </div>
-                    </div>
-                    <div class="appt-item">
-                        <div class="appt-icon"><i class="fa-solid fa-user-doctor"></i></div>
-                        <div class="appt-details">
-                            <h6>Dr. Virginia Apgar</h6>
-                            <p>Dermatologist • Tomorrow, 2:00 PM</p>
-                            <span class="status-badge status-confirmed">Confirmed</span>
-                        </div>
-                    </div>
-                    <div class="appt-item">
-                        <div class="appt-icon"><i class="fa-solid fa-user-doctor"></i></div>
-                        <div class="appt-details">
-                            <h6>Dr. William Osler</h6>
-                            <p>Neurologist • 25 Mar, 11:00 AM</p>
-                            <span class="status-badge status-pending">Pending</span>
-                        </div>
-                    </div>
+                <div class="appt-list" id="upcomingAppsList">
+                    <!-- Dynamic Content -->
                 </div>
             </div>
 
             <!-- Medicine Card -->
-            <div class="medicine-card" data-aos="fade-up" data-aos-delay="200">
+            <div class="medicine-card" data-aos="fade-up" data-aos-delay="200" id="medsSection">
                 <div class="card-header">
                     <h4>Your daily medicine</h4>
                     <button class="btn-add-med" data-bs-toggle="modal" data-bs-target="#addMedModal">
@@ -1130,117 +1411,38 @@
                 </div>
 
                 <div class="medicine-list" id="medList">
-                    <!-- Row 1 -->
-                    <div class="med-list-row">
-                        <div class="med-info">
-                            <h5>Metformin 500mg</h5>
-                            <p>Antidiabetic medicine</p>
-                        </div>
-                        <div class="med-badges">
-                            <div class="badge-pill bg-purple"><i class="fa-solid fa-sun"></i> ☀ 1</div>
-                            <div class="badge-pill bg-teal"><i class="fa-solid fa-moon"></i> 🌙 1</div>
-                        </div>
-                    </div>
-                    <!-- Row 2 -->
-                    <div class="med-list-row">
-                        <div class="med-info">
-                            <h5>Lisinopril 10mg</h5>
-                            <p>Blood pressure medication</p>
-                        </div>
-                        <div class="med-badges">
-                            <div class="badge-pill bg-purple"><i class="fa-solid fa-sun"></i> ☀ 1</div>
-                            <div class="badge-pill bg-yellow"><i class="fa-solid fa-cloud-sun"></i> ⛅ 1</div>
-                        </div>
-                    </div>
-                    <!-- Row 3 -->
-                    <div class="med-list-row">
-                        <div class="med-info">
-                            <h5>Atorvastatin 20mg</h5>
-                            <p>Cholesterol management</p>
-                        </div>
-                        <div class="med-badges">
-                            <div class="badge-pill bg-teal"><i class="fa-solid fa-moon"></i> 🌙 1</div>
-                        </div>
-                    </div>
-                    <!-- Row 4 -->
-                    <div class="med-list-row">
-                        <div class="med-info">
-                            <h5>Amoxicillin 500mg</h5>
-                            <p>Antibiotic course</p>
-                        </div>
-                        <div class="med-badges">
-                            <div class="badge-pill bg-purple"><i class="fa-solid fa-sun"></i> ☀ 1</div>
-                            <div class="badge-pill bg-yellow"><i class="fa-solid fa-cloud-sun"></i> ⛅ 1</div>
-                            <div class="badge-pill bg-teal"><i class="fa-solid fa-moon"></i> 🌙 1</div>
-                        </div>
-                    </div>
-                    <!-- Row 5 -->
-                    <div class="med-list-row border-0">
-                        <div class="med-info">
-                            <h5>Omeprazole 20mg</h5>
-                            <p>Stomach care</p>
-                        </div>
-                        <div class="med-badges">
-                            <div class="badge-pill bg-purple"><i class="fa-solid fa-sun"></i> ☀ 1</div>
-                        </div>
-                    </div>
+                    <!-- Dynamic Content -->
                 </div>
             </div>
 
             <!-- Bottom Row Cards -->
             <div class="bottom-row-grid" data-aos="fade-up" data-aos-delay="300">
                 <!-- Schedule Card -->
-                <div class="bottom-card">
+                <div class="bottom-card" id="scheduleSection">
                     <div class="bottom-card-header">
                         <h5>Schedule</h5>
                     </div>
-                    <div class="schedule-table">
-                        <div class="grid-header"></div>
-                        <div class="grid-header">Mon</div>
-                        <div class="grid-header">Tue</div>
-                        <div class="grid-header fw-bold text-dark">Wed</div>
-                        <div class="grid-header">Thu</div>
-                        <div class="grid-header">Fri</div>
-
-                        <div class="grid-label">Dentist</div>
-                        <div class="grid-cell active-p"></div>
-                        <div class="grid-cell"></div>
-                        <div class="grid-cell active-p"></div>
-                        <div class="grid-cell"></div>
-                        <div class="grid-cell active-p"></div>
-
-                        <div class="grid-label">Gym</div>
-                        <div class="grid-cell active-t"></div>
-                        <div class="grid-cell active-t"></div>
-                        <div class="grid-cell"></div>
-                        <div class="grid-cell active-t"></div>
-                        <div class="grid-cell active-t"></div>
-
-                        <div class="grid-label">Physiologist</div>
-                        <div class="grid-cell"></div>
-                        <div class="grid-cell"></div>
-                        <div class="grid-cell active-y"></div>
-                        <div class="grid-cell active-y"></div>
-                        <div class="grid-cell"></div>
+                    <div class="schedule-table" id="scheduleGrid">
+                        <!-- Dynamic Content -->
                     </div>
                 </div>
 
                 <!-- Billing Status Card -->
-                <div class="bottom-card">
+                <div class="bottom-card" id="billingSection">
                     <div class="bottom-card-header">
                         <h5>Billing Status</h5>
                     </div>
                     <div class="chart-container-donut">
                         <canvas id="billingChart"></canvas>
                     </div>
-                    <div class="chart-legend">
+                    <div class="chart-legend" id="billingLegend">
                         <span><span class="dot" style="background: var(--yellow);"></span> Pending</span>
                         <span><span class="dot" style="background: var(--teal);"></span> Paid</span>
                     </div>
                 </div>
 
                 <!-- Consultation Card -->
-                <div class="bottom-card">
+                <div class="bottom-card" id="consultSection">
                     <div class="bottom-card-header">
                         <h5>Consultations</h5>
                     </div>
@@ -1255,7 +1457,7 @@
 
         <!-- RIGHT Column - MediAI -->
         <div class="right-column-container">
-            <div class="ai-panel" data-aos="fade-left">
+            <div class="ai-panel" data-aos="fade-left" id="aiPanel">
                 <!-- AI Top -->
                 <div class="ai-top-bar">
                     <i class="fa-solid fa-bars" style="cursor: pointer;"></i>
@@ -1265,13 +1467,14 @@
 
                 <!-- Orb Section -->
                 <div class="orb-section">
+                    <canvas id="meshGlobeCanvas"></canvas>
                     <div class="pulsing-ring ring-1"></div>
                     <div class="pulsing-ring ring-2"></div>
                     <div class="pulsing-ring ring-3"></div>
                     <canvas id="orbCanvas"></canvas>
                 </div>
 
-                <div class="ai-welcome">How can I assist you today?</div>
+                <div class="ai-welcome" id="aiWelcomeMsg">How can I assist you today?</div>
 
                 <!-- Action Grid -->
                 <div class="ai-actions-grid">
@@ -1303,10 +1506,7 @@
 
                 <!-- Chat Area -->
                 <div class="chat-messages" id="chatMessages">
-                    <div class="chat-bubble ai-bubble">
-                        👋 Hi Monica! I'm MediAI, your personal health assistant. I can help you find the right doctor,
-                        give health tips, and manage your meds. How can I help you today?
-                    </div>
+                    <!-- Dynamic content -->
                 </div>
 
                 <!-- Input Area -->
@@ -1329,8 +1529,9 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
                 <div class="modal-header border-0 pb-0 pt-4 px-4">
-                    <h5 class="modal-title fw-bold">Add Medicine Reminder</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <h5 class="modal-title fw-bold" id="medModalTitle">Add Medicine Reminder</h5>
+                    <input type="hidden" id="editMedIndex" value="-1">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="resetMedModal()"></button>
                 </div>
                 <div class="modal-body p-4">
                     <div class="mb-3">
@@ -1344,24 +1545,38 @@
                             placeholder="e.g. Antidiabetic medicine" style="border-radius: 12px; padding: 12px;">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label small fw-bold">Dose Time</label>
-                        <div class="d-flex gap-3">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="morning">
-                                <label class="form-check-label small" for="morning">Morning</label>
+                        <label class="form-label small fw-bold">Dose Time & Quantity</label>
+                        <div class="d-flex flex-column gap-2">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="morning">
+                                    <label class="form-check-label small" for="morning">Morning</label>
+                                </div>
+                                <input type="number" id="morning_qty" class="form-control form-control-sm" value="1"
+                                    min="1" style="width: 60px; border-radius: 8px;">
                             </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="afternoon">
-                                <label class="form-check-label small" for="afternoon">Afternoon</label>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="afternoon">
+                                    <label class="form-check-label small" for="afternoon">Afternoon</label>
+                                </div>
+                                <input type="number" id="afternoon_qty" class="form-control form-control-sm" value="1"
+                                    min="1" style="width: 60px; border-radius: 8px;">
                             </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="evening">
-                                <label class="form-check-label small" for="evening">Evening</label>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="evening">
+                                    <label class="form-check-label small" for="evening">Evening</label>
+                                </div>
+                                <input type="number" id="evening_qty" class="form-control form-control-sm" value="1"
+                                    min="1" style="width: 60px; border-radius: 8px;">
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-primary w-100 rounded-pill py-3 fw-bold mt-3" onclick="saveMedicine()">Save
-                        Reminder</button>
+                    <button class="btn btn-primary w-100 rounded-pill py-3 fw-bold mt-3" id="saveMedBtn"
+                        onclick="saveMedicine()">Save Reminder</button>
+                    <button class="btn btn-light w-100 rounded-pill py-2 text-muted small mt-2 border-0"
+                        data-bs-dismiss="modal" onclick="resetMedModal()">Cancel</button>
                 </div>
             </div>
         </div>
@@ -1375,351 +1590,526 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
     <script>
-        // 🛡️ AUTH CHECK
-        const token = localStorage.getItem('token');
-        const userStr = localStorage.getItem('user');
+        // 🛡️ AUTH GUARD & IDENTITY
+        const token = sessionStorage.getItem('token');
+        const userStr = sessionStorage.getItem('user');
         const user = userStr ? JSON.parse(userStr) : null;
 
         if (!token || !user || user.role !== 'patient') {
             window.location.href = 'login.html';
         }
 
-        // Initialize AOS
-        AOS.init({ duration: 800, once: true });
+        // --- GLOBAL HELPERS ---
+        const fetchAPI = async (endpoint) => {
+            const res = await fetch(`http://localhost:5000${endpoint}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            if (res.status === 401) {
+                sessionStorage.clear();
+                window.location.href = 'login.html';
+                return;
+            }
+            if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
+            return await res.json();
+        };
 
-        // Update User Profile UI
+        const showLoading = (el) => {
+            el.innerHTML = `
+                <div class="d-flex flex-column align-items-center justify-content-center p-5 text-muted">
+                    <div class="spinner-border spinner-border-sm text-primary mb-2" role="status"></div>
+                    <span class="small fw-medium">Checking records...</span>
+                </div>`;
+        };
+
+        const showEmpty = (el, icon, text) => {
+            el.innerHTML = `
+                <div class="d-flex flex-column align-items-center justify-content-center p-4 text-center text-muted opacity-75">
+                    <i class="fa-solid ${icon} mb-3" style="font-size: 30px;"></i>
+                    <p class="small fw-medium mb-0">${text}</p>
+                </div>`;
+        };
+
+        const showError = (el, msg = "Unable to load data.") => {
+            el.innerHTML = `<div class="p-4 text-center text-danger small"><i class="fa-solid fa-circle-exclamation me-2"></i> ${msg}</div>`;
+        };
+
+        // --- DASHBOARD CORE ---
         document.addEventListener('DOMContentLoaded', () => {
-            if (!user) return;
-            AOS.init({ duration: 800 });
-            document.querySelectorAll('.user-name-display').forEach(el => el.innerText = user.full_name);
-            // Fetch real dashboard stats
-            fetchDashboardData();
+            AOS.init({ duration: 800, once: true });
+
+            // Pre-render Initials
+            if (user) {
+                document.querySelectorAll('.user-name-display').forEach(el => el.innerText = user.full_name);
+                const firstName = user.full_name.split(' ')[0];
+                document.getElementById('aiWelcomeMsg').innerText = `How can I assist you today?`;
+                initMediAI(firstName);
+            }
+
+            // Parallel Load
+            Promise.allSettled([
+                loadStatsAndCharts(),
+                loadUpcomingAppointments(),
+                loadMedicines(),
+                loadSchedule()
+            ]);
+
+            generateDatePills();
+            initCharts();
+            initThreeJsOrb();
         });
 
-        async function fetchDashboardData() {
+        // SECTION 1, 5, 6 — Stats, Billing & Consultations (Backend Driven)
+        async function loadStatsAndCharts() {
             try {
-                const res = await fetch('http://localhost:5000/api/patient/dashboard', {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                const data = await res.json();
-                if (res.ok) {
-                    // Mapping stats to UI elements (ids must exist in HTML)
-                    const totalEl = document.getElementById('stat-total-apps');
-                    const upcomingEl = document.getElementById('stat-upcoming');
-                    const completedEl = document.getElementById('stat-completed');
+                const appointments = await fetchAPI('/api/patient/appointments');
+                if (!appointments) return;
 
-                    if (totalEl) totalEl.innerText = data.total;
-                    if (upcomingEl) upcomingEl.innerText = data.upcoming;
-                    if (completedEl) completedEl.innerText = data.completed;
-                    if (document.getElementById('stat-cancelled')) document.getElementById('stat-cancelled').innerText = data.cancelled;
+                const today = new Date();
+                const next7Days = new Date();
+                next7Days.setDate(today.getDate() + 7);
+
+                const stats = {
+                    total: appointments.length,
+                    upcoming: appointments.filter(a => a.status === 'confirmed' && new Date(a.appointment_date) <= next7Days && new Date(a.appointment_date) >= today).length,
+                    completedMonth: appointments.filter(a => a.status === 'completed' && new Date(a.appointment_date).getMonth() === today.getMonth()).length,
+                    cancelledMonth: appointments.filter(a => a.status === 'cancelled' && new Date(a.appointment_date).getMonth() === today.getMonth()).length
+                };
+
+                document.getElementById('stat-total-apps').innerText = stats.total;
+                document.getElementById('stat-upcoming').innerText = stats.upcoming;
+                document.getElementById('stat-completed').innerText = stats.completedMonth;
+                document.getElementById('stat-cancelled').innerText = stats.cancelledMonth;
+
+                // Update Billing Chart
+                updateBillingChart(appointments);
+                // Update Consult Chart
+                updateConsultChart(appointments);
+
+            } catch (e) {
+                console.error("Dashboard Stats Fail", e);
+                // Stats default to 0 in HTML
+            }
+        }
+
+        // SECTION 2 — Upcoming Appointments
+        async function loadUpcomingAppointments() {
+            const container = document.getElementById('upcomingAppsList');
+            showLoading(container);
+
+            try {
+                // Fetch confirmed/pending, limit 3
+                const data = await fetchAPI('/api/patient/appointments?status=confirmed,pending&limit=3');
+
+                if (!data || data.length === 0) {
+                    showEmpty(container, 'fa-calendar-xmark', 'No upcoming appointments. Book one now.');
+                    return;
                 }
-            } catch (e) { console.error("MediBook API Error:", e); }
+
+                container.innerHTML = data.map(ap => `
+                    <div class="appt-item">
+                        <div class="appt-icon" style="background:var(--purple-light); color:var(--purple);">${ap.doctor_name[0]}</div>
+                        <div class="appt-details">
+                            <h6>${ap.doctor_name}</h6>
+                            <p>${ap.specialty || 'General Physician'} • ${new Date(ap.appointment_date).toLocaleDateString()} at ${ap.appointment_time || '10:00 AM'}</p>
+                            <span class="status-badge ${ap.status === 'confirmed' ? 'status-confirmed' : 'status-pending'}">
+                                ${ap.status.charAt(0).toUpperCase() + ap.status.slice(1)}
+                            </span>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (e) {
+                showError(container);
+            }
         }
 
-        // Logout
-        function logout() {
-            localStorage.clear();
-            window.location.href = 'login.html';
+        // SECTION 3 — Daily Medicine (localStorage)
+        function loadMedicines() {
+            const container = document.getElementById('medList');
+            const meds = JSON.parse(localStorage.getItem('medibook_medicines') || '[]');
+
+            if (meds.length === 0) {
+                showEmpty(container, 'fa-pills', 'No medicines added yet.');
+                return;
+            }
+
+            container.innerHTML = meds.map((m, idx) => `
+                <div class="med-list-row med-item group">
+                    <div class="med-info flex-grow-1">
+                        <div class="d-flex align-items-center gap-2">
+                             <h5 class="mb-0">${m.name}</h5>
+                             <div class="med-actions opacity-0 group-hover-opacity-100 transition-all d-flex gap-2">
+                                <button onclick="editMedicine(${idx})" class="btn btn-link p-0 text-primary small"><i class="fa-solid fa-pen-to-square"></i></button>
+                                <button onclick="deleteMedicine(${idx})" class="btn btn-link p-0 text-danger small"><i class="fa-solid fa-trash-can"></i></button>
+                             </div>
+                        </div>
+                        <p class="mb-0">${m.description}</p>
+                    </div>
+                    <div class="med-badges">
+                        ${m.morning ? `<div class="badge-pill bg-purple"><i class="fa-solid fa-sun"></i> ${m.morning_qty || 1}</div>` : ''}
+                        ${m.afternoon ? `<div class="badge-pill bg-yellow"><i class="fa-solid fa-cloud-sun"></i> ${m.afternoon_qty || 1}</div>` : ''}
+                        ${m.night ? `<div class="badge-pill bg-teal"><i class="fa-solid fa-moon"></i> ${m.night_qty || 1}</div>` : ''}
+                    </div>
+                </div>
+            `).join('');
+
+            // Add custom style for hover visibility
+            if (!document.getElementById('medHoverStyle')) {
+                const style = document.createElement('style');
+                style.id = 'medHoverStyle';
+                style.innerHTML = '.med-item .med-actions { opacity: 0; transition: 0.2s; } .med-item:hover .med-actions { opacity: 1; }';
+                document.head.appendChild(style);
+            }
         }
 
-        // Generate Date Pills
+        function editMedicine(index) {
+            const meds = JSON.parse(localStorage.getItem('medibook_medicines') || '[]');
+            const m = meds[index];
+            if (!m) return;
+
+            document.getElementById('medModalTitle').innerText = 'Edit Medicine Details';
+            document.getElementById('editMedIndex').value = index;
+            document.getElementById('newMedName').value = m.name;
+            document.getElementById('newMedPurpose').value = m.description;
+            document.getElementById('morning').checked = !!m.morning;
+            document.getElementById('morning_qty').value = m.morning_qty || 1;
+            document.getElementById('afternoon').checked = !!m.afternoon;
+            document.getElementById('afternoon_qty').value = m.afternoon_qty || 1;
+            document.getElementById('evening').checked = !!m.night;
+            document.getElementById('evening_qty').value = m.night_qty || 1;
+
+            new bootstrap.Modal(document.getElementById('addMedModal')).show();
+        }
+
+        function deleteMedicine(index) {
+            if (!confirm("Are you sure you want to remove this medicine?")) return;
+            const meds = JSON.parse(localStorage.getItem('medibook_medicines') || '[]');
+            meds.splice(index, 1);
+            localStorage.setItem('medibook_medicines', JSON.stringify(meds));
+            loadMedicines();
+            addBubble("Medicine removed from your daily tracker.", "ai");
+        }
+
+        function resetMedModal() {
+            document.getElementById('medModalTitle').innerText = 'Add Medicine Reminder';
+            document.getElementById('editMedIndex').value = '-1';
+            document.getElementById('newMedName').value = '';
+            document.getElementById('newMedPurpose').value = '';
+            document.getElementById('morning').checked = false;
+            document.getElementById('morning_qty').value = 1;
+            document.getElementById('afternoon').checked = false;
+            document.getElementById('afternoon_qty').value = 1;
+            document.getElementById('evening').checked = false;
+            document.getElementById('evening_qty').value = 1;
+        }
+
+        function saveMedicine() {
+            const index = parseInt(document.getElementById('editMedIndex').value);
+            const name = document.getElementById('newMedName').value;
+            const desc = document.getElementById('newMedPurpose').value;
+            if (!name || !desc) return alert("Please fill name and purpose.");
+
+            const m = {
+                name,
+                description: desc,
+                morning: document.getElementById('morning').checked,
+                morning_qty: document.getElementById('morning_qty').value,
+                afternoon: document.getElementById('afternoon').checked,
+                afternoon_qty: document.getElementById('afternoon_qty').value,
+                night: document.getElementById('evening').checked,
+                night_qty: document.getElementById('evening_qty').value
+            };
+
+            const meds = JSON.parse(localStorage.getItem('medibook_medicines') || '[]');
+
+            if (index === -1) {
+                meds.unshift(m);
+            } else {
+                meds[index] = m;
+            }
+
+            localStorage.setItem('medibook_medicines', JSON.stringify(meds));
+
+            resetMedModal();
+            bootstrap.Modal.getInstance(document.getElementById('addMedModal')).hide();
+            loadMedicines();
+            addBubble(index === -1 ? `Added ${name} to your schedule!` : `Updated ${name} details.`, 'ai');
+        }
+
+        // SECTION 4 — Schedule (localStorage)
+        function loadSchedule() {
+            const container = document.getElementById('scheduleGrid');
+            const schedule = JSON.parse(localStorage.getItem('medibook_schedule') || '[]');
+
+            if (schedule.length === 0) {
+                showEmpty(container, 'fa-calendar-week', 'No schedule set.');
+                return;
+            }
+
+            let html = `
+                <div class="grid-header"></div>
+                <div class="grid-header">Mon</div>
+                <div class="grid-header">Tue</div>
+                <div class="grid-header fw-bold text-dark">Wed</div>
+                <div class="grid-header">Thu</div>
+                <div class="grid-header">Fri</div>
+            `;
+
+            schedule.forEach(row => {
+                html += `<div class="grid-label">${row.label}</div>`;
+                ['mon', 'tue', 'wed', 'thu', 'fri'].forEach(day => {
+                    const active = row[day] ? `active-${row.color || 'p'}` : '';
+                    html += `<div class="grid-cell ${active}"></div>`;
+                });
+            });
+
+            container.innerHTML = html;
+        }
+
+        // SECTION 7 — MediAI
+        function initMediAI(name) {
+            const chatBox = document.getElementById('chatMessages');
+            chatBox.innerHTML = `
+                <div class="chat-bubble ai-bubble">
+                    👋 Hi ${name}! I'm MediAI, your personal health assistant. How can I help you today?
+                </div>
+            `;
+        }
+
+        // --- VISUALS & CHARTS ---
+        let billingChart, consultChart;
+
+        function initCharts() {
+            const billingCtx = document.getElementById('billingChart').getContext('2d');
+            billingChart = new Chart(billingCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Pending', 'Paid'],
+                    datasets: [{ data: [1, 1], backgroundColor: ['#E5E7EB', '#D1D5DB'], borderWidth: 0 }]
+                },
+                options: { cutout: '72%', plugins: { legend: { display: false } } }
+            });
+
+            const consultCtx = document.getElementById('consultChart').getContext('2d');
+            consultChart = new Chart(consultCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Phone', 'Video', 'Offline'],
+                    datasets: [{
+                        data: [0, 0, 0],
+                        backgroundColor: ['#F59E0B', '#06B6D4', '#7C3AED'],
+                        borderRadius: 8,
+                        barThickness: 15
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { x: { display: false }, y: { grid: { display: false }, ticks: { font: { size: 10 } } } }
+                }
+            });
+        }
+
+        function updateBillingChart(apps) {
+            const pending = apps.filter(a => a.payment_status === 'pending').length;
+            const paid = apps.filter(a => a.payment_status === 'paid').length;
+
+            billingChart.data.datasets[0].data = [pending || 0, paid || 0];
+            billingChart.data.datasets[0].backgroundColor = (pending + paid === 0) ? ['#E5E7EB', '#D1D5DB'] : ['#F59E0B', '#06B6D4'];
+            billingChart.update();
+        }
+
+        function updateConsultChart(apps) {
+            const phone = apps.filter(a => (a.consultation_type || '').toLowerCase() === 'phone').length;
+            const video = apps.filter(a => (a.consultation_type || '').toLowerCase() === 'video').length;
+            const offline = apps.filter(a => ['offline', 'in-person'].includes((a.consultation_type || '').toLowerCase())).length;
+
+            consultChart.data.datasets[0].data = [phone, video, offline];
+            consultChart.update();
+        }
+
         function generateDatePills() {
             const container = document.getElementById('datePills');
             const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
             const today = new Date();
-
-            // Generate for 11 days (5 before, today, 5 after)
             for (let i = -5; i <= 5; i++) {
-                const date = new Date(today);
-                date.setDate(today.getDate() + i);
-
+                const d = new Date(today); d.setDate(today.getDate() + i);
                 const pill = document.createElement('div');
                 pill.className = `date-pill ${i === 0 ? 'active' : ''}`;
-
-                const dayName = days[date.getDay()];
-                const dateNum = date.getDate();
-
-                pill.innerHTML = `
-                    <span class="day">${dayName} ${dateNum}</span>
-                    <span class="num">${dateNum}</span>
-                `;
-
-                pill.onclick = function () {
-                    document.querySelectorAll('.date-pill').forEach(p => p.classList.remove('active'));
-                    pill.classList.add('active');
-                };
-
+                pill.innerHTML = `<span class="day">${days[d.getDay()]} ${d.getDate()}</span><span class="num">${d.getDate()}</span>`;
                 container.appendChild(pill);
             }
         }
-        generateDatePills();
 
-        // 🔍 LIVE SEARCH FILTERING (Dashboard items)
-        const searchInput = document.getElementById('globalSearch');
-        if (searchInput) {
-            searchInput.addEventListener('input', (e) => {
-                const term = e.target.value.toLowerCase();
-
-                // Filter Medicines
-                document.querySelectorAll('.med-list-row').forEach(row => {
-                    const text = row.innerText.toLowerCase();
-                    row.style.display = text.includes(term) ? 'flex' : 'none';
-                });
-
-                // Filter Appointments
-                document.querySelectorAll('.appt-item').forEach(item => {
-                    const text = item.innerText.toLowerCase();
-                    item.style.display = text.includes(term) ? 'flex' : 'none';
-                });
-            });
-
-            // Prevent Enter from redirecting to other pages in dashboard
-            searchInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                }
-            });
-        }
-
-        // CHARTS
-        // Billing Doughnut
-        const billingCtx = document.getElementById('billingChart').getContext('2d');
-        new Chart(billingCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Pending', 'Paid'],
-                datasets: [{
-                    data: [3, 9],
-                    backgroundColor: ['#F59E0B', '#06B6D4'],
-                    borderWidth: 0,
-                    hoverOffset: 6
-                }]
-            },
-            options: {
-                cutout: '72%',
-                plugins: { legend: { display: false } },
-                animation: { duration: 1500 }
-            }
-        });
-
-        // Consultation Bar
-        const consultCtx = document.getElementById('consultChart').getContext('2d');
-        new Chart(consultCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Phone', 'Video', 'Offline'],
-                datasets: [{
-                    data: [4, 12, 24],
-                    backgroundColor: ['#F59E0B', '#06B6D4', '#7C3AED'],
-                    borderRadius: 8,
-                    borderSkipped: false,
-                    barThickness: 15
-                }]
-            },
-            options: {
-                indexAxis: 'y',
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    x: { display: false },
-                    y: { grid: { display: false }, ticks: { font: { size: 10 } } }
-                },
-                animation: { duration: 1500 }
-            }
-        });
-
-        // THREE.JS ORB ANIMATION
-        const orbCanvas = document.getElementById('orbCanvas');
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
-        camera.position.z = 2;
-
-        const renderer = new THREE.WebGLRenderer({ canvas: orbCanvas, alpha: true, antialias: true });
-        renderer.setSize(180, 180);
-        renderer.setClearColor(0x000000, 0);
-
-        const geometry = new THREE.SphereGeometry(0.75, 64, 64);
-        const material = new THREE.MeshPhongMaterial({
-            color: 0x00E5FF,
-            emissive: 0x0891B2,
-            specular: 0xffffff,
-            shininess: 120,
-            transparent: true,
-            opacity: 0.85
-        });
-        const sphere = new THREE.Mesh(geometry, material);
-        scene.add(sphere);
-
-        const wireMat = new THREE.MeshBasicMaterial({ color: 0xA78BFA, wireframe: true, transparent: true, opacity: 0.25 });
-        const wire = new THREE.Mesh(geometry, wireMat);
-        wire.scale.set(1.03, 1.03, 1.03);
-        scene.add(wire);
-
-        const partGeo = new THREE.BufferGeometry();
-        const positions = new Float32Array(500 * 3);
-        for (let i = 0; i < 500; i++) {
-            const theta = Math.random() * Math.PI * 2;
-            const phi = Math.acos(2 * Math.random() - 1);
-            const r = 0.9 + Math.random() * 0.4;
-            positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
-            positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-            positions[i * 3 + 2] = r * Math.cos(phi);
-        }
-        partGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        const partMat = new THREE.PointsMaterial({ color: 0x00E5FF, size: 0.025, transparent: true, opacity: 0.7 });
-        const particles = new THREE.Points(partGeo, partMat);
-        scene.add(particles);
-
-        scene.add(new THREE.AmbientLight(0x7C3AED, 0.6));
-        const dirLight = new THREE.DirectionalLight(0x00E5FF, 1.2);
-        dirLight.position.set(5, 3, 5);
-        scene.add(dirLight);
-        const ptLight = new THREE.PointLight(0xffffff, 0.8);
-        ptLight.position.set(-3, -3, -3);
-        scene.add(ptLight);
-
-        let t = 0;
-        function animateOrb() {
-            requestAnimationFrame(animateOrb);
-            t += 0.01;
-            sphere.rotation.x += 0.003;
-            sphere.rotation.y += 0.005;
-            wire.rotation.x -= 0.002;
-            wire.rotation.y -= 0.004;
-            sphere.position.y = Math.sin(t) * 0.08;
-            wire.position.y = Math.sin(t) * 0.08;
-            particles.rotation.y += 0.001;
-            particles.rotation.x += 0.0005;
-            sphere.material.opacity = 0.75 + Math.sin(t * 2) * 0.1;
-            renderer.render(scene, camera);
-        }
-        animateOrb();
-
-        // MEDIAI CHAT LOGIC
+        // --- MEDIAI LOGIC ---
         const aiResponses = {
-            'specialists': "🏥 Available specializations at MediBook:\n• Cardiologist - Heart specialist\n• Dermatologist - Skin specialist\n• Neurologist - Brain specialist\n• Orthopedist - Bone specialist\n• Gynecologist - Women's health\n• Pediatrician - Child specialist\nBook any specialist from Find Doctors!",
-            'med_history': "💊 Medicine Management Tips:\n• Always take medicines at same time daily\n• Never skip doses without doctor advice\n• Store medicines in cool dry place\n• Your current medicines: 5 active\n• Next dose: Metformin 500mg (Evening)",
-            'ehr': "📋 Electronic Health Record (EHR):\nYour EHR contains your complete medical history including past appointments, prescriptions, test results and doctor notes. It helps doctors provide better and more informed care for you.",
-            'health_tips': "💚 3 Health Tips for Today:\n1. 💧 Drink 8 glasses of water daily\n2. 🚶 Walk 30 minutes this morning\n3. 😴 Sleep 7-8 hours tonight\nSmall healthy habits make big differences!",
-            'prescriptions': "📝 Reading Your Prescription:\n• Rx = prescription symbol\n• OD = Once daily\n• BD = Twice daily\n• TDS = Three times daily\nAlways follow your doctor's instructions!",
-            'consultation': "🩺 Consultation Types at MediBook:\n📞 Phone - Quick queries, follow-ups\n📹 Video - Visual examination needed\n🏥 In-Person - Physical examination\nBest results come from in-person visits!",
-            default: "I understand your concern. For accurate medical advice, I recommend consulting one of our specialist doctors. Would you like me to help you find the right specialist for your needs? 😊"
+            'specialists': "🏥 Available specializations: Cardiologist, Dermatologist, Neurologist, etc. Book one via Find Doctors!",
+            'med_history': "💊 Tips: Take meds same time daily. Your local Med Tracker has your schedule.",
+            'ehr': "📋 Your EHR contains all medical history securely synced with our backend.",
+            'health_tips': "💚 Healthy Habit: Drink 2L water daily and walk 10k steps for better immunity!",
+            'prescriptions': "📝 Find your full prescription list in the 'Prescriptions' tab.",
+            'consultation': "🩺 Consultation Types: Offline (Best results), Video (Remote), Phone (Query).",
+            default: "I assist with bookings and health info. For emergencies, please call 911. 😊"
         };
 
         function addBubble(text, type) {
             const chatBox = document.getElementById('chatMessages');
-            const bubble = document.createElement('div');
-            bubble.className = `chat-bubble ${type}-bubble`;
-            bubble.innerText = text;
-            chatBox.appendChild(bubble);
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
-
-        function showLoading() {
-            const chatBox = document.getElementById('chatMessages');
-            const loader = document.createElement('div');
-            loader.className = 'chat-bubble ai-bubble typing';
-            loader.id = 'temp-loader';
-            loader.innerHTML = '<div class="dot-pulse"></div><div class="dot-pulse"></div><div class="dot-pulse"></div>';
-            chatBox.appendChild(loader);
-            chatBox.scrollTop = chatBox.scrollHeight;
-            return loader.id;
+            const bubble = document.createElement('div'); bubble.className = `chat-bubble ${type}-bubble animate__animated animate__fadeInUp`;
+            bubble.innerText = text; chatBox.appendChild(bubble); chatBox.scrollTop = chatBox.scrollHeight;
         }
 
         function quickAction(key, displayText) {
             addBubble(displayText, 'user');
-            const loaderId = showLoading();
-            setTimeout(() => {
-                document.getElementById(loaderId).remove();
-                const response = aiResponses[key] || aiResponses.default;
-                addBubble(response, 'ai');
-
-                // Functional Redirections
-                setTimeout(() => {
-                    if (key === 'specialists') window.location.href = 'doctors.html';
-                    if (key === 'ehr') window.location.href = 'medical-records.html';
-                    if (key === 'prescriptions') window.location.href = 'prescriptions.html';
-                    if (key === 'consultation') window.location.href = 'appointments.html';
-                }, 2000);
-            }, 1200);
-        }
-
-        function handleKeyPress(e) {
-            if (e.key === 'Enter') sendMessage();
+            setTimeout(() => addBubble(aiResponses[key] || aiResponses.default, 'ai'), 800);
         }
 
         function sendMessage() {
-            const input = document.getElementById('chatInput');
-            const msg = input.value.trim();
-            if (!msg) return;
-
-            addBubble(msg, 'user');
-            input.value = '';
-
-            const loaderId = showLoading();
-
-            setTimeout(() => {
-                document.getElementById(loaderId).remove();
-                addBubble(getSmartResponse(msg), 'ai');
-            }, 1200);
+            const input = document.getElementById('chatInput'); if (!input.value.trim()) return;
+            addBubble(input.value.trim(), 'user'); input.value = '';
+            setTimeout(() => addBubble(aiResponses.default, 'ai'), 800);
         }
 
-        function getSmartResponse(msg) {
-            const lower = msg.toLowerCase();
-            if (lower.includes('headache')) return "🧠 For headaches, I recommend consulting a Neurologist. Dr. William Osler is available. Shall I help you book?";
-            if (lower.includes('heart') || lower.includes('chest')) return "❤️ For chest/heart concerns, please see Dr. Alexander Smith (Cardiologist) urgently. Shall I help you book?";
-            if (lower.includes('skin') || lower.includes('rash')) return "🩺 For skin issues, consult Dr. Virginia Apgar (Dermatologist). She's highly rated!";
-            if (lower.includes('medicine')) return "💊 You have 5 active medicines. Metformin 500mg is due this evening. Always take medicines as prescribed!";
-            return aiResponses.default;
+        function handleKeyPress(e) { if (e.key === 'Enter') sendMessage(); }
+
+        // --- THREE.JS ORB ---
+        function initThreeJsOrb() {
+            const orbCanvas = document.getElementById('orbCanvas');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000); camera.position.z = 2;
+            const renderer = new THREE.WebGLRenderer({ canvas: orbCanvas, alpha: true, antialias: true });
+            renderer.setSize(180, 180);
+
+            const geometry = new THREE.SphereGeometry(0.75, 64, 64);
+            const material = new THREE.MeshPhongMaterial({ color: 0x00E5FF, emissive: 0x0891B2, specular: 0xffffff, shininess: 120, transparent: true, opacity: 0.85 });
+            const sphere = new THREE.Mesh(geometry, material); scene.add(sphere);
+
+            const wireMat = new THREE.MeshBasicMaterial({ color: 0xA78BFA, wireframe: true, transparent: true, opacity: 0.25 });
+            const wire = new THREE.Mesh(geometry, wireMat); wire.scale.set(1.03, 1.03, 1.03); scene.add(wire);
+
+            scene.add(new THREE.AmbientLight(0x7C3AED, 0.6));
+            const dirLight = new THREE.DirectionalLight(0x00E5FF, 1.2); dirLight.position.set(5, 3, 5); scene.add(dirLight);
+
+            function animate() { requestAnimationFrame(animate); sphere.rotation.x += 0.003; sphere.rotation.y += 0.005; wire.rotation.x -= 0.002; renderer.render(scene, camera); }
+            animate();
         }
 
-        // --- Medicine Management ---
-        function saveMedicine() {
-            const name = document.getElementById('newMedName').value;
-            const purpose = document.getElementById('newMedPurpose').value;
-            const morning = document.getElementById('morning').checked;
-            const afternoon = document.getElementById('afternoon').checked;
-            const evening = document.getElementById('evening').checked;
+        // 🔮 Mesh Globe Animation for Dashboard
+        const mCanvas = document.getElementById('meshGlobeCanvas');
+        if (mCanvas) {
+            const mCtx = mCanvas.getContext('2d');
+            let mWidth, mHeight;
+            let mTick = 0;
 
-            if (!name || !purpose) {
-                alert('Please enter both name and purpose');
-                return;
+            let mCubes = [];
+            const mCubeCount = 60;
+
+            function resizeMesh() {
+                mWidth = mCanvas.width = mCanvas.parentElement.offsetWidth;
+                mHeight = mCanvas.height = mCanvas.parentElement.offsetHeight;
             }
 
-            const medList = document.getElementById('medList');
-            const row = document.createElement('div');
-            row.className = 'med-list-row animate__animated animate__fadeInDown';
+            class Cube {
+                constructor() {
+                    this.init();
+                }
+                init() {
+                    this.radius = Math.random() * 80 + 60;
+                    this.angle = Math.random() * Math.PI * 2;
+                    this.speed = (Math.random() * 0.01 + 0.005) * (Math.random() < 0.5 ? 1 : -1);
+                    this.size = Math.random() * 5 + 2.5;
+                    this.z = Math.random() * 2 - 1;
+                    this.opacity = Math.random() * 0.5 + 0.4;
+                }
+                update() {
+                    this.angle += this.speed;
+                }
+                draw() {
+                    const centerX = mWidth * 0.5;
+                    const centerY = mHeight * 0.5;
+                    const projectionX = Math.cos(this.angle) * this.radius;
+                    const projectionY = Math.sin(this.angle) * this.radius * 0.4;
+                    const x = centerX + projectionX;
+                    const y = centerY + projectionY;
+                    const scale = 1 + Math.sin(this.angle) * 0.3;
+                    mCtx.fillStyle = `rgba(124, 58, 237, ${this.opacity * scale})`;
+                    mCtx.fillRect(x, y, this.size * scale, this.size * scale);
+                }
+            }
 
-            let badges = '';
-            if (morning) badges += `<div class="badge-pill bg-purple"><i class="fa-solid fa-sun"></i> ☀ 1</div>`;
-            if (afternoon) badges += `<div class="badge-pill bg-yellow"><i class="fa-solid fa-cloud-sun"></i> ⛅ 1</div>`;
-            if (evening) badges += `<div class="badge-pill bg-teal"><i class="fa-solid fa-moon"></i> 🌙 1</div>`;
+            function initMesh() {
+                resizeMesh();
+                for (let i = 0; i < mCubeCount; i++) mCubes.push(new Cube());
+                animateMesh();
+            }
 
-            row.innerHTML = `
-                <div class="med-info">
-                    <h5>${name}</h5>
-                    <p>${purpose}</p>
-                </div>
-                <div class="med-badges">${badges || '<span class="small text-muted">No time set</span>'}</div>
-            `;
+            function drawGlobe() {
+                const centerX = mWidth * 0.5;
+                const centerY = mHeight * 0.5;
+                const radius = 70;
+                const gradient = mCtx.createRadialGradient(centerX, centerY, 0, centerX, centerY, radius);
+                gradient.addColorStop(0, 'rgba(124, 58, 237, 0.6)');
+                gradient.addColorStop(0.7, 'rgba(124, 58, 237, 0.4)');
+                gradient.addColorStop(1, 'rgba(168, 85, 247, 0.2)');
+                mCtx.fillStyle = gradient;
+                mCtx.beginPath();
+                mCtx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+                mCtx.fill();
+                mCtx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+                mCtx.lineWidth = 0.8;
+                mCtx.save();
+                mCtx.beginPath();
+                mCtx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+                mCtx.clip();
+                const gridSpacing = 15;
+                const offset = (mTick % gridSpacing);
+                for (let x = -radius; x < radius; x += gridSpacing) {
+                    mCtx.beginPath();
+                    mCtx.moveTo(centerX + x + offset, centerY - radius);
+                    mCtx.lineTo(centerX + x + offset, centerY + radius);
+                    mCtx.stroke();
+                }
+                for (let y = -radius; y < radius; y += gridSpacing) {
+                    mCtx.beginPath();
+                    mCtx.moveTo(centerX - radius, centerY + y + offset * 0.5);
+                    mCtx.lineTo(centerX + radius, centerY + y + offset * 0.5);
+                    mCtx.stroke();
+                }
+                mCtx.restore();
+            }
 
-            medList.prepend(row);
+            function drawConcentricCircles() {
+                const centerX = mWidth * 0.5;
+                const centerY = mHeight * 0.5;
+                mCtx.lineWidth = 1;
+                for (let i = 1; i <= 3; i++) {
+                    const r = 70 + i * 30 + (mTick * 0.5 % 30);
+                    const alpha = 0.1 * (1 - (mTick * 0.5 % 30) / 30);
+                    mCtx.strokeStyle = `rgba(124, 58, 237, ${alpha})`;
+                    mCtx.beginPath();
+                    mCtx.arc(centerX, centerY, r, 0, Math.PI * 2);
+                    mCtx.stroke();
+                }
+            }
 
-            // Reset and Close
-            document.getElementById('newMedName').value = '';
-            document.getElementById('newMedPurpose').value = '';
-            document.getElementById('morning').checked = false;
-            document.getElementById('afternoon').checked = false;
-            document.getElementById('evening').checked = false;
+            function animateMesh() {
+                mTick++;
+                mCtx.clearRect(0, 0, mWidth, mHeight);
+                drawConcentricCircles();
+                drawGlobe();
+                mCubes.forEach(cube => {
+                    cube.update();
+                    cube.draw();
+                });
+                requestAnimationFrame(animateMesh);
+            }
 
-            const modal = bootstrap.Modal.getInstance(document.getElementById('addMedModal'));
-            modal.hide();
-
-            // Notify AI
-            addBubble(`I've added ${name} to your daily schedule!`, 'ai');
+            window.addEventListener('resize', resizeMesh);
+            initMesh();
         }
     </script>
-
 </body>
 
 </html>

@@ -1,17 +1,21 @@
 nohup: ignoring input
-127.0.0.1 - - [25/Mar/2026 19:07:34] "GET /index.html HTTP/1.1" 304 -
-127.0.0.1 - - [25/Mar/2026 19:07:35] "GET /assets/images/doctor-1.png HTTP/1.1" 304 -
-127.0.0.1 - - [25/Mar/2026 19:07:35] "GET /assets/images/doctor-2.png HTTP/1.1" 304 -
-127.0.0.1 - - [25/Mar/2026 19:07:35] "GET /assets/images/doctor-3.png HTTP/1.1" 304 -
-127.0.0.1 - - [25/Mar/2026 19:07:35] "GET /assets/images/hero-doctor.png HTTP/1.1" 304 -
-127.0.0.1 - - [25/Mar/2026 19:07:35] "GET /assets/images/about-team.png HTTP/1.1" 304 -
-127.0.0.1 - - [25/Mar/2026 19:07:35] "GET /assets/images/doctor-4.png HTTP/1.1" 304 -
-127.0.0.1 - - [25/Mar/2026 19:07:41] "GET /login.html HTTP/1.1" 304 -
-127.0.0.1 - - [25/Mar/2026 19:08:05] "GET /register.html HTTP/1.1" 200 -
-127.0.0.1 - - [25/Mar/2026 19:08:40] "GET /patient-dashboard.html HTTP/1.1" 200 -
-127.0.0.1 - - [25/Mar/2026 19:08:48] "GET /appointments.html HTTP/1.1" 200 -
-127.0.0.1 - - [25/Mar/2026 19:08:56] code 404, message File not found
-127.0.0.1 - - [25/Mar/2026 19:08:56] "GET /medical-records.html HTTP/1.1" 404 -
-127.0.0.1 - - [25/Mar/2026 19:09:02] "GET /profile.html HTTP/1.1" 200 -
-127.0.0.1 - - [25/Mar/2026 19:09:53] "GET /doctor-dashboard.html HTTP/1.1" 200 -
-127.0.0.1 - - [25/Mar/2026 19:09:59] "GET /register.html HTTP/1.1" 304 -
+127.0.0.1 - - [28/Mar/2026 00:58:37] "GET /login.html HTTP/1.1" 200 -
+127.0.0.1 - - [28/Mar/2026 00:58:38] code 404, message File not found
+127.0.0.1 - - [28/Mar/2026 00:58:38] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [28/Mar/2026 00:58:58] "GET /patient-dashboard.html HTTP/1.1" 200 -
+127.0.0.1 - - [28/Mar/2026 00:58:58] "GET /shared_navbar.js HTTP/1.1" 200 -
+127.0.0.1 - - [28/Mar/2026 01:00:22] "GET /login.html HTTP/1.1" 200 -
+127.0.0.1 - - [28/Mar/2026 01:00:22] code 404, message File not found
+127.0.0.1 - - [28/Mar/2026 01:00:22] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [28/Mar/2026 01:02:37] "GET /patient-dashboard.html HTTP/1.1" 200 -
+127.0.0.1 - - [28/Mar/2026 01:02:38] "GET /shared_navbar.js HTTP/1.1" 200 -
+127.0.0.1 - - [28/Mar/2026 01:43:20] code 404, message File not found
+127.0.0.1 - - [28/Mar/2026 01:43:20] "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 -
+127.0.0.1 - - [28/Mar/2026 01:47:22] "GET /doctors.html HTTP/1.1" 200 -
+127.0.0.1 - - [28/Mar/2026 01:47:22] "GET /shared_navbar.js HTTP/1.1" 200 -
+127.0.0.1 - - [28/Mar/2026 01:47:27] "GET /medical-records.html HTTP/1.1" 200 -
+127.0.0.1 - - [28/Mar/2026 01:47:30] "GET /prescriptions.html HTTP/1.1" 200 -
+127.0.0.1 - - [28/Mar/2026 01:47:33] "GET /appointments.html HTTP/1.1" 200 -
+127.0.0.1 - - [28/Mar/2026 01:47:35] "GET /patient-dashboard.html HTTP/1.1" 200 -
+127.0.0.1 - - [28/Mar/2026 02:15:49] "GET /patient-dashboard.html HTTP/1.1" 200 -
+127.0.0.1 - - [28/Mar/2026 02:15:50] "GET /shared_navbar.js HTTP/1.1" 200 -

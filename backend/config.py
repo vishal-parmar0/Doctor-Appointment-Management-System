@@ -17,8 +17,9 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
     # Secrets
-    SECRET_KEY = os.getenv('SECRET_KEY', 'dev_key_123')
-    JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', 'jwt_dev_key_123')
+    SECRET_KEY = os.getenv('SECRET_KEY', os.urandom(24).hex())
+    JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', os.urandom(24).hex())
+    GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', '')
     
     # Expiration
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=24)

@@ -331,7 +331,7 @@
     <div class="container-content">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="fw-bold">Find a Specialist</h2>
-            <p class="text-muted">65 doctors available nearby</p>
+            <p class="text-muted" id="doctorCountText">Searching for doctors...</p>
         </div>
 
         <!-- Search Bar -->
@@ -374,63 +374,9 @@
 
         <!-- Doctor Grid -->
         <div class="doctor-grid">
-            <!-- Doctor 1 -->
-            <div class="doc-card" data-aos="fade-up" data-aos-delay="150">
-                <div class="badge-rating"><i class="fa-solid fa-star"></i> 4.9 (124)</div>
-                <div class="doc-header">
-                    <img src="https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=150" class="doc-img">
-                    <div class="doc-info">
-                        <h5>Dr. Alexander Smith</h5>
-                        <p>Cardiogist • Apollo Hospitals</p>
-                        <small class="text-muted"><i class="fa-solid fa-location-dot me-1"></i> Ahmedabad</small>
-                    </div>
-                </div>
-                <div class="small mb-3">Exp: 15+ Years • Specializing in adult heart health and surgical procedures.
-                </div>
-                <div class="doc-footer">
-                    <div class="doc-price">₹1,500 <small class="text-muted" style="font-size: 11px;">(Cons. Fee)</small>
-                    </div>
-                    <button class="btn-book" onclick="bookNow('Dr. Alexander Smith')">Book Appointment</button>
-                </div>
-            </div>
-
-            <!-- Doctor 2 -->
-            <div class="doc-card" data-aos="fade-up" data-aos-delay="200">
-                <div class="badge-rating"><i class="fa-solid fa-star"></i> 4.8 (89)</div>
-                <div class="doc-header">
-                    <img src="https://images.unsplash.com/photo-1559839734-2b71f153678e?w=150" class="doc-img">
-                    <div class="doc-info">
-                        <h5>Dr. Virginia Apgar</h5>
-                        <p>Dermatologist • SkinCare Clinic</p>
-                        <small class="text-muted"><i class="fa-solid fa-location-dot me-1"></i> Surat</small>
-                    </div>
-                </div>
-                <div class="small mb-3">Exp: 10+ Years • Expert in clinical dermatology and aesthetic skin treatments.
-                </div>
-                <div class="doc-footer">
-                    <div class="doc-price">₹800 <small class="text-muted" style="font-size: 11px;">(Cons. Fee)</small>
-                    </div>
-                    <button class="btn-book" onclick="bookNow('Dr. Virginia Apgar')">Book Appointment</button>
-                </div>
-            </div>
-
-            <!-- Doctor 3 -->
-            <div class="doc-card" data-aos="fade-up" data-aos-delay="250">
-                <div class="badge-rating"><i class="fa-solid fa-star"></i> 4.7 (215)</div>
-                <div class="doc-header">
-                    <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=150" class="doc-img">
-                    <div class="doc-info">
-                        <h5>Dr. William Osler</h5>
-                        <p>Neurologist • City Brain Center</p>
-                        <small class="text-muted"><i class="fa-solid fa-location-dot me-1"></i> Mumbai</small>
-                    </div>
-                </div>
-                <div class="small mb-3">Exp: 20+ Years • Leading neurologist specializing in stroke recovery.</div>
-                <div class="doc-footer">
-                    <div class="doc-price">₹2,000 <small class="text-muted" style="font-size: 11px;">(Cons. Fee)</small>
-                    </div>
-                    <button class="btn-book" onclick="bookNow('Dr. William Osler')">Book Appointment</button>
-                </div>
+            <div class="text-center w-100 py-5">
+                <div class="spinner-border text-primary mb-3"></div>
+                <p class="text-muted">Syncing with specialist database...</p>
             </div>
         </div>
     </div>
@@ -472,8 +418,8 @@
     <script src="shared_navbar.js"></script>
     <script>
         // 🛡️ AUTH CHECK
-        const token = localStorage.getItem('token');
-        const userStr = localStorage.getItem('user');
+        const token = sessionStorage.getItem('token');
+        const userStr = sessionStorage.getItem('user');
         const user = userStr ? JSON.parse(userStr) : null;
 
         if (!token || !user || user.role !== 'patient') {
@@ -520,7 +466,7 @@
         function renderDoctors(docs) {
             const grid = document.querySelector('.doctor-grid');
             grid.innerHTML = '';
-            document.querySelector('.container-content p.text-muted').innerText = `${docs.length} doctors found`;
+            document.getElementById('doctorCountText').innerText = `${docs.length} doctors found`;
 
             if (docs.length === 0) {
                 const isRealLocation = document.getElementById('locationStatus').getAttribute('data-real') !== 'false';

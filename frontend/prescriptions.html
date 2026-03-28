@@ -275,42 +275,10 @@
     <div class="container-content">
         <h2 class="fw-bold mb-4">Past Prescriptions</h2>
 
-        <div data-aos="fade-up">
-            <!-- Rx 1 -->
-            <div class="rx-card">
-                <div class="rx-icon"><i class="fa-solid fa-file-prescription"></i></div>
-                <div class="rx-details">
-                    <span class="rx-badge">Active Treatment</span>
-                    <h6>Hypertension Management Plan</h6>
-                    <p>By Dr. Alexander Smith • Mar 10, 2026</p>
-                    <p class="small text-muted mt-1">Metformin, Lisinopril, Atenolol</p>
-                </div>
-                <button class="btn-rx-download" onclick="alert('Downloading Rx_MB_SMITH_MAR10.pdf...')"><i
-                        class="fa-solid fa-download"></i> Download Rx</button>
-            </div>
-
-            <!-- Rx 2 -->
-            <div class="rx-card">
-                <div class="rx-icon"><i class="fa-solid fa-file-prescription"></i></div>
-                <div class="rx-details">
-                    <span class="rx-badge" style="background: #F3F4F6; color: #6B7280;">Completed</span>
-                    <h6>Migraine Consultation RX</h6>
-                    <p>By Dr. William Osler • Feb 15, 2026</p>
-                    <p class="small text-muted mt-1">Sumatriptan 50mg (SOS)</p>
-                </div>
-                <button class="btn-rx-download"><i class="fa-solid fa-download"></i> Download Rx</button>
-            </div>
-
-            <!-- Rx 3 -->
-            <div class="rx-card">
-                <div class="rx-icon"><i class="fa-solid fa-file-prescription"></i></div>
-                <div class="rx-details">
-                    <span class="rx-badge" style="background: #F3F4F6; color: #6B7280;">Completed</span>
-                    <h6>Annual Wellness Report</h6>
-                    <p>By Dr. Virginia Apgar • Jan 02, 2026</p>
-                    <p class="small text-muted mt-1">Multivitamins, Zinc Supplements</p>
-                </div>
-                <button class="btn-rx-download"><i class="fa-solid fa-download"></i> Download Rx</button>
+        <div id="prescriptionsContainer" data-aos="fade-up">
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary"></div>
+                <p class="mt-2 text-muted">Loading your prescriptions...</p>
             </div>
         </div>
     </div>
@@ -321,8 +289,8 @@
     <script src="shared_navbar.js"></script>
     <script>
         // 🛡️ AUTH CHECK
-        const token = localStorage.getItem('token');
-        const userStr = localStorage.getItem('user');
+        const token = sessionStorage.getItem('token');
+        const userStr = sessionStorage.getItem('user');
         const user = userStr ? JSON.parse(userStr) : null;
 
         if (!token || !user || user.role !== 'patient') {
@@ -369,10 +337,14 @@
                 });
                 const data = await res.json();
                 if (res.ok) {
-                    const grid = document.querySelector('.container-content > div');
+                    const grid = document.getElementById('prescriptionsContainer');
                     grid.innerHTML = '';
                     if (data.length === 0) {
-                        grid.innerHTML = '<div class="alert alert-info">No prescriptions found yet.</div>';
+                        grid.innerHTML = `
+                            <div class="text-center py-5 opacity-50">
+                                <i class="fa-solid fa-file-prescription mb-3" style="font-size: 50px;"></i>
+                                <p>No prescriptions found yet.</p>
+                            </div>`;
                         return;
                     }
                     data.forEach(p => {

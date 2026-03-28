@@ -74,7 +74,9 @@ def login():
                 return jsonify({"error": "Doctor account not verified by Admin"}), 403
 
         # Success - Generate Token
-        access_token = create_access_token(identity={"id": user.id, "role": user.role, "email": user.email})
+        import json
+        identity_str = json.dumps({"id": user.id, "role": user.role, "email": user.email})
+        access_token = create_access_token(identity=identity_str)
         return jsonify({
             "token": access_token,
             "user": {

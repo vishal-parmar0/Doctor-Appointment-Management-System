@@ -50,14 +50,26 @@ def book_appointment():
         db.session.rollback()
         return jsonify({"error": str(e)}), 400
 
-@patient_bp.route('/appointments/patient', methods=['GET'])
+@patient_bp.route('/appointments', methods=['GET'])
 @jwt_required()
-def get_patient_appointments():
-    """View my personal appointment history as a patient"""
+def get_patient_appointments_flexible():
+    """Flexible endpoint to view personal appointment history as a patient with status and limit"""
     current_user = get_jwt_identity()
+    status_filter = request.args.get('status')
+    limit = request.args.get('limit', type=int)
     
-    # Query: Patient Appointments JOIN Doctors (User)
-    apps = db.session.query(Appointment, User).join(User, Appointment.doctor_id == User.id).filter(Appointment.patient_id == current_user['id']).all()
+    query = db.session.query(Appointment, User).join(User, Appointment.doctor_id == User.id).filter(Appointment.patient_id == current_user['id'])
+    
+    if status_filter:
+        statuses = status_filter.split(',')
+        query = query.filter(Appointment.status.in_(statuses))
+    
+    query = query.order_by(Appointment.appointment_date.desc(), Appointment.appointment_time.desc())
+    
+    if limit:
+        apps = query.limit(limit).all()
+    else:
+        apps = query.all()
     
     res = []
     for ap, doc_user in apps:
@@ -67,10 +79,17 @@ def get_patient_appointments():
             "date": str(ap.appointment_date),
             "time": str(ap.appointment_time),
             "status": ap.status,
-            "type": ap.consultation_type
+            "type": ap.consultation_type,
+            "specialty": doc_user.doctor_profile.specialization if doc_user.doctor_profile else "General Physician"
         })
     
     return jsonify(res), 200
+
+@patient_bp.route('/appointments/patient', methods=['GET'])
+@jwt_required()
+def get_patient_appointments_legacy():
+    """Legacy endpoint for patient appointments"""
+    return get_patient_appointments_flexible()
 
 @patient_bp.route('/appointments/cancel/<int:id>', methods=['PUT'])
 @jwt_required()

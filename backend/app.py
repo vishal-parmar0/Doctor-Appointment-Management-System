@@ -2,7 +2,7 @@ import sys
 from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
-from models.models import db, bcrypt
+from models.models import db, bcrypt, User
 from config import Config
 
 # Routes
@@ -44,6 +44,29 @@ def create_app():
     @app.errorhandler(500)
     def server_error(error):
         return jsonify({"error": "Internal Server Error"}), 505
+
+    # Database initialization and seeding
+    with app.app_context():
+        try:
+            db.create_all()
+            
+            # Check if admin user exists, if not create it
+            admin_user = User.query.filter_by(email='admin@medibook.com').first()
+            if not admin_user:
+                admin_user = User(
+                    full_name='Super Admin',
+                    email='admin@medibook.com',
+                    password_hash=User.hash_password('admin123'),
+                    role='admin',
+                    phone='0000000000'
+                )
+                db.session.add(admin_user)
+                db.session.commit()
+                print("✓ Admin user created: admin@medibook.com / admin123")
+            else:
+                print("✓ Admin user already exists")
+        except Exception as e:
+            print(f"⚠ Database initialization error: {str(e)}")
 
     # Heartbeat
     @app.route('/', methods=['GET'])

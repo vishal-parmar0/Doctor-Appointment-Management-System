@@ -123,11 +123,11 @@ const navbarRightHtml = `
                 <div class="text-muted profile-email text-truncate" style="font-size: 12px;">user@example.com</div>
             </div>
             <div class="list-group list-group-flush p-1">
-                <a href="profile.html" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-2 px-3">
+                <a id="navProfileLink" href="profile.html" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-2 px-3">
                     <div class="bg-primary bg-opacity-10 text-primary rounded-3 p-2 d-flex align-items-center justify-content-center" style="width:34px; height:34px;"><i class="fa-solid fa-user-circle"></i></div>
                     <span style="font-size: 14px; font-weight: 500;">My Profile</span>
                 </a>
-                <a href="profile.html" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-2 px-3">
+                <a id="navSettingsLink" href="profile.html" class="list-group-item list-group-item-action d-flex align-items-center gap-3 py-2 px-3">
                     <div class="bg-secondary bg-opacity-10 text-secondary rounded-3 p-2 d-flex align-items-center justify-content-center" style="width:34px; height:34px;"><i class="fa-solid fa-sliders"></i></div>
                     <span style="font-size: 14px; font-weight: 500;">Account Settings</span>
                 </a>
@@ -182,6 +182,20 @@ initNavbarLogic();
 function initNavbarLogic() {
     const user = JSON.parse(sessionStorage.getItem('user'));
     if (user) {
+        // Set Profile Links based on role
+        const profileLink = document.getElementById('navProfileLink');
+        const settingsLink = document.getElementById('navSettingsLink');
+        if (user.role === 'doctor') {
+            if (profileLink) profileLink.href = 'doctor-settings.html';
+            if (settingsLink) settingsLink.href = 'doctor-settings.html';
+        } else if (user.role === 'admin') {
+            if (profileLink) profileLink.href = 'admin-settings.html';
+            if (settingsLink) settingsLink.href = 'admin-settings.html';
+        } else {
+            if (profileLink) profileLink.href = 'profile.html';
+            if (settingsLink) settingsLink.href = 'profile.html';
+        }
+
         const initials = user.full_name.split(' ').map(n => n[0]).join('').toUpperCase();
         const navAvatar = document.getElementById('userInitials');
         if (user.avatar_url) {

@@ -412,7 +412,7 @@
                 </a>
             </li>
             <li class="menu-item">
-                <a href="#" class="menu-link">
+                <a href="doctor-settings.html" class="menu-link">
                     <i class="fa-solid fa-gear"></i>
                     <span>Settings</span>
                 </a>
@@ -420,7 +420,7 @@
         </ul>
 
         <div class="sidebar-footer">
-            <a href="login.html" class="menu-link text-danger">
+            <a href="#" onclick="logout(); return false;" class="menu-link text-danger">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i>
                 <span>Logout</span>
             </a>
@@ -436,18 +436,7 @@
                 <p class="text-muted small">Here is what is happening with your practice today.</p>
             </div>
 
-            <div class="doctor-profile">
-                <div class="nav-btn d-none d-md-flex me-3">
-                    <button class="btn btn-light rounded-pill px-3 py-2 small border">
-                        <i class="fa-solid fa-plus me-2"></i> Add Patient
-                    </button>
-                </div>
-                <div class="avatar-box avatar-initials">DS</div>
-                <div class="profile-info d-none d-lg-block">
-                    <h4 class="doctor-name-display">Dr. Alexander Smith</h4>
-                    <p>Consultant</p>
-                </div>
-            </div>
+            <div id="shared-navbar-right"></div>
         </header>
 
         <!-- Stats Grid -->
@@ -503,47 +492,7 @@
                     </div>
 
                     <div class="appt-table">
-                        <!-- Patient 1 -->
-                        <div class="appt-row">
-                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100"
-                                class="patient-img">
-                            <div class="patient-meta">
-                                <h6>Monica Johnson</h6>
-                                <p>Routine Checkup • New Patient</p>
-                            </div>
-                            <div class="appt-time">10:00 AM</div>
-                            <div class="appt-actions">
-                                <button class="btn-action btn-accept"><i class="fa-solid fa-check"></i></button>
-                                <button class="btn-action btn-cancel"><i class="fa-solid fa-xmark"></i></button>
-                            </div>
-                        </div>
-                        <!-- Patient 2 -->
-                        <div class="appt-row">
-                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100"
-                                class="patient-img">
-                            <div class="patient-meta">
-                                <h6>Sarah Connor</h6>
-                                <p>Heart Palpitations • Follow-up</p>
-                            </div>
-                            <div class="appt-time">11:30 AM</div>
-                            <div class="appt-actions">
-                                <button class="btn-action btn-accept"><i class="fa-solid fa-play"></i></button>
-                            </div>
-                        </div>
-                        <!-- Patient 3 -->
-                        <div class="appt-row">
-                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100"
-                                class="patient-img">
-                            <div class="patient-meta">
-                                <h6>John Wick</h6>
-                                <p>Blood Pressure Test • Urgent</p>
-                            </div>
-                            <div class="appt-time">01:45 PM</div>
-                            <div class="appt-actions">
-                                <button class="btn-action btn-accept"><i class="fa-solid fa-check"></i></button>
-                                <button class="btn-action btn-cancel"><i class="fa-solid fa-trash"></i></button>
-                            </div>
-                        </div>
+                        <!-- Dynamic appointments will be loaded here -->
                     </div>
                 </div>
 
@@ -582,41 +531,15 @@
                         <h5>Recent Activity</h5>
                     </div>
                     <ul class="list-unstyled mb-0">
-                        <li class="d-flex gap-3 mb-3 pb-3 border-bottom">
-                            <div class="text-primary"><i class="fa-solid fa-file-medical"></i></div>
-                            <div>
-                                <h6 class="mb-1" style="font-size: 13px;">Prescription Uploaded</h6>
-                                <p class="small text-muted mb-0">Monica Johnson • 2 mins ago</p>
-                            </div>
-                        </li>
-                        <li class="d-flex gap-3 mb-3 pb-3 border-bottom">
-                            <div class="text-success"><i class="fa-solid fa-check-double"></i></div>
-                            <div>
-                                <h6 class="mb-1" style="font-size: 13px;">Appt. Confirmed</h6>
-                                <p class="small text-muted mb-0">Sarah Connor • 1 hour ago</p>
-                            </div>
-                        </li>
-                        <li class="d-flex gap-3">
-                            <div class="text-warning"><i class="fa-solid fa-star"></i></div>
-                            <div>
-                                <h6 class="mb-1" style="font-size: 13px;">New Review Received</h6>
-                                <p class="small text-muted mb-0">5 Stars from John Wick • 3 hours ago</p>
-                            </div>
-                        </li>
+                        <!-- Dynamic activities will be loaded here -->
                     </ul>
                 </div>
 
                 <!-- Next Patient Reminder -->
                 <div class="card-panel bg-light border-0">
-                    <h6 class="text-secondary fw-bold mb-3 small"><i class="fa-solid fa-clock me-2"></i>NEXT PATIENT
-                    </h6>
-                    <div class="d-flex align-items-center">
-                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100"
-                            class="patient-img rounded-circle" style="width: 60px; height: 60px;">
-                        <div class="ms-3">
-                            <h5 class="mb-1">Monica Johnson</h5>
-                            <p class="small text-muted mb-0">Prep for room 302</p>
-                        </div>
+                    <h6 class="text-secondary fw-bold mb-3 small"><i class="fa-solid fa-clock me-2"></i>NEXT PATIENT</h6>
+                    <div id="next-patient-container" class="d-flex align-items-center">
+                        <p class="text-muted text-center w-100">No upcoming appointments</p>
                     </div>
                 </div>
 
@@ -639,6 +562,8 @@
             window.location.href = 'login.html';
         }
 
+        const API_BASE = 'http://localhost:5000/api';
+
         AOS.init({ duration: 800, once: true });
 
         // Update Doctor UI
@@ -646,57 +571,424 @@
             document.querySelectorAll('.doctor-name-display').forEach(el => el.innerText = 'Dr. ' + user.full_name);
             const initials = user.full_name.split(' ').map(n => n[0]).join('').toUpperCase();
             document.querySelectorAll('.avatar-initials').forEach(el => el.innerText = initials);
-            fetchDashboardData();
+            
+            // Load all dashboard data
+            loadDashboardStats();
+            loadTodayAppointments();
+            loadPatientGrowthChart();
+            loadRecentActivity();
+            loadProfileCompletion();
         });
 
-        async function fetchDashboardData() {
+        // ==================== DASHBOARD STATS ====================
+        async function loadDashboardStats() {
             try {
-                const res = await fetch('http://localhost:5000/api/doctor/dashboard', {
+                const res = await fetch(`${API_BASE}/doctor/dashboard/stats`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
+                
+                if (!res.ok) throw new Error('Failed to load stats');
+                
                 const data = await res.json();
-                if (res.ok) {
-                    const stats = {
-                        'stat-total-patients': data.patients,
-                        'stat-today-sessions': data.today,
-                        'stat-total-sessions': data.total,
-                        'stat-doc-rating': data.rating
-                    };
-                    for (const [id, val] of Object.entries(stats)) {
-                        const el = document.getElementById(id);
-                        if (el) el.innerText = val;
-                    }
-                }
-            } catch (e) { console.error("Doctor API Error:", e); }
+                document.getElementById('stat-total-patients').innerText = data.total_patients || 0;
+                document.getElementById('stat-today-sessions').innerText = data.appointments_today || 0;
+                document.getElementById('stat-total-sessions').innerText = data.total_consultations || 0;
+                document.getElementById('stat-doc-rating').innerText = data.average_rating || '0';
+            } catch (e) {
+                console.error("Error loading dashboard stats:", e);
+            }
         }
 
-        // Growth Chart
-        const ctx = document.getElementById('growthChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                datasets: [{
-                    label: 'New Patients',
-                    data: [65, 80, 72, 95, 110, 130],
-                    borderColor: '#0066FF',
-                    backgroundColor: 'rgba(0, 102, 255, 0.1)',
-                    fill: true,
-                    tension: 0.4,
-                    pointRadius: 5,
-                    pointBackgroundColor: '#0066FF'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    x: { grid: { display: false } },
-                    y: { border: { dash: [5, 5] }, grid: { color: '#f0f0f0' } }
+        // ==================== TODAY'S APPOINTMENTS ====================
+        async function loadTodayAppointments() {
+            try {
+                const res = await fetch(`${API_BASE}/doctor/appointments/today`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (!res.ok) throw new Error('Failed to load appointments');
+                
+                const appointments = await res.json();
+                const appointmentContainer = document.querySelector('.appt-table');
+                
+                // Clear existing demo appointments
+                appointmentContainer.innerHTML = '';
+                
+                if (appointments.length === 0) {
+                    appointmentContainer.innerHTML = '<p class="text-muted text-center py-3">No appointments scheduled for today</p>';
+                    return;
                 }
+                
+                appointments.forEach(appt => {
+                    const appointmentEl = createAppointmentRow(appt);
+                    appointmentContainer.appendChild(appointmentEl);
+                });
+                
+                // Update next patient section
+                if (appointments.length > 0) {
+                    updateNextPatient(appointments[0]);
+                }
+            } catch (e) {
+                console.error("Error loading today's appointments:", e);
+            }
+        }
+
+        function updateNextPatient(appt) {
+            const container = document.getElementById('next-patient-container');
+            const initials = appt.patient_name.split(' ').map(n => n[0]).join('').toUpperCase();
+            const colors = ['#0066FF', '#7C3AED', '#10B981', '#F59E0B', '#EF4444'];
+            const bgColor = colors[Math.floor(Math.random() * colors.length)];
+            
+            container.innerHTML = `
+                <div style="width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: ${bgColor}; color: white; font-weight: 600; font-size: 16px;">
+                    ${initials}
+                </div>
+                <div class="ms-3">
+                    <h5 class="mb-1">${appt.patient_name}</h5>
+                    <p class="small text-muted mb-0">${appt.appointment_type} • ${appt.time}</p>
+                </div>
+            `;
+        }
+
+        function createAppointmentRow(appt) {
+            const row = document.createElement('div');
+            row.className = 'appt-row';
+            row.id = `appointment-${appt.id}`;
+            
+            // Get initials for avatar
+            const initials = appt.patient_name.split(' ').map(n => n[0]).join('').toUpperCase();
+            const colors = ['#0066FF', '#7C3AED', '#10B981', '#F59E0B', '#EF4444'];
+            const bgColor = colors[Math.floor(Math.random() * colors.length)];
+            
+            row.innerHTML = `
+                <div style="width: 42px; height: 42px; border-radius: 10px; margin-right: 15px; display: flex; align-items: center; justify-content: center; background: ${bgColor}; color: white; font-weight: 600; font-size: 14px;">
+                    ${initials}
+                </div>
+                <div class="patient-meta">
+                    <h6>${appt.patient_name}</h6>
+                    <p>${appt.reason} • ${appt.appointment_type}</p>
+                </div>
+                <div class="appt-time">${appt.time}</div>
+                <div class="appt-actions">
+                    ${getAppointmentButtons(appt)}
+                </div>
+            `;
+            
+            return row;
+        }
+
+        function getAppointmentButtons(appt) {
+            const status = appt.status;
+            
+            if (status === 'pending') {
+                return `
+                    <button class="btn-action btn-accept" onclick="acceptAppointment(${appt.id})" title="Accept">
+                        <i class="fa-solid fa-check"></i>
+                    </button>
+                    <button class="btn-action btn-cancel" onclick="rejectAppointment(${appt.id})" title="Reject">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                `;
+            } else if (status === 'confirmed') {
+                return `
+                    <button class="btn-action btn-accept" onclick="startConsultation(${appt.id})" title="Start Consultation" style="background: #DBEAFE; color: #0284C7;">
+                        <i class="fa-solid fa-play"></i>
+                    </button>
+                `;
+            } else if (status === 'in_consultation') {
+                return `
+                    <span class="badge bg-warning">In Progress</span>
+                `;
+            } else if (status === 'completed') {
+                return `
+                    <span class="badge bg-success">Completed</span>
+                `;
+            } else if (status === 'cancelled') {
+                return `
+                    <span class="badge bg-danger">Cancelled</span>
+                `;
+            }
+            
+            return '';
+        }
+
+        async function acceptAppointment(appointmentId) {
+            try {
+                const res = await fetch(`${API_BASE}/doctor/appointments/accept/${appointmentId}`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (!res.ok) throw new Error('Failed to accept appointment');
+                
+                showFlash('Appointment confirmed', 'success');
+                loadTodayAppointments();
+            } catch (e) {
+                showFlash('Error confirming appointment', 'danger');
+                console.error("Error:", e);
+            }
+        }
+
+        async function rejectAppointment(appointmentId) {
+            try {
+                const res = await fetch(`${API_BASE}/doctor/appointments/reject/${appointmentId}`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (!res.ok) throw new Error('Failed to reject appointment');
+                
+                showFlash('Appointment rejected', 'info');
+                loadTodayAppointments();
+            } catch (e) {
+                showFlash('Error rejecting appointment', 'danger');
+                console.error("Error:", e);
+            }
+        }
+
+        async function startConsultation(appointmentId) {
+            try {
+                const res = await fetch(`${API_BASE}/doctor/appointments/start/${appointmentId}`, {
+                    method: 'PUT',
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (!res.ok) throw new Error('Failed to start consultation');
+                
+                showFlash('Consultation started', 'success');
+                loadTodayAppointments();
+            } catch (e) {
+                showFlash('Error starting consultation', 'danger');
+                console.error("Error:", e);
+            }
+        }
+
+        // ==================== PATIENT GROWTH CHART ====================
+        let growthChart;
+
+        async function loadPatientGrowthChart() {
+            try {
+                const res = await fetch(`${API_BASE}/doctor/analytics/patient-growth`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (!res.ok) throw new Error('Failed to load analytics');
+                
+                const data = await res.json();
+                updateGrowthChart(data);
+            } catch (e) {
+                console.error("Error loading analytics:", e);
+                // Use default data on error
+                const defaultData = [
+                    { month: 'Jan', count: 0 },
+                    { month: 'Feb', count: 0 },
+                    { month: 'Mar', count: 0 },
+                    { month: 'Apr', count: 0 },
+                    { month: 'May', count: 0 },
+                    { month: 'Jun', count: 0 }
+                ];
+                updateGrowthChart(defaultData);
+            }
+        }
+
+        function updateGrowthChart(data) {
+            const ctx = document.getElementById('growthChart').getContext('2d');
+            
+            if (growthChart) {
+                growthChart.destroy();
+            }
+            
+            growthChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.map(d => d.month),
+                    datasets: [{
+                        label: 'New Patients',
+                        data: data.map(d => d.count),
+                        borderColor: '#0066FF',
+                        backgroundColor: 'rgba(0, 102, 255, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#0066FF'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { display: false } },
+                        y: { border: { dash: [5, 5] }, grid: { color: '#f0f0f0' } }
+                    }
+                }
+            });
+        }
+
+        // ==================== RECENT ACTIVITY ====================
+        async function loadRecentActivity() {
+            try {
+                const res = await fetch(`${API_BASE}/doctor/activity/recent`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (!res.ok) {
+                    console.warn('No activity data available');
+                    return;
+                }
+                
+                const activities = await res.json();
+                const activityList = document.querySelector('.card-panel ul');
+                
+                // Only update if we have activity data
+                if (activities && activities.length > 0) {
+                    activityList.innerHTML = activities.map(activity => `
+                        <li class="d-flex gap-3 mb-3 pb-3 border-bottom">
+                            <div class="${getActivityIcon(activity.activity_type)}">${getActivityIconElement(activity.activity_type)}</div>
+                            <div>
+                                <h6 class="mb-1" style="font-size: 13px;">${getActivityTitle(activity.activity_type)}</h6>
+                                <p class="small text-muted mb-0">${activity.patient_name} • ${formatTime(activity.timestamp)}</p>
+                            </div>
+                        </li>
+                    `).join('');
+                }
+            } catch (e) {
+                console.error("Error loading recent activity:", e);
+            }
+        }
+
+        function getActivityIcon(type) {
+            const iconMap = {
+                'prescription_uploaded': 'text-primary',
+                'appointment_confirmed': 'text-success',
+                'review_received': 'text-warning',
+                'patient_added': 'text-info'
+            };
+            return iconMap[type] || 'text-primary';
+        }
+
+        function getActivityIconElement(type) {
+            const iconMap = {
+                'prescription_uploaded': '<i class="fa-solid fa-file-medical"></i>',
+                'appointment_confirmed': '<i class="fa-solid fa-check-double"></i>',
+                'review_received': '<i class="fa-solid fa-star"></i>',
+                'patient_added': '<i class="fa-solid fa-user-plus"></i>'
+            };
+            return iconMap[type] || '<i class="fa-solid fa-bell"></i>';
+        }
+
+        function getActivityTitle(type) {
+            const titleMap = {
+                'prescription_uploaded': 'Prescription Uploaded',
+                'appointment_confirmed': 'Appt. Confirmed',
+                'review_received': 'New Review Received',
+                'patient_added': 'Patient Added'
+            };
+            return titleMap[type] || 'Activity';
+        }
+
+        function formatTime(timestamp) {
+            const date = new Date(timestamp);
+            const now = new Date();
+            const diff = Math.floor((now - date) / 1000); // seconds
+            
+            if (diff < 60) return 'just now';
+            if (diff < 3600) return `${Math.floor(diff / 60)} mins ago`;
+            if (diff < 86400) return `${Math.floor(diff / 3600)} hours ago`;
+            if (diff < 604800) return `${Math.floor(diff / 86400)} days ago`;
+            
+            return date.toLocaleDateString();
+        }
+
+        // ==================== PROFILE COMPLETION ====================
+        async function loadProfileCompletion() {
+            try {
+                const res = await fetch(`${API_BASE}/doctor/profile/completion`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (!res.ok) throw new Error('Failed to load profile completion');
+                
+                const data = await res.json();
+                updateProfileCompletion(data);
+            } catch (e) {
+                console.error("Error loading profile completion:", e);
+            }
+        }
+
+        function updateProfileCompletion(data) {
+            const progressCircle = document.querySelector('.progress-circle');
+            if (progressCircle) {
+                progressCircle.innerText = data.completion_percent + '%';
+            }
+            
+            // Update button
+            const updateBtn = document.querySelector('button[style*="var(--primary)"]');
+            if (updateBtn) {
+                updateBtn.onclick = () => {
+                    window.location.href = 'doctor-settings.html';
+                };
+            }
+        }
+
+        // ==================== ADD PATIENT BUTTON ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            const addPatientBtn = document.querySelector('button:has(i.fa-plus)');
+            if (addPatientBtn) {
+                addPatientBtn.onclick = () => {
+                    const name = prompt('Enter patient name:');
+                    if (!name) return;
+                    
+                    const contact = prompt('Enter patient contact number:');
+                    const gender = prompt('Enter patient gender (Male/Female/Other):');
+                    
+                    addNewPatient({
+                        name: name,
+                        contact: contact,
+                        gender: gender,
+                        email: `patient_${Date.now()}@medibook.local`
+                    });
+                };
             }
         });
+
+        async function addNewPatient(patientData) {
+            try {
+                const res = await fetch(`${API_BASE}/doctor/patient/add`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(patientData)
+                });
+                
+                if (!res.ok) throw new Error('Failed to add patient');
+                
+                const result = await res.json();
+                showFlash(`Patient ${patientData.name} added successfully!`, 'success');
+            } catch (e) {
+                showFlash('Error adding patient', 'danger');
+                console.error("Error:", e);
+            }
+        }
+
+        // ==================== FLASH MESSAGE ====================
+        function showFlash(message, type = 'info') {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+            alertDiv.style.cssText = 'position: fixed; top: 20px; right: 20px; z-index: 9999; max-width: 400px;';
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            document.body.appendChild(alertDiv);
+            
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 4000);
+        }
     </script>
     <script src="shared_navbar.js"></script>
 </body>

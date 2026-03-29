@@ -1,3 +1,4 @@
+import json
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from models.models import db, User, Doctor, Patient, Appointment
@@ -8,7 +9,8 @@ admin_bp = Blueprint('admin', __name__)
 @jwt_required()
 def get_all_users():
     """Admin dashboard to view all users and their basic info"""
-    current_user = get_jwt_identity()
+    current_user = json.loads(get_jwt_identity())
+    
     if current_user['role'] != 'admin':
         return jsonify({"error": "Admin access required"}), 403
         
@@ -29,7 +31,8 @@ def get_all_users():
 @jwt_required()
 def verify_doctor(id):
     """Admin desk approves doctor verification via ID"""
-    current_user = get_jwt_identity()
+    current_user = json.loads(get_jwt_identity())
+    
     if current_user['role'] != 'admin':
         return jsonify({"error": "Admin portal access required"}), 403
         
@@ -45,7 +48,8 @@ def verify_doctor(id):
 @jwt_required()
 def reject_doctor(id):
     """Admin desk rejects doctor verification via ID"""
-    current_user = get_jwt_identity()
+    current_user = json.loads(get_jwt_identity())
+    
     if current_user['role'] != 'admin':
         return jsonify({"error": "Admin portal access required"}), 403
         
@@ -61,11 +65,11 @@ def reject_doctor(id):
 @jwt_required()
 def get_admin_analytics():
     """Stats for the central dashboard cards"""
-    current_user = get_jwt_identity()
+    current_user = json.loads(get_jwt_identity())
+    
     if current_user['role'] != 'admin':
         return jsonify({"error": "Admin portal access required"}), 403
         
-    # Count totals
     total_docs = Doctor.query.filter_by(verification_status='verified').count()
     total_patients = Patient.query.count()
     total_apps = Appointment.query.count()
@@ -77,17 +81,18 @@ def get_admin_analytics():
         "appointments": total_apps,
         "pending_verifications": pending_verifications
     }), 200
+
 @admin_bp.route('/dashboard', methods=['GET'])
 @jwt_required()
 def get_admin_dashboard():
     """Returns platform overview for admin cards"""
-    current_user = get_jwt_identity()
+    current_user = json.loads(get_jwt_identity())
+    
     if current_user['role'] != 'admin':
         return jsonify({"error": "Admin portal access required"}), 403
         
     total_docs = Doctor.query.count()
     total_patients = Patient.query.count()
-    # Simple mock for platform revenue - 10% of all confirmed consults
     revenue = db.session.query(db.func.sum(Doctor.consultation_fee)).join(Appointment, Doctor.user_id == Appointment.doctor_id).filter(Appointment.status == 'confirmed').scalar() or 0
     revenue = float(revenue) * 0.1
     
@@ -99,11 +104,13 @@ def get_admin_dashboard():
         "revenue": round(revenue, 2),
         "signups": signups_today
     }), 200
+
 @admin_bp.route('/pending-doctors', methods=['GET'])
 @jwt_required()
 def get_pending_doctors():
     """List all doctors awaiting admin verification"""
-    current_user = get_jwt_identity()
+    current_user = json.loads(get_jwt_identity())
+    
     if current_user['role'] != 'admin':
         return jsonify({"error": "Admin portal access required"}), 403
         

@@ -244,8 +244,8 @@
                 .then(obj => {
                     if (obj.status === 200 && obj.body.user.role === 'admin') {
                         showFlash('Identity Verified. Welcome Master.', 'success');
-                        localStorage.setItem('token', obj.body.token);
-                        localStorage.setItem('user', JSON.stringify(obj.body.user));
+                        sessionStorage.setItem('token', obj.body.token);
+                        sessionStorage.setItem('user', JSON.stringify(obj.body.user));
                         setTimeout(() => window.location.href = '../admin-dashboard.html', 1000);
                     } else {
                         btn.innerHTML = 'Authorize Access';

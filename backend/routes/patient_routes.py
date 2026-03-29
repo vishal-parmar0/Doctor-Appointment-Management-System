@@ -1,3 +1,4 @@
+import json
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from models.models import db, User, Doctor, Patient, Appointment, Prescription
@@ -8,10 +9,8 @@ patient_bp = Blueprint('patient', __name__)
 @jwt_required()
 def get_all_doctors():
     """Endpoint for patients to find all available/verified doctors"""
-    # Join with User table for names
     docs = db.session.query(User, Doctor).join(Doctor, User.id == Doctor.user_id).filter(Doctor.verification_status == 'verified').all()
     
-    # Prep response JSON
     res = []
     for user, doc in docs:
         res.append({
@@ -29,11 +28,10 @@ def get_all_doctors():
 @jwt_required()
 def book_appointment():
     """Endpoint to create an appointment slot"""
-    current_user = get_jwt_identity()
+    current_user = json.loads(get_jwt_identity())
     data = request.get_json()
     
     try:
-        # Create Appointment object
         new_app = Appointment(
             patient_id=current_user['id'],
             doctor_id=data.get('doctor_id'),
@@ -54,7 +52,7 @@ def book_appointment():
 @jwt_required()
 def get_patient_appointments_flexible():
     """Flexible endpoint to view personal appointment history as a patient with status and limit"""
-    current_user = get_jwt_identity()
+    current_user = json.loads(get_jwt_identity())
     status_filter = request.args.get('status')
     limit = request.args.get('limit', type=int)
     
@@ -95,7 +93,7 @@ def get_patient_appointments_legacy():
 @jwt_required()
 def cancel_appointment(id):
     """Update status to cancelled"""
-    current_user = get_jwt_identity()
+    current_user = json.loads(get_jwt_identity())
     app = Appointment.query.filter_by(id=id, patient_id=current_user['id']).first()
     
     if not app:
@@ -104,11 +102,12 @@ def cancel_appointment(id):
     app.status = 'cancelled'
     db.session.commit()
     return jsonify({"message": "Appointment cancelled successfully"}), 200
+
 @patient_bp.route('/dashboard', methods=['GET'])
 @jwt_required()
 def get_patient_dashboard():
     """Returns patient summary info for cards"""
-    current_user = get_jwt_identity()
+    current_user = json.loads(get_jwt_identity())
     patient_id = current_user['id']
     
     total_apps = Appointment.query.filter_by(patient_id=patient_id).count()
@@ -127,9 +126,8 @@ def get_patient_dashboard():
 @jwt_required()
 def get_patient_prescriptions():
     """List all prescriptions issued to this patient"""
-    current_user = get_jwt_identity()
+    current_user = json.loads(get_jwt_identity())
     
-    # Needs to JOIN Appointment to Filter by patient_id
     data = db.session.query(Prescription, Appointment, User).join(Appointment, Prescription.appointment_id == Appointment.id).join(User, Appointment.doctor_id == User.id).filter(Appointment.patient_id == current_user['id']).all()
     
     res = []

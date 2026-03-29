@@ -96,7 +96,18 @@ def login():
 @jwt_required()
 def change_password():
     """Endpoint for logged-in users to change their password"""
+    import json
     current_user_identity = get_jwt_identity()
+    
+    # Parse JWT identity (it's a JSON string)
+    if isinstance(current_user_identity, str):
+        try:
+            current_user_data = json.loads(current_user_identity)
+        except:
+            return jsonify({"error": "Invalid token"}), 401
+    else:
+        current_user_data = current_user_identity
+    
     data = request.get_json()
 
     old_password = data.get('old_password')
@@ -105,7 +116,7 @@ def change_password():
     if not old_password or not new_password:
         return jsonify({"error": "Both old and new password are required"}), 400
 
-    user = User.query.get(current_user_identity['id'])
+    user = User.query.get(current_user_data['id'])
     
     if not user:
         return jsonify({"error": "User not found"}), 404

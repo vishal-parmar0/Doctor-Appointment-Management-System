@@ -70,128 +70,26 @@
             color: white;
         }
 
-        .content {
+        /* Main Content */
+        .main-content {
             margin-left: 280px;
-            width: 100%;
+            width: calc(100% - 280px);
             padding: 40px;
+            min-height: 100vh;
         }
 
-        /* Calendar View Mockup */
-        .calendar-card {
-            background: white;
-            border-radius: var(--radius-md);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            padding: 30px;
-        }
-
-        .day-header {
+        /* Top Header */
+        .header-top {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
-        }
-
-        .month-name {
-            font-size: 20px;
-            font-weight: 700;
-            color: #1A1A2E;
-        }
-
-        .time-slot-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .time-slot {
-            display: flex;
-            padding: 15px;
-            border: 1px solid #F3F4F6;
-            border-radius: 12px;
-            align-items: center;
-            gap: 20px;
-            transition: 0.2s;
-        }
-
-        .time-slot:hover {
-            border-color: var(--primary);
-            cursor: pointer;
-        }
-
-        .time-label {
-            min-width: 100px;
-            font-weight: 700;
-            color: var(--grey);
-            font-size: 14px;
-        }
-
-        .booking-info {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .p-avatar {
-            width: 35px;
-            height: 35px;
-            border-radius: 8px;
-        }
-
-        .p-name {
-            font-size: 13px;
-            font-weight: 600;
-            margin: 0;
-        }
-
-        .badge-type {
-            font-size: 10px;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 20px;
-            text-transform: uppercase;
-        }
-
-        .type-video {
-            background: #E0E7FF;
-            color: #3730A3;
-        }
-
-        .type-offline {
-            background: #F3F4F6;
-            color: #1A1A2E;
-        }
-
-        .btn-panel-sm {
-            display: flex;
-            gap: 8px;
-        }
-
-        .btn-circle {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            transition: 0.2s;
-        }
-
-        .btn-primary-light {
-            background: rgba(0, 102, 255, 0.1);
-            color: var(--primary);
-        }
-
-        .btn-primary-light:hover {
-            background: var(--primary);
-            color: white;
+            margin-bottom: 35px;
         }
 
         @media (max-width: 992px) {
             .sidebar {
                 width: 80px;
+                padding: 20px 10px;
             }
 
             .sidebar-brand span,
@@ -199,8 +97,10 @@
                 display: none;
             }
 
-            .content {
+            .main-content {
                 margin-left: 80px;
+                width: calc(100% - 80px);
+                padding: 20px;
             }
         }
     </style>
@@ -212,104 +112,58 @@
         <a href="doctor-dashboard.html" class="sidebar-brand">
             <i class="fa-solid fa-square-plus"></i> <span>MediBook</span>
         </a>
-        <nav>
-            <a href="doctor-dashboard.html" class="menu-link">
-                <i class="fa-solid fa-house"></i> <span>Dashboard</span>
+
+        <ul class="sidebar-menu" style="list-style: none; padding: 0; flex: 1;">
+            <li class="menu-item">
+                <a href="doctor-dashboard.html" class="menu-link">
+                    <i class="fa-solid fa-house"></i> <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="doctor-appointments.html" class="menu-link active">
+                    <i class="fa-solid fa-calendar"></i> <span>Appointments</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="doctor-patients.html" class="menu-link">
+                    <i class="fa-solid fa-user-group"></i> <span>My Patients</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="doctor-settings.html" class="menu-link">
+                    <i class="fa-solid fa-gear"></i> <span>Settings</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="sidebar-footer" style="border-top: 1px solid #eee; padding-top: 20px;">
+            <a href="#" onclick="logout(); return false;" class="menu-link text-danger">
+                <i class="fa-solid fa-right-from-bracket"></i> <span>Sign Out</span>
             </a>
-            <a href="doctor-appointments.html" class="menu-link active">
-                <i class="fa-solid fa-calendar"></i> <span>Appointments</span>
-            </a>
-            <a href="doctor-patients.html" class="menu-link">
-                <i class="fa-solid fa-user-group"></i> <span>My Patients</span>
-            </a>
-        </nav>
+        </div>
     </aside>
 
-    <main class="content">
-        <div class="day-header">
-            <h2 class="fw-bold">Manage Schedule</h2>
+    <main class="main-content">
+        <header class="header-top" data-aos="fade-down">
+            <div>
+                <h2 class="fw-bold mb-1">Manage Schedule</h2>
+                <div class="month-name small text-muted" id="currentDateDisplay">Today, March 28, 2026</div>
+            </div>
+
             <div class="d-flex align-items-center gap-3">
-                <div class="month-name">Today, March 25, 2026</div>
                 <div class="btn-group">
-                    <button class="btn btn-outline-light border text-dark"><i
+                    <button class="btn btn-outline-light border text-dark" id="prevDay"><i
                             class="fa-solid fa-chevron-left"></i></button>
-                    <button class="btn btn-outline-light border text-dark"><i
+                    <button class="btn btn-outline-light border text-dark" id="nextDay"><i
                             class="fa-solid fa-chevron-right"></i></button>
                 </div>
+                <div id="shared-navbar-right"></div>
             </div>
-        </div>
+        </header>
 
         <div class="calendar-card" data-aos="fade-up">
-            <div class="time-slot-list">
-                <!-- 09:00 AM -->
-                <div class="time-slot">
-                    <div class="time-label">09:00 AM</div>
-                    <div class="booking-info">
-                        <span class="text-muted small">Available Space</span>
-                    </div>
-                </div>
-
-                <!-- 10:00 AM -->
-                <div class="time-slot" style="background: rgba(0, 102, 255, 0.03); border-color: var(--primary);">
-                    <div class="time-label">10:00 AM</div>
-                    <div class="booking-info">
-                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=50" class="p-avatar">
-                        <div>
-                            <p class="p-name">Monica Johnson</p>
-                            <span class="badge-type type-video"><i class="fa-solid fa-video me-1"></i> Video Call</span>
-                        </div>
-                    </div>
-                    <div class="btn-panel-sm">
-                        <button class="btn-circle btn-primary-light"
-                            onclick="window.location.href='doctor-patients.html'"><i
-                                class="fa-solid fa-file-medical"></i></button>
-                        <button class="btn-circle btn-primary-light"><i class="fa-solid fa-play"></i></button>
-                        <button class="btn-circle btn-primary-light text-danger"><i
-                                class="fa-solid fa-times"></i></button>
-                    </div>
-                </div>
-
-                <!-- 11:30 AM -->
-                <div class="time-slot" style="background: rgba(0, 102, 255, 0.03); border-color: var(--primary);">
-                    <div class="time-label">11:30 AM</div>
-                    <div class="booking-info">
-                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=50" class="p-avatar">
-                        <div>
-                            <p class="p-name">Sarah Connor</p>
-                            <span class="badge-type type-offline"><i class="fa-solid fa-hand-holding-medical me-1"></i>
-                                In-Person</span>
-                        </div>
-                    </div>
-                    <div class="btn-panel-sm">
-                        <button class="btn-circle btn-primary-light"><i class="fa-solid fa-file-medical"></i></button>
-                        <button class="btn-circle btn-primary-light"><i class="fa-solid fa-check"></i></button>
-                    </div>
-                </div>
-
-                <!-- 01:45 PM -->
-                <div class="time-slot" style="background: rgba(0, 102, 255, 0.03); border-color: var(--primary);">
-                    <div class="time-label">01:45 PM</div>
-                    <div class="booking-info">
-                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=50" class="p-avatar">
-                        <div>
-                            <p class="p-name">John Wick</p>
-                            <span class="badge-type type-offline"><i class="fa-solid fa-hand-holding-medical me-1"></i>
-                                In-Person</span>
-                        </div>
-                    </div>
-                    <div class="btn-panel-sm">
-                        <button class="btn-circle btn-primary-light"><i class="fa-solid fa-file-medical"></i></button>
-                        <button class="btn-circle btn-primary-light"><i class="fa-solid fa-check"></i></button>
-                    </div>
-                </div>
-
-                <!-- 03:00 PM -->
-                <div class="time-slot">
-                    <div class="time-label">03:00 PM</div>
-                    <div class="booking-info">
-                        <span class="text-muted small">Not Available Slot</span>
-                    </div>
-                </div>
+            <div class="time-slot-list" id="appointmentsContainer">
+                <!-- Dynamic content loaded via JS -->
             </div>
         </div>
     </main>
@@ -319,6 +173,7 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         // 🛡️ AUTH CHECK
+        const API_URL = 'http://127.0.0.1:5000/api';
         const token = sessionStorage.getItem('token');
         const userStr = sessionStorage.getItem('user');
         const user = userStr ? JSON.parse(userStr) : null;
@@ -329,76 +184,117 @@
 
         AOS.init({ duration: 800 });
 
+        let currentViewDate = new Date('2026-03-28');
+
+        document.getElementById('prevDay').onclick = () => {
+            currentViewDate.setDate(currentViewDate.getDate() - 1);
+            updateDateDisplay();
+            fetchSchedule();
+        };
+
+        document.getElementById('nextDay').onclick = () => {
+            currentViewDate.setDate(currentViewDate.getDate() + 1);
+            updateDateDisplay();
+            fetchSchedule();
+        };
+
+        function updateDateDisplay() {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('currentDateDisplay').innerText = 
+                currentViewDate.toDateString() === new Date().toDateString() ? 
+                `Today, ${currentViewDate.toLocaleDateString(undefined, options)}` : 
+                currentViewDate.toLocaleDateString(undefined, options);
+        }
+
         async function fetchSchedule() {
             try {
-                const res = await fetch('http://localhost:5000/api/doctor/appointments/doctor', {
+                const response = await fetch(`${API_URL}/doctor/appointments/doctor`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
-                const data = await res.json();
-                if (res.ok) {
-                    const container = document.querySelector('.time-slot-list');
-                    if (data.length === 0) {
-                        container.innerHTML = '<div class="p-5 text-center text-muted">No appointments scheduled for today.</div>';
-                        return;
-                    }
-                    container.innerHTML = ''; // Clear hardcoded
-                    data.forEach(ap => {
-                        const typeClass = (ap.type === 'Video') ? 'type-video' : 'type-offline';
-                        const typeIcon = (ap.type === 'Video') ? 'fa-video' : 'fa-hand-holding-medical';
+                const data = await response.json();
+                
+                const container = document.getElementById('appointmentsContainer');
+                container.innerHTML = '';
 
-                        // Status styling
-                        let bgColor = 'white';
-                        let borderColor = '#F3F4F6';
-                        if (ap.status === 'confirmed') {
-                            bgColor = 'rgba(16, 185, 129, 0.03)';
-                            borderColor = 'var(--success)';
-                        } else if (ap.status === 'pending') {
-                            bgColor = 'rgba(0, 102, 255, 0.03)';
-                            borderColor = 'var(--primary)';
-                        }
+                // Filter by chosen date
+                const targetDateStr = currentViewDate.toISOString().split('T')[0];
+                const filtered = data.filter(ap => ap.date === targetDateStr);
 
-                        container.innerHTML += `
-                            <div class="time-slot" style="background: ${bgColor}; border-color: ${borderColor};">
-                                <div class="time-label">${ap.time}</div>
-                                <div class="booking-info">
-                                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=50" class="p-avatar">
-                                    <div>
-                                        <p class="p-name">${ap.patient_name}</p>
-                                        <span class="badge-type ${typeClass}"><i class="fa-solid ${typeIcon} me-1"></i> ${ap.type}</span>
-                                        <span class="badge-type status-${ap.status.toLowerCase()} ms-1">${ap.status}</span>
-                                    </div>
-                                </div>
-                                <div class="btn-panel-sm">
-                                    ${ap.status === 'pending' ? `
-                                        <button class="btn-circle btn-primary-light text-success" onclick="handleStatus(${ap.id}, 'accept')" title="Accept"><i class="fa-solid fa-check"></i></button>
-                                        <button class="btn-circle btn-primary-light text-danger" onclick="handleStatus(${ap.id}, 'reject')" title="Reject"><i class="fa-solid fa-times"></i></button>
-                                    ` : ''}
-                                    ${ap.status === 'confirmed' ? `
-                                        <button class="btn-circle btn-primary-light" onclick="alert('Starting ${ap.type} Session...')"><i class="fa-solid fa-play"></i></button>
-                                        <button class="btn-circle btn-primary-light" onclick="window.location.href='doctor-patients.html'" title="View History"><i class="fa-solid fa-file-medical"></i></button>
-                                    ` : ''}
-                                </div>
-                            </div>
-                        `;
-                    });
+                if (filtered.length === 0) {
+                    container.innerHTML = `
+                        <div class="p-5 text-center">
+                            <i class="fa-regular fa-calendar-xmark fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">No appointments found for this day.</p>
+                        </div>`;
+                    return;
                 }
-            } catch (e) { console.error("MediBook API Error:", e); }
-        }
-        fetchSchedule();
 
-        async function handleStatus(id, action) {
+                filtered.sort((a, b) => a.time.localeCompare(b.time)).forEach(ap => {
+                    const isVideo = ap.type.toLowerCase().includes('video');
+                    const typeClass = isVideo ? 'type-video' : 'type-offline';
+                    const typeIcon = isVideo ? 'fa-video' : 'fa-hand-holding-medical';
+                    const avatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(ap.patient_name)}&background=random`;
+
+                    let statusStyles = {
+                        confirmed: { bg: 'rgba(16, 185, 129, 0.05)', border: 'var(--success)' },
+                        pending: { bg: 'rgba(0, 102, 255, 0.05)', border: 'var(--primary)' },
+                        in_consultation: { bg: 'rgba(124, 58, 237, 0.05)', border: 'var(--secondary)' },
+                        cancelled: { bg: 'rgba(107, 114, 128, 0.05)', border: 'var(--grey)' }
+                    };
+
+                    const style = statusStyles[ap.status] || { bg: 'white', border: '#F3F4F6' };
+
+                    const div = document.createElement('div');
+                    div.className = 'time-slot';
+                    div.style.background = style.bg;
+                    div.style.borderColor = style.border;
+                    div.innerHTML = `
+                        <div class="time-label">${ap.time}</div>
+                        <div class="booking-info">
+                            <img src="${avatar}" class="p-avatar">
+                            <div>
+                                <p class="p-name">${ap.patient_name}</p>
+                                <span class="badge-type ${typeClass}"><i class="fa-solid ${typeIcon} me-1"></i> ${ap.type}</span>
+                                <span class="badge rounded-pill bg-light text-dark small border ms-2">${ap.status}</span>
+                            </div>
+                        </div>
+                        <div class="btn-panel-sm">
+                            ${ap.status === 'pending' ? `
+                                <button class="btn-circle btn-primary-light text-success" onclick="updateAppointment(${ap.id}, 'accept')" title="Accept"><i class="fa-solid fa-check"></i></button>
+                                <button class="btn-circle btn-primary-light text-danger" onclick="updateAppointment(${ap.id}, 'reject')" title="Reject"><i class="fa-solid fa-times"></i></button>
+                            ` : ''}
+                            ${ap.status === 'confirmed' ? `
+                                <button class="btn-circle btn-primary-light" onclick="updateAppointment(${ap.id}, 'start')" title="Start Consult"><i class="fa-solid fa-play"></i></button>
+                            ` : ''}
+                            <button class="btn-circle btn-primary-light" onclick="window.location.href='doctor-patients.html'" title="View History"><i class="fa-solid fa-file-medical"></i></button>
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+            } catch (err) {
+                console.error('Error fetching schedule:', err);
+            }
+        }
+
+        async function updateAppointment(id, action) {
             try {
-                const res = await fetch(`http://localhost:5000/api/doctor/appointments/${action}/${id}`, {
+                const res = await fetch(`${API_URL}/doctor/appointments/${action}/${id}`, {
                     method: 'PUT',
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (res.ok) {
                     fetchSchedule();
                 } else {
-                    alert("Error updating status.");
+                    const error = await res.json();
+                    alert(error.error || "Failed to update appointment");
                 }
-            } catch (e) { alert("Server error."); }
+            } catch (err) {
+                alert("Server error connecting to MediBook.");
+            }
         }
+
+        updateDateDisplay();
+        fetchSchedule();
     </script>
     <script src="shared_navbar.js"></script>
 </body>

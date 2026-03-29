@@ -853,6 +853,36 @@
             }
         }
 
+        /* Typing Indicator */
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #7C3AED;
+            display: inline-block;
+            margin: 0 2px;
+            animation: typing-bounce 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing-bounce {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.7;
+            }
+            30% {
+                transform: translateY(-8px);
+                opacity: 1;
+            }
+        }
+
         /* Chat Input Area */
         .chat-input-area {
             padding: 12px 16px;
@@ -1478,27 +1508,27 @@
 
                 <!-- Action Grid -->
                 <div class="ai-actions-grid">
-                    <div class="action-btn" onclick="quickAction('specialists', 'Show doctor specializations')">
+                    <div class="action-btn" onclick="quickAction('specialist', 'Show me available specialists')">
                         <i class="fa-solid fa-user-md"></i>
                         <span>Specialists</span>
                     </div>
-                    <div class="action-btn" onclick="quickAction('med_history', 'Management tips')">
+                    <div class="action-btn" onclick="quickAction('prescription', 'Tell me about my medical history and records')">
                         <i class="fa-solid fa-notes-medical"></i>
                         <span>Med. History</span>
                     </div>
-                    <div class="action-btn" onclick="quickAction('ehr', 'What is EHR?')">
+                    <div class="action-btn" onclick="quickAction('prescription', 'What is an EHR and where are my records')">
                         <i class="fa-solid fa-file-medical-alt"></i>
                         <span>My EHR</span>
                     </div>
-                    <div class="action-btn" onclick="quickAction('health_tips', 'Health Tips')">
+                    <div class="action-btn" onclick="quickAction('tips', 'Give me some health tips')">
                         <i class="fa-solid fa-heartbeat"></i>
                         <span>Health Tips</span>
                     </div>
-                    <div class="action-btn" onclick="quickAction('prescriptions', 'Prescriptions info')">
+                    <div class="action-btn" onclick="quickAction('prescription', 'Tell me about my prescriptions')">
                         <i class="fa-solid fa-pills"></i>
                         <span>Prescriptions</span>
                     </div>
-                    <div class="action-btn" onclick="quickAction('consultation', 'Consultations info')">
+                    <div class="action-btn" onclick="quickAction('appointment', 'I want to book a consultation')">
                         <i class="fa-solid fa-stethoscope"></i>
                         <span>Consultation</span>
                     </div>
@@ -1575,6 +1605,8 @@
                     </div>
                     <button class="btn btn-primary w-100 rounded-pill py-3 fw-bold mt-3" id="saveMedBtn"
                         onclick="saveMedicine()">Save Reminder</button>
+                    <button class="btn btn-danger w-100 rounded-pill py-2 fw-bold mt-2" id="removeMedBtn"
+                        onclick="removeMedicineFromEdit()" style="display: none;"><i class="fa-solid fa-trash-can me-2"></i>Remove Medicine</button>
                     <button class="btn btn-light w-100 rounded-pill py-2 text-muted small mt-2 border-0"
                         data-bs-dismiss="modal" onclick="resetMedModal()">Cancel</button>
                 </div>
@@ -1736,11 +1768,11 @@
             }
 
             container.innerHTML = meds.map((m, idx) => `
-                <div class="med-list-row med-item group">
+                <div class="med-list-row med-item group" onclick="editMedicine(${idx})" style="cursor: pointer;">
                     <div class="med-info flex-grow-1">
                         <div class="d-flex align-items-center gap-2">
                              <h5 class="mb-0">${m.name}</h5>
-                             <div class="med-actions opacity-0 group-hover-opacity-100 transition-all d-flex gap-2">
+                             <div class="med-actions opacity-0 group-hover-opacity-100 transition-all d-flex gap-2" onclick="event.stopPropagation();">
                                 <button onclick="editMedicine(${idx})" class="btn btn-link p-0 text-primary small"><i class="fa-solid fa-pen-to-square"></i></button>
                                 <button onclick="deleteMedicine(${idx})" class="btn btn-link p-0 text-danger small"><i class="fa-solid fa-trash-can"></i></button>
                              </div>
@@ -1780,7 +1812,18 @@
             document.getElementById('evening').checked = !!m.night;
             document.getElementById('evening_qty').value = m.night_qty || 1;
 
+            // Show remove button when editing
+            document.getElementById('removeMedBtn').style.display = 'block';
+
             new bootstrap.Modal(document.getElementById('addMedModal')).show();
+        }
+
+        function removeMedicineFromEdit() {
+            const index = parseInt(document.getElementById('editMedIndex').value);
+            if (index === -1) return;
+            if (!confirm("Are you sure you want to remove this medicine?")) return;
+            deleteMedicine(index);
+            bootstrap.Modal.getInstance(document.getElementById('addMedModal')).hide();
         }
 
         function deleteMedicine(index) {
@@ -1803,6 +1846,8 @@
             document.getElementById('afternoon_qty').value = 1;
             document.getElementById('evening').checked = false;
             document.getElementById('evening_qty').value = 1;
+            // Hide remove button when adding new
+            document.getElementById('removeMedBtn').style.display = 'none';
         }
 
         function saveMedicine() {
@@ -1868,12 +1913,90 @@
             container.innerHTML = html;
         }
 
-        // SECTION 7 — MediAI
+        // SECTION 7 — MediAI Smart Demo Chatbot
+        const mediAIResponses = {
+            greet: {
+                keywords: ['hello', 'hi', 'hey', 'good morning', 'good evening', 'greetings'],
+                response: `👋 Hello! I'm MediAI, your personal health assistant inside MediBook. How can I help you today? You can ask me about symptoms, medicines, appointments, or health tips!`
+            },
+            fever: {
+                keywords: ['fever', 'temperature', 'chills', 'sweating', 'hot'],
+                response: `🌡️ Fever can be caused by infections, flu, or other conditions. If your temperature is above 103°F (39.4°C) or lasts more than 3 days, please consult a doctor immediately. In the meantime, stay hydrated and rest well. Would you like me to help you find a General Physician?`
+            },
+            headache: {
+                keywords: ['headache', 'head pain', 'migraine', 'head hurts', 'head ache'],
+                response: `🤕 Headaches are very common and can be caused by stress, dehydration, or lack of sleep. Drink water, rest in a quiet dark room, and avoid screens. If headaches are frequent or severe, I recommend seeing a Neurologist. Shall I help you find one?`
+            },
+            cold: {
+                keywords: ['cold', 'cough', 'runny nose', 'sneezing', 'sore throat', 'flu'],
+                response: `🤧 Cold and cough symptoms are usually viral and resolve in 7-10 days. Stay warm, drink hot fluids, and get adequate rest. If symptoms persist beyond 10 days or you develop high fever, please see a doctor. Would you like to book an appointment?`
+            },
+            stomach: {
+                keywords: ['stomach', 'abdomen', 'nausea', 'vomiting', 'diarrhea', 'acidity', 'gastric', 'belly pain', 'stomach pain'],
+                response: `🫃 Stomach issues can range from acidity to infections. Avoid spicy food, drink ORS if you have diarrhea, and eat light meals. If pain is severe or vomiting persists more than 24 hours, see a Gastroenterologist. Want me to help you find one?`
+            },
+            chest: {
+                keywords: ['chest pain', 'chest', 'heart', 'breathing', 'shortness of breath', 'cardiac'],
+                response: `⚠️ Chest pain or breathing difficulty can be serious. Please do not ignore these symptoms. If the pain is sudden and severe, call emergency services (112) immediately. For mild discomfort, consult a Cardiologist as soon as possible. Your health is the priority!`
+            },
+            diabetes: {
+                keywords: ['diabetes', 'sugar', 'blood sugar', 'insulin', 'glucose', 'diabetic'],
+                response: `🩸 Managing diabetes requires regular monitoring of blood sugar levels, a balanced diet, and consistent medication. Avoid sugary foods and maintain an active lifestyle. Regular check-ups with an Endocrinologist are important. Would you like to find a specialist?`
+            },
+            bp: {
+                keywords: ['blood pressure', 'bp', 'hypertension', 'high bp', 'low bp', 'pressure'],
+                response: `💊 Blood pressure management is crucial. Reduce salt intake, exercise regularly, avoid stress, and take prescribed medications consistently. Monitor your BP at home if possible. A Cardiologist can help you manage this better. Shall I help you book?`
+            },
+            medicine: {
+                keywords: ['medicine', 'medication', 'drug', 'tablet', 'capsule', 'prescription', 'dose', 'med'],
+                response: `💊 I can see your prescriptions in your MediBook records. Always take medicines as prescribed by your doctor — do not skip doses or self-medicate. If you have side effects or concerns about a specific medicine, consult your doctor immediately. Never stop medication without medical advice.`
+            },
+            appointment: {
+                keywords: ['appointment', 'book', 'schedule', 'doctor', 'visit', 'consult', 'consultation'],
+                response: `📅 You can easily book an appointment through MediBook! Go to "Find Doctors" in the navigation, search by specialty or doctor name, and select an available slot. Your doctor will confirm the appointment shortly. Is there a specific specialty you are looking for?`
+            },
+            prescription: {
+                keywords: ['prescription', 'rx', 'report', 'records', 'history', 'medical records', 'prescriptions'],
+                response: `📋 Your prescriptions and medical records are safely stored in MediBook. You can view them anytime under the "Prescriptions" and "Medical Records" sections. These records are shared with your doctors during consultations for better care.`
+            },
+            tips: {
+                keywords: ['tips', 'advice', 'healthy', 'health', 'fitness', 'diet', 'exercise', 'lifestyle', 'wellness'],
+                response: `🌿 Here are some daily health tips:\n• Drink 8 glasses of water daily\n• Sleep 7-8 hours every night\n• Exercise at least 30 minutes daily\n• Eat more fruits and vegetables\n• Avoid smoking and limit alcohol\n• Take regular health check-ups\n• Manage stress through meditation or yoga\n\nSmall daily habits lead to big health improvements! 💪`
+            },
+            emergency: {
+                keywords: ['emergency', 'urgent', 'serious', 'critical', 'ambulance', '112', 'urgent care'],
+                response: `🚨 If this is a medical emergency, please call 112 immediately! Do not wait. For urgent but non-emergency situations, visit your nearest clinic or use MediBook to book an urgent appointment. Your health and safety come first!`
+            },
+            specialist: {
+                keywords: ['specialist', 'cardiologist', 'dermatologist', 'neurologist', 'pediatrician', 'orthopedic', 'gynecologist', 'psychiatrist', 'specialization'],
+                response: `🏥 MediBook has verified specialists across all major departments:\n• Cardiologist — Heart conditions\n• Dermatologist — Skin issues\n• Neurologist — Brain and nerves\n• Pediatrician — Children's health\n• Orthopedic — Bones and joints\n• Gynecologist — Women's health\n• Psychiatrist — Mental health\n\nGo to "Find Doctors" to search and book any specialist!`
+            },
+            mental: {
+                keywords: ['stress', 'anxiety', 'depression', 'mental', 'sad', 'worried', 'panic', 'sleep', 'insomnia'],
+                response: `🧠 Mental health is just as important as physical health. It is okay to not be okay sometimes. Try deep breathing, regular exercise, and talking to someone you trust. If feelings persist, speaking with a Psychiatrist or Counselor can really help. MediBook has mental health specialists available — would you like to find one?`
+            },
+            default: {
+                response: `🤔 I am not sure I understand that completely. I am MediAI, your health assistant. I can help you with:\n• Symptoms and what they might mean\n• Finding the right specialist\n• Understanding your medicines\n• Health tips and advice\n• Booking appointments\n\nCould you rephrase your question? I am here to help! 😊`
+            }
+        };
+
+        function getMediAIResponse(userMessage) {
+            const msg = userMessage.toLowerCase();
+            for (const key in mediAIResponses) {
+                if (key === 'default') continue;
+                const keywords = mediAIResponses[key].keywords || [];
+                if (keywords.some(kw => msg.includes(kw))) {
+                    return mediAIResponses[key].response;
+                }
+            }
+            return mediAIResponses.default.response;
+        }
+
         function initMediAI(name) {
             const chatBox = document.getElementById('chatMessages');
             chatBox.innerHTML = `
                 <div class="chat-bubble ai-bubble">
-                    👋 Hi ${name}! I'm MediAI, your personal health assistant. How can I help you today?
+                    👋 Hi ${name}! I'm MediAI, your personal health assistant. I can help you find the right doctor, understand your medicines, and give health tips. How can I help you today?
                 </div>
             `;
         }
@@ -1945,34 +2068,58 @@
         }
 
         // --- MEDIAI LOGIC ---
-        const aiResponses = {
-            'specialists': "🏥 Available specializations: Cardiologist, Dermatologist, Neurologist, etc. Book one via Find Doctors!",
-            'med_history': "💊 Tips: Take meds same time daily. Your local Med Tracker has your schedule.",
-            'ehr': "📋 Your EHR contains all medical history securely synced with our backend.",
-            'health_tips': "💚 Healthy Habit: Drink 2L water daily and walk 10k steps for better immunity!",
-            'prescriptions': "📝 Find your full prescription list in the 'Prescriptions' tab.",
-            'consultation': "🩺 Consultation Types: Offline (Best results), Video (Remote), Phone (Query).",
-            default: "I assist with bookings and health info. For emergencies, please call 911. 😊"
-        };
-
         function addBubble(text, type) {
             const chatBox = document.getElementById('chatMessages');
-            const bubble = document.createElement('div'); bubble.className = `chat-bubble ${type}-bubble animate__animated animate__fadeInUp`;
-            bubble.innerText = text; chatBox.appendChild(bubble); chatBox.scrollTop = chatBox.scrollHeight;
+            const bubble = document.createElement('div');
+            bubble.className = `chat-bubble ${type}-bubble`;
+            bubble.innerHTML = text;
+            chatBox.appendChild(bubble);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            const chatBox = document.getElementById('chatMessages');
+            const indicator = document.createElement('div');
+            indicator.className = 'chat-bubble ai-bubble';
+            indicator.id = 'typingIndicator';
+            indicator.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
+            chatBox.appendChild(indicator);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const indicator = document.getElementById('typingIndicator');
+            if (indicator) indicator.remove();
+        }
+
+        async function sendMediAIMessage(userMessage) {
+            if (!userMessage.trim()) return;
+            addBubble(userMessage, 'user');
+            showTypingIndicator();
+            // Simulate thinking delay for realism
+            await new Promise(resolve => setTimeout(resolve, 1000 + Math.random() * 800));
+            removeTypingIndicator();
+            const reply = getMediAIResponse(userMessage);
+            addBubble(reply, 'ai');
         }
 
         function quickAction(key, displayText) {
-            addBubble(displayText, 'user');
-            setTimeout(() => addBubble(aiResponses[key] || aiResponses.default, 'ai'), 800);
+            sendMediAIMessage(displayText);
         }
 
         function sendMessage() {
-            const input = document.getElementById('chatInput'); if (!input.value.trim()) return;
-            addBubble(input.value.trim(), 'user'); input.value = '';
-            setTimeout(() => addBubble(aiResponses.default, 'ai'), 800);
+            const input = document.getElementById('chatInput');
+            if (!input.value.trim()) return;
+            sendMediAIMessage(input.value.trim());
+            input.value = '';
         }
 
-        function handleKeyPress(e) { if (e.key === 'Enter') sendMessage(); }
+        function handleKeyPress(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        }
 
         // --- THREE.JS ORB ---
         function initThreeJsOrb() {

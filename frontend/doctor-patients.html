@@ -71,99 +71,20 @@
             box-shadow: 0 8px 15px rgba(0, 102, 255, 0.2);
         }
 
-        .content {
+        /* Main Content */
+        .main-content {
             margin-left: 280px;
-            width: 100%;
+            width: calc(100% - 280px);
             padding: 40px;
+            min-height: 100vh;
         }
 
-        /* Patient Table */
-        .patient-table-card {
-            background: white;
-            border-radius: var(--radius-md);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            padding: 30px;
-        }
-
-        .search-patient {
+        /* Top Header */
+        .header-top {
             display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-        }
-
-        .search-patient input {
-            border: 1px solid #E5E7EB;
-            padding: 10px 15px;
-            border-radius: 10px;
-            flex: 1;
-            outline: none;
-        }
-
-        .p-table {
-            width: 100%;
-        }
-
-        .p-table th {
-            font-size: 12px;
-            color: var(--grey);
-            font-weight: 600;
-            text-transform: uppercase;
-            padding: 15px;
-            border-bottom: 1px solid #F3F4F6;
-        }
-
-        .p-table td {
-            padding: 15px;
-            vertical-align: middle;
-            border-bottom: 1px solid #F3F4F6;
-        }
-
-        .p-img-box {
-            display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 12px;
-        }
-
-        .p-img {
-            width: 45px;
-            height: 45px;
-            border-radius: 10px;
-        }
-
-        .p-name {
-            font-size: 14px;
-            font-weight: 600;
-            margin: 0;
-        }
-
-        .p-id {
-            font-size: 11px;
-            color: var(--grey);
-        }
-
-        .badge-age {
-            background: #F3F4F6;
-            color: var(--grey);
-            padding: 5px 10px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .btn-view {
-            border: 1px solid var(--primary);
-            color: var(--primary);
-            background: transparent;
-            padding: 6px 15px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 600;
-            transition: 0.2s;
-        }
-
-        .btn-view:hover {
-            background: var(--primary);
-            color: white;
+            margin-bottom: 35px;
         }
 
         @media (max-width: 992px) {
@@ -177,8 +98,10 @@
                 display: none;
             }
 
-            .content {
+            .main-content {
                 margin-left: 80px;
+                width: calc(100% - 80px);
+                padding: 20px;
             }
         }
     </style>
@@ -190,24 +113,46 @@
         <a href="doctor-dashboard.html" class="sidebar-brand">
             <i class="fa-solid fa-square-plus"></i> <span>MediBook</span>
         </a>
-        <nav>
-            <a href="doctor-dashboard.html" class="menu-link">
-                <i class="fa-solid fa-house"></i> <span>Dashboard</span>
+
+        <ul class="sidebar-menu" style="list-style: none; padding: 0; flex: 1;">
+            <li class="menu-item">
+                <a href="doctor-dashboard.html" class="menu-link">
+                    <i class="fa-solid fa-house"></i> <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="doctor-appointments.html" class="menu-link">
+                    <i class="fa-solid fa-calendar"></i> <span>Appointments</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="doctor-patients.html" class="menu-link active">
+                    <i class="fa-solid fa-user-group"></i> <span>My Patients</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="doctor-settings.html" class="menu-link">
+                    <i class="fa-solid fa-gear"></i> <span>Settings</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="sidebar-footer" style="border-top: 1px solid #eee; padding-top: 20px;">
+            <a href="#" onclick="logout(); return false;" class="menu-link text-danger">
+                <i class="fa-solid fa-right-from-bracket"></i> <span>Sign Out</span>
             </a>
-            <a href="doctor-appointments.html" class="menu-link">
-                <i class="fa-solid fa-calendar"></i> <span>Appointments</span>
-            </a>
-            <a href="doctor-patients.html" class="menu-link active">
-                <i class="fa-solid fa-user-group"></i> <span>My Patients</span>
-            </a>
-        </nav>
+        </div>
     </aside>
 
-    <main class="content">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="fw-bold">My Patients</h2>
-            <button class="btn btn-primary rounded-pill px-4 fw-bold">Add New Entry</button>
-        </div>
+    <main class="main-content">
+        <header class="header-top" data-aos="fade-down">
+            <div>
+                <h2 class="fw-bold mb-1">My Patients</h2>
+                <p class="text-muted small">Manage your patient records and medical history.</p>
+            </div>
+
+            <div id="shared-navbar-right"></div>
+        </header>
 
         <div class="patient-table-card" data-aos="fade-up">
             <div class="search-patient">
@@ -227,62 +172,8 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <!-- Patient 1 -->
-                        <tr>
-                            <td>
-                                <div class="p-img-box">
-                                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100"
-                                        class="p-img">
-                                    <div>
-                                        <h6 class="p-name">Monica Johnson</h6>
-                                        <span class="p-id">#MB-202301</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><span class="badge-age">24 / Female</span></td>
-                            <td>+91 98765-XXXXX</td>
-                            <td>Hypertension</td>
-                            <td>Today, 10:00 AM</td>
-                            <td><button class="btn-view" onclick="viewPatient('Monica Johnson')">Patient File</button>
-                            </td>
-                        </tr>
-                        <!-- Patient 2 -->
-                        <tr>
-                            <td>
-                                <div class="p-img-box">
-                                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100"
-                                        class="p-img">
-                                    <div>
-                                        <h6 class="p-name">Sarah Connor</h6>
-                                        <span class="p-id">#MB-202305</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><span class="badge-age">32 / Female</span></td>
-                            <td>+91 98231-XXXXX</td>
-                            <td>Skin Allergy</td>
-                            <td>12 Mar 2026</td>
-                            <td><button class="btn-view">Patient File</button></td>
-                        </tr>
-                        <!-- Patient 3 -->
-                        <tr>
-                            <td>
-                                <div class="p-img-box">
-                                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100"
-                                        class="p-img">
-                                    <div>
-                                        <h6 class="p-name">John Wick</h6>
-                                        <span class="p-id">#MB-202409</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><span class="badge-age">45 / Male</span></td>
-                            <td>+91 97712-XXXXX</td>
-                            <td>Blood Pressure</td>
-                            <td>08 Mar 2026</td>
-                            <td><button class="btn-view">Patient File</button></td>
-                        </tr>
+                    <tbody id="patient-table-body">
+                        <!-- Dynamic content loaded via JS -->
                     </tbody>
                 </table>
             </div>
@@ -296,35 +187,27 @@
             <h4 class="fw-bold mb-4" id="sidePatientName">Patient Record</h4>
 
             <div class="mb-4 text-center">
-                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200"
+                <img id="sidePatientAvatar" src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200"
                     class="rounded-circle mb-3" style="width: 80px; height: 80px;">
-                <p class="text-muted small">Medical History ID: #MB-202301</p>
+                <p class="text-muted small" id="sidePatientId">Medical History ID: #MB-XXXXXX</p>
+                <div id="sidePatientContact" class="small text-muted mb-2"></div>
             </div>
 
             <div class="mb-4">
                 <h6>Recent Reports</h6>
-                <div class="p-3 bg-light rounded-3 mb-2 d-flex justify-content-between align-items-center">
-                    <span class="small"><i class="fa-solid fa-file-pdf me-2 text-primary"></i>
-                        Blood_Test_Mar24.pdf</span>
-                    <i class="fa-solid fa-download text-muted small cursor-pointer"></i>
-                </div>
-                <div class="p-3 bg-light rounded-3 mb-2 d-flex justify-content-between align-items-center">
-                    <span class="small"><i class="fa-solid fa-file-pdf me-2 text-primary"></i>
-                        ECG_Scan_Results.pdf</span>
-                    <i class="fa-solid fa-download text-muted small cursor-pointer"></i>
+                <div id="reportsList">
+                   <p class="text-muted small">No reports available.</p>
                 </div>
             </div>
 
             <div class="mb-4">
                 <h6>Past Prescriptions</h6>
-                <div class="p-3 bg-light rounded-3 mb-2">
-                    <p class="mb-1 small fw-bold">Metformin 500mg • 2 Weeks ago</p>
-                    <p class="small text-muted mb-0">Note: Take twice daily after meals.</p>
+                <div id="prescriptionsList">
+                   <!-- Loaded dynamically -->
                 </div>
             </div>
 
-            <button class="btn btn-primary w-100 py-3 rounded-pill fw-bold"
-                onclick="alert('Proceeding to Consult session...')">Start Consult Session</button>
+            <button class="btn btn-primary w-100 py-3 rounded-pill fw-bold" id="startConsultBtn">Start Consult Session</button>
         </div>
     </div>
 
@@ -334,11 +217,129 @@
     <script>
         AOS.init({ duration: 800 });
 
+        const API_URL = 'http://127.0.0.1:5000/api';
+        const token = sessionStorage.getItem('token');
         const patientSidebar = new bootstrap.Offcanvas(document.getElementById('patientFile'));
 
-        function viewPatient(name) {
-            document.getElementById('sidePatientName').innerText = name;
-            patientSidebar.show();
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadPatients();
+
+            document.getElementById('addNewPatientBtn').onclick = async () => {
+                const name = prompt("Enter patient full name:");
+                if (!name) return;
+                const phone = prompt("Enter phone number:");
+                const email = prompt("Enter email address:");
+                const age = prompt("Enter age:");
+                const gender = prompt("Enter gender (Male/Female/Other):");
+
+                try {
+                    const response = await fetch(`${API_URL}/doctor/patient/add`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ name, phone, email, age, gender })
+                    });
+
+                    if (response.ok) {
+                        alert("Patient added successfully!");
+                        loadPatients();
+                    } else {
+                        const err = await response.json();
+                        alert(err.error || "Failed to add patient");
+                    }
+                } catch (e) {
+                    alert("Network error occurred.");
+                }
+            };
+        });
+
+        async function loadPatients() {
+            try {
+                const response = await fetch(`${API_URL}/doctor/patients`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const patients = await response.json();
+                
+                const tbody = document.getElementById('patient-table-body');
+                tbody.innerHTML = '';
+
+                if (patients.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4">No patients found.</td></tr>';
+                    return;
+                }
+
+                patients.forEach(patient => {
+                    const avatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(patient.full_name)}&background=random`;
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>
+                            <div class="p-img-box">
+                                <img src="${avatar}" class="p-img">
+                                <div>
+                                    <h6 class="p-name">${patient.full_name}</h6>
+                                    <span class="p-id">#${patient.patient_id_label}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="badge-age">${patient.age} / ${patient.gender}</span></td>
+                        <td>${patient.phone}</td>
+                        <td class="small">${patient.last_diagnosis}</td>
+                        <td>${patient.last_visit}</td>
+                        <td><button class="btn-view" onclick="viewPatient(${patient.id})">Patient File</button></td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (err) {
+                console.error('Error loading patients:', err);
+            }
+        }
+
+        async function viewPatient(patientId) {
+            try {
+                const response = await fetch(`${API_URL}/doctor/patient/details/${patientId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await response.json();
+                const info = data.patient_info;
+
+                document.getElementById('sidePatientName').innerText = info.name;
+                document.getElementById('sidePatientId').innerText = `Medical History ID: #${info.patient_id_label}`;
+                document.getElementById('sidePatientAvatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(info.name)}&background=random`;
+                document.getElementById('sidePatientContact').innerText = `${info.phone || ''} | ${info.email || ''}`;
+
+                const historyList = document.getElementById('prescriptionsList');
+                historyList.innerHTML = '';
+
+                if (!data.history || data.history.length === 0) {
+                    historyList.innerHTML = '<p class="text-muted small">No past history found.</p>';
+                } else {
+                    data.history.forEach(h => {
+                        const div = document.createElement('div');
+                        div.className = 'p-3 bg-light rounded-3 mb-2';
+                        div.innerHTML = `
+                            <p class="mb-1 small fw-bold">${h.type} • ${h.date}</p>
+                            <p class="small text-muted mb-0">${h.notes || 'Routine update'}</p>
+                            ${h.medicines ? `<p class="small text-primary mb-0 mt-1">Rx: ${h.medicines}</p>` : ''}
+                        `;
+                        historyList.appendChild(div);
+                    });
+                }
+
+                document.getElementById('startConsultBtn').onclick = () => {
+                    alert('Redirecting to consultation interface...');
+                    // Add real redirection logic here if available
+                };
+
+                patientSidebar.show();
+            } catch (err) {
+                console.error('Error fetching patient details:', err);
+            }
         }
     </script>
     <script src="shared_navbar.js"></script>
